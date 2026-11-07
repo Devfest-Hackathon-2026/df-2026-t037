@@ -174,8 +174,10 @@ def call_gemini(prompt: str) -> dict:
         print(f"[Vertex AI network error] {e}")
         raise HTTPException(status_code=504, detail="AIへの接続がタイムアウトしました")
 
+# File: backend/main.py（call_gemini 内の該当箇所だけ置き換え）
     if resp.status_code != 200:
-        print(f"[Vertex AI error] {resp.status_code} {resp.text[:500]}")
+        # Vertex AIのエラー本文にはプロンプトは含まれないが、念のため先頭だけ残す
+        print(f"[Vertex AI error] status={resp.status_code} body={resp.text[:300]}")
         raise HTTPException(status_code=502, detail="AIの応答に失敗しました")
 
     body = resp.json()
@@ -183,8 +185,12 @@ def call_gemini(prompt: str) -> dict:
         text = body["candidates"][0]["content"]["parts"][0]["text"]
         return json.loads(text)
     except (KeyError, IndexError, json.JSONDecodeError):
-        reason = (body.get("candidates") or [{}])[0].get("finishReason")
-        print(f"[Vertex AI parse error] finishReason={reason} {resp.text[:500]}")
+        candidate = (body.get("candidates") or [{}])[0]
+        # 生徒の記述を含みうるAI出力本文は記録せず、原因の特定に必要な情報だけ残す
+        print(
+            f"[Vertex AI parse error] finishReason={candidate.get('finishReason')} "
+            f"has_content={'content' in candidate}"
+        )
         raise HTTPException(status_code=502, detail="AIの応答を解析できませんでした")
 
 

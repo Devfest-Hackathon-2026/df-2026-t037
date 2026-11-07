@@ -370,18 +370,20 @@ function RecordView({ lastResult, onResult }) {
               placeholder="例: 加法定理を単位円の図から導出した。cos(α−β)を2点間の距離で表すと、暗記していた式が回転の性質から出てくると分かった。"
             />
             <div className={`counter ${length >= GOOD_LENGTH ? "good" : ""}`}>
-              {length >= GOOD_LENGTH ? "✓ 十分な量です" : `目安 ${GOOD_LENGTH}字`} ・ {length}/2000
+              <span>
+                {length >= GOOD_LENGTH ? "✓ 十分な量です" : `目安 ${GOOD_LENGTH}字`}
+                {` ・ ${length}/2000`}
+              </span>
             </div>
-          </div>
 
           <button type="submit" className="btn-primary" disabled={loading || !length}>
             {loading ? (
-              <>
+              <span key="loading" className="btn-inner">
                 <span className="spinner" />
-                AIが思考の深さを採点中…
-              </>
+                <span>AIが思考の深さを採点中…</span>
+              </span>
             ) : (
-              "記録してAIの評価を受け取る"
+              <span key="idle">記録してAIの評価を受け取る</span>
             )}
           </button>
           {error && <div className="error-box">{error}</div>}
