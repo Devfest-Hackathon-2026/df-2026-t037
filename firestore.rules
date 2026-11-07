@@ -1,0 +1,33 @@
+// File: firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    function validGrade() {
+      return request.resource.data.grade in ['高校1年生', '高校2年生', '高校3年生'];
+    }
+
+    match /users/{uid} {
+      allow read: if isOwner(uid);
+
+      // 初回の学年登録：grade と createdAt だけ書き込める
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['grade', 'createdAt'])
+        && validGrade();
+
+      // 学年の変更：grade 以外（totalExp など）は変更できない
+      allow update: if isOwner(uid)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['grade'])
+        && validGrade();
+
+      match /study_logs/{logId} {
+        allow read: if isOwner(uid);
+        // 書き込みはCloud Run（Admin SDK）だけ。Admin SDKにはルールが適用されない
+        allow write: if false;
+      }
+    }
+  }
+}
