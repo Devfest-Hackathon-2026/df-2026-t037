@@ -189,8 +189,8 @@ def call_gemini(prompt: str) -> dict:
 
 
 # ---- エンドポイント ----
-@app.get("/healthz")
-def healthz():
+@app.get("/health")
+def health():
     return {"status": "ok"}
 
 
