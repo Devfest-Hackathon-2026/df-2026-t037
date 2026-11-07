@@ -45,9 +45,26 @@ const EXP_PER_LEVEL = 100;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 // ===== ユーティリティ =====
+function toText(value) {
+  if (value == null) return "";
+  if (typeof value === "string") return value;
+  if (typeof value === "number") return String(value);
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return "";
+  }
+}
+
+function toNumber(value) {
+  const n = Number(value);
+  return Number.isFinite(n) ? n : 0;
+}
+
 function formatMinutes(total) {
-  const h = Math.floor(total / 60);
-  const m = total % 60;
+  const safe = Math.max(0, Math.round(toNumber(total)));
+  const h = Math.floor(safe / 60);
+  const m = safe % 60;
   if (h === 0) return `${m}分`;
   return m === 0 ? `${h}時間` : `${h}時間${m}分`;
 }
@@ -57,11 +74,17 @@ function formatDate(date) {
 }
 
 function daysAgo(date) {
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const target = new Date(date);
   target.setHours(0, 0, 0, 0);
-  return Math.round((start - target) / DAY_MS);
+  return Math.round((today - target) / DAY_MS);
+}
+
+function lastStudiedLabel(days) {
+  if (days === null) return "30日以上記録なし";
+  if (days === 0) return "今日学習";
+  return `${days}日前に学習`;
 }
 
 // ===== ルート =====
@@ -80,6 +103,7 @@ export default function App() {
     let unsubProfile = () => {};
     const unsubAuth = onAuthStateChanged(auth, (currentUser) => {
       unsubProfile();
+      unsubProfile = () => {};
       setUser(currentUser);
       setAuthReady(true);
       setProfile(null);
@@ -88,10 +112,17 @@ export default function App() {
       setLastResult(null);
       if (!currentUser) return;
 
-      unsubProfile = onSnapshot(doc(db, "users", currentUser.uid), (snap) => {
-        setProfile(snap.exists() ? snap.data() : null);
-        setProfileReady(true);
-      });
+      unsubProfile = onSnapshot(
+        doc(db, "users", currentUser.uid),
+        (snap) => {
+          setProfile(snap.exists() ? snap.data() : null);
+          setProfileReady(true);
+        },
+        (err) => {
+          console.error("[profile listener error]", err);
+          setProfileReady(true);
+        }
+      );
     });
     return () => {
       unsubProfile();
@@ -101,7 +132,7 @@ export default function App() {
 
   // 直近30日の学習ログ
   useEffect(() => {
-    if (!user) return;
+    if (!user) return undefined;
     const since = Timestamp.fromDate(new Date(Date.now() - 30 * DAY_MS));
     const q = query(
       collection(db, "users", user.uid, "study_logs"),
@@ -109,25 +140,33 @@ export default function App() {
       orderBy("createdAt", "desc"),
       limit(200)
     );
-    return onSnapshot(q, (snapshot) => {
-      setLogs(
-        snapshot.docs.map((d) => {
-          const data = d.data();
-          return {
-            id: d.id,
-            ...data,
-            dateObj: data.createdAt ? data.createdAt.toDate() : new Date(),
-          };
-        })
-      );
-    });
+    return onSnapshot(
+      q,
+      (snapshot) => {
+        setLogs(
+          snapshot.docs.map((d) => {
+            const data = d.data();
+            return {
+              id: d.id,
+              ...data,
+              dateObj: data.createdAt?.toDate ? data.createdAt.toDate() : new Date(),
+            };
+          })
+        );
+      },
+      (err) => console.error("[logs listener error]", err)
+    );
   }, [user]);
 
   const handleSelectGrade = async (grade) => {
     if (!user) return;
     const data = profile ? { grade } : { grade, createdAt: serverTimestamp() };
-    await setDoc(doc(db, "users", user.uid), data, { merge: true });
-    setGradeEditing(false);
+    try {
+      await setDoc(doc(db, "users", user.uid), data, { merge: true });
+      setGradeEditing(false);
+    } catch (err) {
+      console.error("[grade save error]", err);
+    }
   };
 
   if (!authReady) {
@@ -144,29 +183,28 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header
-        grade={profile?.grade}
-        onGradeClick={() => setGradeEditing(true)}
-      />
+      <Header grade={profile?.grade} onGradeClick={() => setGradeEditing(true)} />
 
       <main className="container main">
         <LevelCard
-          totalExp={profile?.totalExp ?? 0}
-          userName={user.isAnonymous ? "ゲスト" : user.displayName || user.email}
+          totalExp={toNumber(profile?.totalExp)}
+          userName={user.isAnonymous ? "ゲスト" : user.displayName || user.email || ""}
         />
 
         <nav className="tabs">
           <button
+            type="button"
             className={`tab ${tab === "record" ? "active" : ""}`}
             onClick={() => setTab("record")}
           >
-            ✍️ 記録する
+            <span>✍️ 記録する</span>
           </button>
           <button
+            type="button"
             className={`tab ${tab === "report" ? "active" : ""}`}
             onClick={() => setTab("report")}
           >
-            📊 レポート
+            <span>📊 レポート</span>
           </button>
         </nav>
 
@@ -191,27 +229,44 @@ export default function App() {
 
 // ===== ログイン画面 =====
 function LoginScreen() {
+  const [error, setError] = useState("");
+
+  const handleLogin = async (fn) => {
+    setError("");
+    try {
+      await fn();
+    } catch (err) {
+      console.error("[login error]", err);
+      setError("ログインに失敗しました。もう一度お試しください。");
+    }
+  };
+
   return (
     <div className="login">
       <div className="card login-card">
         <div className="brand-mark">SC</div>
         <h1 className="login-title">Study Cockpit</h1>
         <p className="login-lead">
-          勉強時間ではなく「思考の深さ」を育てる、
+          <span>勉強時間ではなく「思考の深さ」を育てる、</span>
           <br />
-          高校生のための学習・進路コックピット
+          <span>高校生のための学習・進路コックピット</span>
         </p>
         <ul className="features">
-          <li><span>🧠</span>学びの言語化をAIがS〜Cで採点</li>
-          <li><span>📈</span>過去ログから教科の偏りや成長を分析</li>
-          <li><span>🎯</span>学年に合わせた受験戦略をアドバイス</li>
+          <li><span>🧠</span><span>学びの言語化をAIがS〜Cで採点</span></li>
+          <li><span>📈</span><span>過去ログから教科の偏りや成長を分析</span></li>
+          <li><span>🎯</span><span>学年に合わせた受験戦略をアドバイス</span></li>
         </ul>
-        <button className="btn-google" onClick={loginWithGoogle}>
-          Google アカウントで始める
+        <button type="button" className="btn-google" onClick={() => handleLogin(loginWithGoogle)}>
+          <span>Google アカウントで始める</span>
         </button>
-        <button className="btn-link" onClick={loginAsGuest}>
-          ログインせずにゲストで試す
+        <button type="button" className="btn-link" onClick={() => handleLogin(loginAsGuest)}>
+          <span>ログインせずにゲストで試す</span>
         </button>
+        {error && (
+          <div className="error-box">
+            <span>{error}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -230,11 +285,11 @@ function Header({ grade, onGradeClick }) {
           </div>
         </div>
         <div className="header-right">
-          <button className="grade-chip" onClick={onGradeClick}>
-            {grade || "学年未設定"}
+          <button type="button" className="grade-chip" onClick={onGradeClick}>
+            <span>{grade || "学年未設定"}</span>
           </button>
-          <button className="btn-ghost" onClick={() => signOut(auth)}>
-            ログアウト
+          <button type="button" className="btn-ghost" onClick={() => signOut(auth)}>
+            <span>ログアウト</span>
           </button>
         </div>
       </div>
@@ -252,7 +307,7 @@ function LevelCard({ totalExp, userName }) {
       <div className="level-avatar">🥚</div>
       <div className="level-body">
         <div className="level-row">
-          <span className="level-num">Lv.{level}</span>
+          <span className="level-num">{`Lv.${level}`}</span>
           <span className="level-user">{userName}</span>
         </div>
         <div className="level-bar">
@@ -262,7 +317,7 @@ function LevelCard({ totalExp, userName }) {
           />
         </div>
         <div className="level-meta">
-          累計 {totalExp} EXP ・ 次のレベルまで {EXP_PER_LEVEL - progress} EXP
+          <span>{`累計 ${totalExp} EXP ・ 次のレベルまで ${EXP_PER_LEVEL - progress} EXP`}</span>
         </div>
       </div>
     </section>
@@ -308,7 +363,9 @@ function RecordView({ lastResult, onResult }) {
 
         <form onSubmit={handleSubmit}>
           <div className="field">
-            <div className="field-label">教科</div>
+            <div className="field-label">
+              <span>教科</span>
+            </div>
             <div className="subject-grid">
               {SUBJECTS.map((s) => (
                 <button
@@ -319,14 +376,16 @@ function RecordView({ lastResult, onResult }) {
                   onClick={() => setSubject(s.name)}
                 >
                   <span className="dot" style={{ background: s.color }} />
-                  {s.name}
+                  <span>{s.name}</span>
                 </button>
               ))}
             </div>
           </div>
 
           <div className="field">
-            <div className="field-label">学習時間</div>
+            <div className="field-label">
+              <span>学習時間</span>
+            </div>
             <div className="minutes-row">
               {MINUTE_PRESETS.map((m) => (
                 <button
@@ -335,7 +394,7 @@ function RecordView({ lastResult, onResult }) {
                   className={`preset ${Number(minutes) === m ? "active" : ""}`}
                   onClick={() => setMinutes(m)}
                 >
-                  {formatMinutes(m)}
+                  <span>{formatMinutes(m)}</span>
                 </button>
               ))}
               <label className="minutes-input">
@@ -347,14 +406,14 @@ function RecordView({ lastResult, onResult }) {
                   value={minutes}
                   onChange={(e) => setMinutes(e.target.value)}
                 />
-                分
+                <span>分</span>
               </label>
             </div>
           </div>
 
           <div className="field">
             <div className="field-label">
-              学びの言語化
+              <span>学びの言語化</span>
               <span className="field-hint">Sランクのヒント</span>
             </div>
             <div className="tips">
@@ -371,10 +430,10 @@ function RecordView({ lastResult, onResult }) {
             />
             <div className={`counter ${length >= GOOD_LENGTH ? "good" : ""}`}>
               <span>
-                {length >= GOOD_LENGTH ? "✓ 十分な量です" : `目安 ${GOOD_LENGTH}字`}
-                {` ・ ${length}/2000`}
+                {`${length >= GOOD_LENGTH ? "✓ 十分な量です" : `目安 ${GOOD_LENGTH}字`} ・ ${length}/2000`}
               </span>
             </div>
+          </div>
 
           <button type="submit" className="btn-primary" disabled={loading || !length}>
             {loading ? (
@@ -386,7 +445,12 @@ function RecordView({ lastResult, onResult }) {
               <span key="idle">記録してAIの評価を受け取る</span>
             )}
           </button>
-          {error && <div className="error-box">{error}</div>}
+
+          {error && (
+            <div className="error-box">
+              <span>{error}</span>
+            </div>
+          )}
         </form>
       </section>
 
@@ -397,10 +461,13 @@ function RecordView({ lastResult, onResult }) {
 
 // ===== AI結果カード =====
 function ResultCard({ result }) {
-  const rank = RANK_META[result.verbal_score] ? result.verbal_score : "C";
+  const rawRank = toText(result?.verbal_score);
+  const rank = RANK_META[rawRank] ? rawRank : "C";
   const meta = RANK_META[rank];
-  const base = result.base_exp ?? 0;
-  const bonus = result.bonus_exp ?? 0;
+  const base = toNumber(result?.base_exp);
+  const bonus = toNumber(result?.bonus_exp);
+  const reason = toText(result?.score_reason);
+  const advice = toText(result?.advice);
 
   return (
     <section className={`card result ${meta.className}`}>
@@ -411,19 +478,25 @@ function ResultCard({ result }) {
           <div className="result-title">{meta.title}</div>
         </div>
         <div className="exp-gain">
-          +{base + bonus}
+          <span className="exp-gain-num">{`+${base + bonus}`}</span>
           <span>EXP</span>
           <div className="exp-breakdown">
-            時間 +{base} ・ 言語化 +{bonus}
+            <span>{`時間 +${base} ・ 言語化 +${bonus}`}</span>
           </div>
         </div>
       </div>
 
-      {result.score_reason && <p className="reason">💡 {result.score_reason}</p>}
+      {reason && (
+        <p className="reason">
+          <span>{`💡 ${reason}`}</span>
+        </p>
+      )}
 
       <div className="advice">
         <div className="advice-title">AIメンターからのアドバイス</div>
-        <p>{result.advice}</p>
+        <p>
+          <span>{advice || "アドバイスを取得できませんでした。"}</span>
+        </p>
       </div>
     </section>
   );
@@ -441,14 +514,15 @@ function ReportView({ logs }) {
     const subjects = SUBJECTS.map((s) => {
       const minutes = filtered
         .filter((l) => l.subject === s.name)
-        .reduce((sum, l) => sum + (l.minutes || 0), 0);
+        .reduce((sum, l) => sum + toNumber(l.minutes), 0);
       const latest = logs.find((l) => l.subject === s.name);
       return { ...s, minutes, lastDays: latest ? daysAgo(latest.dateObj) : null };
     });
 
     const totalMinutes = subjects.reduce((sum, s) => sum + s.minutes, 0);
     const totalExp = filtered.reduce(
-      (sum, l) => sum + (l.base_exp || 0) + (l.bonus_exp || 0), 0
+      (sum, l) => sum + toNumber(l.base_exp) + toNumber(l.bonus_exp),
+      0
     );
     const highRank = filtered.filter((l) => ["S", "A"].includes(l.verbal_score)).length;
     const highRate = filtered.length ? Math.round((highRank / filtered.length) * 100) : 0;
@@ -487,21 +561,23 @@ function ReportView({ logs }) {
           <div>
             <h2 className="card-title">学習バランス</h2>
             <p className="card-sub" style={{ margin: 0 }}>
-              直近{periodDays}日間の教科別学習時間
+              <span>{`直近${periodDays}日間の教科別学習時間`}</span>
             </p>
           </div>
           <div className="segmented">
             <button
+              type="button"
               className={period === "week" ? "active" : ""}
               onClick={() => setPeriod("week")}
             >
-              7日
+              <span>7日</span>
             </button>
             <button
+              type="button"
               className={period === "month" ? "active" : ""}
               onClick={() => setPeriod("month")}
             >
-              30日
+              <span>30日</span>
             </button>
           </div>
         </div>
@@ -514,7 +590,7 @@ function ReportView({ logs }) {
         </div>
 
         {report.totalMinutes > 0 ? (
-          <div className="chart-area">
+          <div className="chart-area" key="chart">
             <div className="doughnut-wrap">
               <Doughnut data={chartData} options={chartOptions} />
               <div className="doughnut-center">
@@ -535,16 +611,12 @@ function ReportView({ logs }) {
                     <div>
                       <span className="legend-name">{s.name}</span>
                       <span className={`legend-last ${warn ? "warn" : ""}`}>
-                        {s.lastDays === null
-                          ? "30日以上記録なし"
-                          : s.lastDays === 0
-                            ? "今日学習"
-                            : `${s.lastDays}日前に学習`}
+                        {lastStudiedLabel(s.lastDays)}
                       </span>
                     </div>
                     <div className="legend-time">
-                      {formatMinutes(s.minutes)}
-                      <span className="legend-pct">{pct}%</span>
+                      <span>{formatMinutes(s.minutes)}</span>
+                      <span className="legend-pct">{`${pct}%`}</span>
                     </div>
                   </li>
                 );
@@ -552,39 +624,50 @@ function ReportView({ logs }) {
             </ul>
           </div>
         ) : (
-          <div className="empty">この期間の記録はまだありません</div>
+          <div className="empty" key="empty">
+            <span>この期間の記録はまだありません</span>
+          </div>
         )}
       </section>
 
       <section className="card">
         <h2 className="card-title">学習ログ</h2>
-        <p className="card-sub">{report.filtered.length}件の記録</p>
+        <p className="card-sub">
+          <span>{`${report.filtered.length}件の記録`}</span>
+        </p>
         {report.filtered.length === 0 ? (
-          <div className="empty">記録タブから最初の学びを残しましょう</div>
+          <div className="empty" key="log-empty">
+            <span>記録タブから最初の学びを残しましょう</span>
+          </div>
         ) : (
-          <ul className="log-list">
+          <ul className="log-list" key="log-list">
             {report.filtered.map((l) => {
               const rank = RANK_META[l.verbal_score] ? l.verbal_score : null;
+              const advice = toText(l.advice);
               return (
                 <li key={l.id} className="log-item">
                   <div className="log-top">
-                    <span className="dot" style={{ background: SUBJECT_COLOR[l.subject] }} />
-                    <span className="log-subject">{l.subject}</span>
+                    <span className="dot" style={{ background: SUBJECT_COLOR[l.subject] || "#94a3b8" }} />
+                    <span className="log-subject">{toText(l.subject)}</span>
                     <span className="log-meta">
-                      {formatDate(l.dateObj)} ・ {formatMinutes(l.minutes || 0)}
+                      {`${formatDate(l.dateObj)} ・ ${formatMinutes(l.minutes)}`}
                     </span>
                     <span className="log-exp">
-                      +{(l.base_exp || 0) + (l.bonus_exp || 0)} EXP
+                      {`+${toNumber(l.base_exp) + toNumber(l.bonus_exp)} EXP`}
                     </span>
                     {rank && (
                       <span className={`rank-badge ${RANK_META[rank].className}`}>{rank}</span>
                     )}
                   </div>
-                  <p className="log-text">{l.reflection}</p>
-                  {l.advice && (
+                  <p className="log-text">
+                    <span>{toText(l.reflection)}</span>
+                  </p>
+                  {advice && (
                     <details className="log-advice">
                       <summary>AIのアドバイスを見る</summary>
-                      <p>{l.advice}</p>
+                      <p>
+                        <span>{advice}</span>
+                      </p>
                     </details>
                   )}
                 </li>
@@ -602,7 +685,7 @@ function Stat({ label, value, unit }) {
     <div className="stat">
       <div className="stat-label">{label}</div>
       <div className="stat-value">
-        {value}
+        <span>{toText(value)}</span>
         {unit && <small>{unit}</small>}
       </div>
     </div>
@@ -619,12 +702,13 @@ function GradeModal({ current, closable, onSelect, onClose }) {
         <div className="grade-options">
           {GRADES.map((g) => (
             <button
+              type="button"
               key={g.value}
               className={`grade-option ${current === g.value ? "active" : ""}`}
               onClick={() => onSelect(g.value)}
             >
               <span>
-                {g.value}
+                <span>{g.value}</span>
                 <small>{g.note}</small>
               </span>
               <span>›</span>
@@ -632,8 +716,13 @@ function GradeModal({ current, closable, onSelect, onClose }) {
           ))}
         </div>
         {closable && (
-          <button className="btn-link" onClick={onClose} style={{ width: "100%" }}>
-            キャンセル
+          <button
+            type="button"
+            className="btn-link"
+            onClick={onClose}
+            style={{ width: "100%" }}
+          >
+            <span>キャンセル</span>
           </button>
         )}
       </div>
