@@ -5,6 +5,8 @@ Cloud Shell で backend/ から実行する（Vertex AI の権限が必要）:
     python3 tools/faculty_data.py profiles      # 紹介文の下書き（途中から再開できる）
     python3 tools/faculty_data.py check         # 出典URLの確認状況を一覧で出す
     python3 tools/faculty_data.py redo          # 「要確認」と失敗した学部だけを下書きし直す（チーム確認済みは触らない）
+    python3 tools/faculty_data.py fix <学部ID> <公式ページのURL>   # 人が見つけた公式ページだけを根拠に作り直す
+    python3 tools/faculty_data.py recheck       # 公式ドメインの一覧を直したあと、判定だけやり直す
     python3 tools/faculty_data.py embeddings    # 紹介文をベクトルにする（紹介文を直したら作り直す）
 
 方針（Own the Why）
@@ -50,7 +52,8 @@ OFFICIAL_DOMAINS = {
     "keio": ["keio.ac.jp"],
     "hitotsu": ["hit-u.ac.jp"],
     "tufs": ["tufs.ac.jp"],
-    "waseda": ["waseda.jp"],
+    # 理工学術院（基幹・創造・先進理工学部）の公式サイトは sci.waseda.ac.jp
+    "waseda": ["waseda.jp", "sci.waseda.ac.jp"],
     "kyoto": ["kyoto-u.ac.jp"],
     "osaka": ["osaka-u.ac.jp"],
 }
@@ -154,6 +157,60 @@ def cmd_profiles() -> None:
     cmd_check()
 
 
+FIX_PROMPT = """あなたは高校生向けの進路情報を作る編集者です。
+次の公式ページ（{url}）の内容だけを根拠に、{uni} {faculty} で「何を学べるか」がわかる紹介文を作ってください。
+
+条件
+- このページに書かれていないこと（偏差値・就職率・評判など）は書かない。推測しない。
+- summary：何を学ぶ学部か。2文・120字以内。やさしい日本語で。
+- keywords：学べる分野や研究テーマのキーワードを6〜8個（各10字以内）。
+
+次のJSONだけを ```json のコードブロックで出力してください。
+{{"summary": "...", "keywords": ["...", "..."]}}"""
+
+
+def cmd_fix(fid: str, src: str) -> None:
+    """人が公式ページを見つけたとき：そのURLだけを根拠に作り直す（URLは公式ドメインでなければ受け付けない）"""
+    if fid not in FACULTIES:
+        sys.exit(f"学部IDが見つかりません: {fid}")
+    f = FACULTIES[fid]
+    uni = UNIVERSITIES[f["universityId"]]
+    if not is_official(f["universityId"], src):
+        sys.exit(f"公式ドメインのURLではありません: {src}（{', '.join(OFFICIAL_DOMAINS.get(f['universityId'], []))}）")
+    url = (f"https://aiplatform.googleapis.com/v1/projects/{PROJECT_ID}/locations/{LOCATION}"
+           f"/publishers/google/models/{MODEL}:generateContent")
+    prompt = FIX_PROMPT.format(url=src, uni=uni["name"], faculty=f["name"])
+    data = {}
+    # URLの中身を読む urlContext を先に使い、使えないモデルなら Google検索のグラウンディングで代わりに読む
+    for tools in ([{"urlContext": {}}], [{"googleSearch": {}}]):
+        try:
+            r = requests.post(url, headers=headers(), timeout=150,
+                              json={"contents": [{"role": "user", "parts": [{"text": prompt}]}], "tools": tools})
+            if r.status_code != 200:
+                print(f"  {list(tools[0])[0]} が使えませんでした（{r.status_code}）")
+                continue
+            parts = r.json()["candidates"][0].get("content", {}).get("parts", [])
+            m = re.search(r"\{[\s\S]*\}", "".join(p.get("text", "") for p in parts))
+            data = json.loads(m.group(0)) if m else {}
+            if data.get("summary"):
+                break
+        except Exception as e:
+            print(f"  失敗: {e.__class__.__name__}")
+    if not data.get("summary"):
+        sys.exit("紹介文を作れませんでした。URLを確かめて、もう一度試してください")
+    profiles = load_json(PROFILES_PATH, {})
+    profiles[fid] = {
+        "id": fid, "universityId": f["universityId"], "university": uni["name"], "faculty": f["name"],
+        "summary": data["summary"].strip(),
+        "keywords": [str(k).strip() for k in (data.get("keywords") or []) if str(k).strip()][:8],
+        "sourceUrl": src, "sourceIsOfficial": True, "groundingTitles": [],
+        "reviewed": False, "draftedBy": MODEL, "draftedAt": time.strftime("%Y-%m-%d"),
+    }
+    save_json(PROFILES_PATH, profiles)
+    print(f"作り直しました: {uni['name']} {f['name']}\n  {profiles[fid]['summary']}\n  {'、'.join(profiles[fid]['keywords'])}")
+    print("※ 紹介文が公式ページと合っているか確認し、よければ reviewed を true にしてください。最後に embeddings を作り直します")
+
+
 def cmd_redo() -> None:
     """出典が公式ドメインでない・紹介文が空・未作成の学部だけを、もう一度下書きする"""
     profiles = load_json(PROFILES_PATH, {})
@@ -224,7 +281,17 @@ def cmd_embeddings() -> None:
 
 if __name__ == "__main__":
     cmds = {"profiles": cmd_profiles, "check": cmd_check, "redo": cmd_redo, "embeddings": cmd_embeddings}
-    if len(sys.argv) != 2 or sys.argv[1] not in cmds:
+    if len(sys.argv) == 4 and sys.argv[1] == "fix":
+        cmd_fix(sys.argv[2], sys.argv[3])
+    elif len(sys.argv) == 2 and sys.argv[1] == "recheck":
+        # ドメインの一覧を直したときに、下書きを作り直さず判定だけやり直す
+        profs = load_json(PROFILES_PATH, {})
+        for pr in profs.values():
+            pr["sourceIsOfficial"] = is_official(pr["universityId"], pr.get("sourceUrl", ""))
+        save_json(PROFILES_PATH, profs)
+        cmd_check()
+    elif len(sys.argv) == 2 and sys.argv[1] in cmds:
+        cmds[sys.argv[1]]()
+    else:
         print(__doc__)
         sys.exit(1)
-    cmds[sys.argv[1]]()
