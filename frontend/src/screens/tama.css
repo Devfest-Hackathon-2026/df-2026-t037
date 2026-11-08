@@ -1,0 +1,245 @@
+/* キャラ育成まわりの画面。値は docs/design/*.dc.html（Setup・Select・Launch）から取っている */
+.tama {
+  --t-bg: #FDF8F4;
+  --t-text: #4A3E3A;
+  --t-sub: #8A7A72;
+  --t-main: #D0607A;
+  --t-main-dark: #A0405A;
+  --t-main-soft: #FCEAF0;
+  --t-line: #E6DCD2;
+  --t-track: #F1E6DA;
+  --t-tip: #FFF1C9;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+  color: var(--t-text);
+}
+.tama p { margin: 0; }
+
+/* ===== 画面全体（初期設定） ===== */
+.tama-screen {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 18px 24px;
+  background: var(--t-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tama-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tama-kicker { font-size: 13px; font-weight: 800; color: var(--t-main); }
+.tama-title { margin: 2px 0 0; font-size: 22px; font-weight: 900; }
+.tama-progress { height: 6px; background: var(--t-track); border-radius: 3px; }
+.tama-progress > div { height: 6px; background: var(--t-main); border-radius: 3px; }
+
+.tama-field { display: flex; flex-direction: column; gap: 6px; }
+.tama-label { font-size: 13px; font-weight: 900; }
+.tama-input {
+  height: 44px;
+  border-radius: 12px;
+  border: 1.5px solid var(--t-line);
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--t-text);
+  background: #FFFFFF;
+}
+.tama-date { height: 36px; font-size: 14px; }
+
+.tama-row { display: flex; gap: 6px; }
+.tama-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.tama-pill {
+  flex: 1;
+  height: 40px;
+  border-radius: 20px;
+  border: 1.5px solid var(--t-line);
+  background: #FFFFFF;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--t-text);
+}
+.tama-pill.on { border: 2px solid var(--t-main); background: var(--t-main); font-weight: 900; color: #FFFFFF; }
+.tama-pill.wide { flex: 1 1 auto; min-width: 96px; height: 44px; border-radius: 22px; font-size: 14px; padding: 0 14px; }
+
+.tama-box {
+  background: #FFFFFF;
+  border-radius: 14px;
+  border: 1.5px solid var(--t-line);
+  padding: 10px 14px;
+}
+.tama-exam { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tama-exam-side { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.tama-badge {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--t-main);
+  background: var(--t-main-soft);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+.tama-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--t-main);
+  text-decoration: underline;
+}
+.tama-link:hover { color: var(--t-main-dark); }
+
+.tama-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.tama-pace {
+  height: 64px;
+  border-radius: 14px;
+  border: 1.5px solid var(--t-line);
+  background: #FFFFFF;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.tama-pace.on { border: 2px solid #E0A21A; background: #FFF6DA; }
+.tama-pace-name { font-size: 14px; font-weight: 900; }
+
+.tama-tip {
+  background: var(--t-tip);
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.tama-strong { font-size: 16px; font-weight: 900; }
+.tama-strong.small { font-size: 13px; }
+.tama-note { font-size: 11px; color: var(--t-sub); }
+.tama-note.strong { font-size: 12px; font-weight: 800; }
+.tama-home .tama-note { font-size: 12px; }
+.tama-tiny { font-size: 10px; color: var(--t-sub); }
+.tama-small { font-size: 12px; line-height: 1.6; }
+.tama-muted { color: var(--t-sub); }
+.tama-name { font-size: 20px; font-weight: 900; }
+.tama-name.big { font-size: 22px; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.tama-stage { font-size: 12px; font-weight: 800; }
+
+.tama-error {
+  background: #FDECEF;
+  color: #B03050;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tama-actions { margin-top: auto; display: flex; gap: 8px; padding-top: 8px; }
+.tama-btn {
+  flex: 1.3;
+  height: 54px;
+  border: 0;
+  border-radius: 27px;
+  background: var(--t-main);
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 900;
+}
+.tama-btn.ghost {
+  flex: 1;
+  background: #FFFFFF;
+  color: var(--t-main);
+  border: 1.5px solid #F0D0D8;
+  font-size: 14px;
+}
+.tama-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ===== 初期設定 2/2：大学 ===== */
+.tama-unis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+.tama-uni {
+  height: 66px;
+  border-radius: 16px;
+  border: 1.5px solid #EEE4DA;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-family: inherit;
+  padding: 0;
+}
+.tama-uni.on { border: 2px solid var(--t-main); }
+.tama-uni-ball {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-top: 3px;
+  box-sizing: border-box;
+}
+.tama-uni-ball > span { width: 3.5px; height: 5px; border-radius: 2px; }
+.tama-uni-name { font-size: 11px; font-weight: 800; color: var(--t-text); }
+
+.tama-card { background: #FFFFFF; border-radius: 22px; padding: 12px 14px; }
+.tama-preview { display: flex; align-items: center; gap: 12px; }
+.tama-preview-ball {
+  width: 118px;
+  height: 118px;
+  flex-shrink: 0;
+  border-radius: 59px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tama-preview-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+/* ===== ホーム（Launch） ===== */
+.tama-home {
+  background: var(--t-bg);
+  border-radius: 26px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.tama-streak { background: #FFFFFF; border-radius: 14px; padding: 4px 12px; text-align: center; flex-shrink: 0; }
+.tama-streak-x { font-size: 18px; font-weight: 900; color: #E0A21A; }
+.tama-goal { display: flex; flex-direction: column; gap: 4px; }
+.tama-bar { height: 12px; background: var(--t-track); border-radius: 6px; overflow: hidden; }
+.tama-bar > div { height: 12px; background: #E8A35A; border-radius: 6px; transition: width 0.6s ease; }
+.tama-togo { color: var(--t-text); font-size: 14px; }
+.tama-season { font-size: 12px; font-weight: 800; color: var(--t-main); }
+.tama-stage-box {
+  height: 210px;
+  background: #FCF4EA;
+  border-radius: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tama-week { border-radius: 18px; padding: 10px 14px; display: flex; flex-direction: column; gap: 5px; }
+.tama-week-row { display: grid; grid-template-columns: 40px 1fr 104px; align-items: center; gap: 8px; font-size: 12px; }
+.tama-week-name { font-weight: 800; }
+.tama-week-bar { position: relative; height: 10px; background: var(--t-track); border-radius: 5px; }
+.tama-week-bar > div { height: 10px; border-radius: 5px; }
+.tama-week-bar > i {
+  position: absolute;
+  top: -3px;
+  width: 3px;
+  height: 16px;
+  margin-left: -1.5px;
+  background: var(--t-text);
+  border-radius: 2px;
+}
+.tama-week-num { color: var(--t-sub); text-align: right; white-space: nowrap; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tama-bar > div { transition: none; }
+}

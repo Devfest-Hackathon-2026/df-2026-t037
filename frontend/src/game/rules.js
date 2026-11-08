@@ -94,9 +94,9 @@ export function nextStreak(prev, studiedYesterday, ticketLeftThisWeek) {
         return { streak: prev, usedTicket: true };
     return { streak: Math.floor(prev / 2), usedTicket: false };
 }
-/** 記録1件のEXP＝分数×（1＋その教科の配点比率）×連続ボーナス */
+/** 記録1件のEXP＝分数×（1＋その教科の配点比率）×連続ボーナス。配点に無いカテゴリ（情報など）は0%として扱う */
 export function expForLog(minutes, category, weights, streak) {
-    return Math.round(minutes * (1 + weights[category] / 100) * streakBonus(streak));
+    return Math.round(minutes * (1 + (weights[category] ?? 0) / 100) * streakBonus(streak));
 }
 export const stageOf = (exp, plan) => (exp >= plan.exp.final ? 3 : exp >= plan.exp.first ? 2 : 1);
 /** 親密度1つ＝（親密度10の必要EXP−最終進化の必要EXP）÷10。最大10 */

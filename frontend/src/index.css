@@ -1,15 +1,16 @@
 /* File: frontend/src/index.css */
 :root {
-  --bg: #f4f6fb;
+  /* 色と文字は docs/design-spec.md の「共通スタイル」に合わせる */
+  --bg: #FDF8F4;
   --surface: #ffffff;
-  --surface-muted: #f8fafc;
-  --text: #0f172a;
-  --text-sub: #475569;
-  --muted: #94a3b8;
-  --border: #e2e8f0;
-  --primary: #2563eb;
-  --primary-strong: #1d4ed8;
-  --primary-soft: #eff6ff;
+  --surface-muted: #FCF4EA;
+  --text: #4A3E3A;
+  --text-sub: #8A7A72;
+  --muted: #B0A296;
+  --border: #F1E6DA;
+  --primary: #D0607A;
+  --primary-strong: #A0405A;
+  --primary-soft: #FCEAF0;
   --danger: #dc2626;
   --danger-soft: #fef2f2;
 
@@ -28,7 +29,7 @@
   --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
   --shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
 
-  font-family: "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", system-ui, sans-serif;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Hiragino Sans", "Noto Sans JP", system-ui, sans-serif;
   color: var(--text);
   background: var(--bg);
   line-height: 1.6;

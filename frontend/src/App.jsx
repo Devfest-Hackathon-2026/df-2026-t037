@@ -2,13 +2,15 @@
 import { useEffect, useMemo, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import {
-  collection, doc, setDoc, query, where, orderBy, limit,
-  onSnapshot, serverTimestamp, Timestamp,
+  collection, doc, query, where, orderBy, limit,
+  onSnapshot, Timestamp,
 } from "firebase/firestore";
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { auth, db, loginAsGuest, loginWithGoogle } from "./firebase";
 import { requestAdvice } from "./api";
+import SetupFlow from "./screens/SetupFlow";
+import CharacterCard from "./screens/CharacterCard";
 import "./App.css";
 
 ChartJS.register(ArcElement, Tooltip);
@@ -24,12 +26,6 @@ const SUBJECTS = [
 ];
 const SUBJECT_COLOR = Object.fromEntries(SUBJECTS.map((s) => [s.name, s.color]));
 
-const GRADES = [
-  { value: "高校1年生", note: "本質的理解と学習習慣づくり" },
-  { value: "高校2年生", note: "受験基礎の確立と苦手の早期対策" },
-  { value: "高校3年生", note: "共通テスト・二次試験の実戦力" },
-];
-
 const MINUTE_PRESETS = [15, 30, 45, 60, 90, 120];
 
 const RANK_META = {
@@ -41,7 +37,6 @@ const RANK_META = {
 
 const S_TIPS = ["なぜその公式になる？", "他の単元とのつながり", "ミスの本当の原因"];
 const GOOD_LENGTH = 80;
-const EXP_PER_LEVEL = 100;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 // ===== ユーティリティ =====
@@ -93,7 +88,7 @@ export default function App() {
   const [authReady, setAuthReady] = useState(false);
   const [profile, setProfile] = useState(null);
   const [profileReady, setProfileReady] = useState(false);
-  const [gradeEditing, setGradeEditing] = useState(false);
+  const [setupEditing, setSetupEditing] = useState(false);
   const [tab, setTab] = useState("record");
   const [logs, setLogs] = useState([]);
   const [lastResult, setLastResult] = useState(null);
@@ -158,17 +153,6 @@ export default function App() {
     );
   }, [user]);
 
-  const handleSelectGrade = async (grade) => {
-    if (!user) return;
-    const data = profile ? { grade } : { grade, createdAt: serverTimestamp() };
-    try {
-      await setDoc(doc(db, "users", user.uid), data, { merge: true });
-      setGradeEditing(false);
-    } catch (err) {
-      console.error("[grade save error]", err);
-    }
-  };
-
   if (!authReady) {
     return (
       <div className="splash">
@@ -179,17 +163,34 @@ export default function App() {
 
   if (!user) return <LoginScreen />;
 
-  const needGrade = profileReady && !profile?.grade;
+  if (!profileReady) {
+    return (
+      <div className="splash">
+        <div className="spinner dark" />
+      </div>
+    );
+  }
+
+  // 初期設定（学年・受験日・ペース・志望学部）がまだなら、まず初期設定へ。
+  // 学年などの変更も同じ画面から POST /plan を通して保存する（plan を計算し直すため）
+  const needSetup = !(profile?.plan && profile?.targetFacultyId);
+  if (needSetup || setupEditing) {
+    return (
+      <SetupFlow
+        profile={profile}
+        defaultNickname={user.isAnonymous ? "" : user.displayName || ""}
+        closable={!needSetup}
+        onClose={() => setSetupEditing(false)}
+      />
+    );
+  }
 
   return (
     <div className="app">
-      <Header grade={profile?.grade} onGradeClick={() => setGradeEditing(true)} />
+      <Header grade={profile?.grade} onGradeClick={() => setSetupEditing(true)} />
 
       <main className="container main">
-        <LevelCard
-          totalExp={toNumber(profile?.totalExp)}
-          userName={user.isAnonymous ? "ゲスト" : user.displayName || user.email || ""}
-        />
+        <CharacterCard profile={profile} logs={logs} />
 
         <nav className="tabs">
           <button
@@ -214,15 +215,6 @@ export default function App() {
           <ReportView logs={logs} />
         )}
       </main>
-
-      {(needGrade || gradeEditing) && (
-        <GradeModal
-          current={profile?.grade}
-          closable={!needGrade}
-          onSelect={handleSelectGrade}
-          onClose={() => setGradeEditing(false)}
-        />
-      )}
     </div>
   );
 }
@@ -294,33 +286,6 @@ function Header({ grade, onGradeClick }) {
         </div>
       </div>
     </header>
-  );
-}
-
-// ===== レベルカード（次フェーズでキャラ進化に置き換え） =====
-function LevelCard({ totalExp, userName }) {
-  const level = Math.floor(totalExp / EXP_PER_LEVEL) + 1;
-  const progress = totalExp % EXP_PER_LEVEL;
-
-  return (
-    <section className="card level-card">
-      <div className="level-avatar">🥚</div>
-      <div className="level-body">
-        <div className="level-row">
-          <span className="level-num">{`Lv.${level}`}</span>
-          <span className="level-user">{userName}</span>
-        </div>
-        <div className="level-bar">
-          <div
-            className="level-bar-fill"
-            style={{ width: `${(progress / EXP_PER_LEVEL) * 100}%` }}
-          />
-        </div>
-        <div className="level-meta">
-          <span>{`累計 ${totalExp} EXP ・ 次のレベルまで ${EXP_PER_LEVEL - progress} EXP`}</span>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -468,6 +433,8 @@ function ResultCard({ result }) {
   const bonus = toNumber(result?.bonus_exp);
   const reason = toText(result?.score_reason);
   const advice = toText(result?.advice);
+  const growth = toNumber(result?.growth_exp);
+  const evolved = result?.evolved === true;
 
   return (
     <section className={`card result ${meta.className}`}>
@@ -485,6 +452,12 @@ function ResultCard({ result }) {
           </div>
         </div>
       </div>
+
+      {(growth > 0 || evolved) && (
+        <p className="growth-gain">
+          <span>{evolved ? `🎉 進化した！ キャラに +${growth} 育成EXP` : `🌱 キャラに +${growth} 育成EXP`}</span>
+        </p>
+      )}
 
       {reason && (
         <p className="reason">
@@ -687,44 +660,6 @@ function Stat({ label, value, unit }) {
       <div className="stat-value">
         <span>{toText(value)}</span>
         {unit && <small>{unit}</small>}
-      </div>
-    </div>
-  );
-}
-
-// ===== 学年選択モーダル =====
-function GradeModal({ current, closable, onSelect, onClose }) {
-  return (
-    <div className="modal-backdrop" onClick={closable ? onClose : undefined}>
-      <div className="card modal" onClick={(e) => e.stopPropagation()}>
-        <h2 className="card-title">学年を選択</h2>
-        <p className="card-sub">学年に合わせて、AIのアドバイスと受験戦略が変わります</p>
-        <div className="grade-options">
-          {GRADES.map((g) => (
-            <button
-              type="button"
-              key={g.value}
-              className={`grade-option ${current === g.value ? "active" : ""}`}
-              onClick={() => onSelect(g.value)}
-            >
-              <span>
-                <span>{g.value}</span>
-                <small>{g.note}</small>
-              </span>
-              <span>›</span>
-            </button>
-          ))}
-        </div>
-        {closable && (
-          <button
-            type="button"
-            className="btn-link"
-            onClick={onClose}
-            style={{ width: "100%" }}
-          >
-            <span>キャンセル</span>
-          </button>
-        )}
       </div>
     </div>
   );
