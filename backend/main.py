@@ -174,7 +174,6 @@ def call_gemini(prompt: str) -> dict:
         print(f"[Vertex AI network error] {e}")
         raise HTTPException(status_code=504, detail="AIへの接続がタイムアウトしました")
 
-# File: backend/main.py（call_gemini 内の該当箇所だけ置き換え）
     if resp.status_code != 200:
         # Vertex AIのエラー本文にはプロンプトは含まれないが、念のため先頭だけ残す
         print(f"[Vertex AI error] status={resp.status_code} body={resp.text[:300]}")
