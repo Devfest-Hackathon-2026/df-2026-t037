@@ -4,6 +4,7 @@
 Cloud Shell で backend/ から実行する（Vertex AI の権限が必要）:
     python3 tools/faculty_data.py profiles      # 紹介文の下書き（途中から再開できる）
     python3 tools/faculty_data.py check         # 出典URLの確認状況を一覧で出す
+    python3 tools/faculty_data.py redo          # 「要確認」と失敗した学部だけを下書きし直す（チーム確認済みは触らない）
     python3 tools/faculty_data.py embeddings    # 紹介文をベクトルにする（紹介文を直したら作り直す）
 
 方針（Own the Why）
@@ -44,7 +45,8 @@ EMBEDDINGS_PATH = ROOT / "faculty_embeddings.json"
 OFFICIAL_DOMAINS = {
     "todai": ["u-tokyo.ac.jp"],
     "kagaku": ["isct.ac.jp", "titech.ac.jp", "tmd.ac.jp"],
-    "chiba": ["it-chiba.ac.jp"],
+    # 大学改革支援・学位授与機構の大学情報データベースに載っている公式サイト（chibatech.jp）と従来のドメイン
+    "chiba": ["chibatech.jp", "it-chiba.ac.jp"],
     "keio": ["keio.ac.jp"],
     "hitotsu": ["hit-u.ac.jp"],
     "tufs": ["tufs.ac.jp"],
@@ -104,7 +106,7 @@ def draft_profile(fid: str) -> dict:
         "contents": [{"role": "user", "parts": [{"text": PROFILE_PROMPT.format(uni=uni["name"], faculty=f["name"])}]}],
         "tools": [{"googleSearch": {}}],
     }
-    r = requests.post(url, headers=headers(), json=body, timeout=90)
+    r = requests.post(url, headers=headers(), json=body, timeout=150)
     r.raise_for_status()
     cand = r.json()["candidates"][0]
     text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", []))
@@ -152,6 +154,38 @@ def cmd_profiles() -> None:
     cmd_check()
 
 
+def cmd_redo() -> None:
+    """出典が公式ドメインでない・紹介文が空・未作成の学部だけを、もう一度下書きする"""
+    profiles = load_json(PROFILES_PATH, {})
+    for p in profiles.values():
+        # ドメインの一覧を直したときのために、判定だけ先にやり直す
+        p["sourceIsOfficial"] = is_official(p["universityId"], p.get("sourceUrl", ""))
+    todo = [fid for fid in FACULTIES
+            if fid not in profiles
+            or (not profiles[fid].get("reviewed")
+                and (not profiles[fid].get("summary") or not profiles[fid].get("sourceIsOfficial")))]
+    print(f"{len(todo)} 件を下書きし直します")
+    for i, fid in enumerate(todo, 1):
+        p = None
+        for attempt in range(3):
+            try:
+                p = draft_profile(fid)
+                break
+            except Exception as e:
+                print(f"  [{fid}] 失敗（{attempt + 1}回目）: {e.__class__.__name__}")
+                time.sleep(3)
+        old = profiles.get(fid)
+        # 新しい下書きが公式の出典つきなら置きかえる。そうでなければ、前の下書きのうち良いほうを残す
+        if p and (p["sourceIsOfficial"] or not old or not old.get("summary")):
+            profiles[fid] = p
+        save_json(PROFILES_PATH, profiles)
+        cur = profiles.get(fid, {})
+        flag = "OK" if cur.get("sourceIsOfficial") else "要確認"
+        print(f"{i:>2}/{len(todo)} {cur.get('university', fid)} {cur.get('faculty', '')} … {flag} {cur.get('sourceUrl', '')}")
+        time.sleep(1)
+    cmd_check()
+
+
 def cmd_check() -> None:
     profiles = load_json(PROFILES_PATH, {})
     missing = [fid for fid in FACULTIES if fid not in profiles]
@@ -189,7 +223,7 @@ def cmd_embeddings() -> None:
 
 
 if __name__ == "__main__":
-    cmds = {"profiles": cmd_profiles, "check": cmd_check, "embeddings": cmd_embeddings}
+    cmds = {"profiles": cmd_profiles, "check": cmd_check, "redo": cmd_redo, "embeddings": cmd_embeddings}
     if len(sys.argv) != 2 or sys.argv[1] not in cmds:
         print(__doc__)
         sys.exit(1)
