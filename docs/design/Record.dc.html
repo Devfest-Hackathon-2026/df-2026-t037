@@ -40,7 +40,7 @@ a{color:#1A4A99}a:hover{color:#0F2E66}
 <button style="flex: 1; height: 44px; border-radius: 12px; border: 2px solid #DAD6CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700">30分</button>
 <button style="flex: 1; height: 44px; border-radius: 12px; border: 2px solid #DAD6CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700">60分</button>
 </div>
-<label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5B5F66">それ以外<input type="number" value="20" min="5" max="600" step="5" style="width: 80px; height: 36px; border-radius: 10px; border: 2px solid #DAD6CC; padding: 0 10px; font-family: inherit; font-size: 14px"> 分（5分単位）</label>
+<label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5B5F66">それ以外<input type="number" value="20" min="1" max="600" step="1" inputmode="numeric" style="width: 80px; height: 36px; border-radius: 10px; border: 2px solid #DAD6CC; padding: 0 10px; font-family: inherit; font-size: 14px"> 分（1分単位で入力できる）</label>
 </div>
 
 <label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 800">つまずいた単元（任意）
@@ -74,10 +74,10 @@ class Component extends DCLogic {
 renderVals() {
 const g = [
 ['数学', '#2563C9', ['数学', '情報']],
-['理科', '#3A7BD5', ['物理', '化学', '生物']],
-['英語', '#6B46B8', ['英語']],
-['国地', '#8A63CF', ['現代文', '古典', '日本史', '世界史']],
-['記実', '#B5500F', ['小論文', '実技']]
+['理科', '#2E9E6A', ['物理', '化学', '生物']],
+['英語', '#E0558E', ['英語']],
+['国地', '#D64545', ['現代文', '古典', '日本史', '世界史']],
+['記実', '#8A63CF', ['小論文', '実技']]
 ];
 const on = '物理';
 return { groups: g.map(([n, c, items]) => ({ n, c, items: items.map(x => ({ n: x, bg: x === on ? c : '#FFFFFF', fg: x === on ? '#FFFFFF' : '#1F2328', bd: x === on ? '2px solid ' + c : '2px solid #DAD6CC' })) })) };

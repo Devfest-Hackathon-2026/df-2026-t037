@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>京大の新キャラ案</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#D0607A}a:hover{color:#A0405A}
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.15)}}
+@keyframes flap{0%,100%{transform:rotate(0)}50%{transform:rotate(-22deg)}}
+@keyframes flapR{0%,100%{transform:rotate(0)}50%{transform:rotate(22deg)}}
+@keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes arm{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes peek{0%,40%,100%{transform:translateX(-4px)}55%,85%{transform:translateX(0)}}
+@keyframes ripple{0%{transform:scale(.7);opacity:.8}100%{transform:scale(1.1);opacity:0}}
+@keyframes chomp{0%,60%,100%{transform:translateY(0)}75%{transform:translateY(-2.5px)}}
+@media (prefers-reduced-motion: no-preference){
+.squish{animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.shadow{animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.blink{animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.swayV{animation:sway 2s ease-in-out infinite;transform-box:view-box}
+.tick{animation:spin 6s steps(12) infinite;transform-box:view-box}
+.spinM{animation:spin 1.6s linear infinite;transform-box:fill-box;transform-origin:center}
+.pop{animation:pop 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 100%}
+.flap{animation:flap 1s ease-in-out infinite;transform-box:fill-box;transform-origin:100% 60%}
+.flapR{animation:flapR 1s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 60%}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+.armM{animation:arm 2s ease-in-out infinite;transform-box:view-box;transform-origin:120px 98px}
+.peek{animation:peek 2.4s ease-in-out infinite}
+.ripple{animation:ripple 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.chomp{animation:chomp 1.6s ease-in-out infinite}
+}
+@keyframes step{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media (prefers-reduced-motion: no-preference){.stepA{animation:step .8s ease-in-out infinite}.stepB{animation:step .8s ease-in-out infinite;animation-delay:.4s}}
+</style>
+<style>@keyframes orbit{from{offset-distance:0%}to{offset-distance:100%}}@media (prefers-reduced-motion: reduce){circle[style*="offset-path"]{animation:none!important}}</style>
+</helmet>
+<div style="width: 1600px; height: 720px; box-sizing: border-box; padding: 40px; background: #FDF8F4; font-family: 'M PLUS Rounded 1c', sans-serif; color: #4A3E3A; display: flex; flex-direction: column; gap: 18px">
+<div><p style="margin: 0; font-size: 14px; font-weight: 800; color: #D0607A">D-1｜京都大学（ゲタまるに代わる、まったく新しい案）</p>
+<h1 style="margin: 2px 0 0; font-size: 30px; font-weight: 900">京大の新しいキャラクター 5案（幼体 → 成体 → 最終進化）</h1>
+<p style="margin: 4px 0 0; font-size: 13px; color: #8A7A72">体の形・点の目・ほっぺは9大学共通のまま、大学ごとに変えるのは体の色とアイテム1つ、の決まりで考えた</p></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px"><div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 200px; border-radius: 18px; background: #F2F6E6; display: flex; align-items: flex-end; justify-content: center; gap: 0; padding-bottom: 8px; box-sizing: border-box"><svg width="84" height="84" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="a1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F6FAEC"></stop><stop offset=".55" stop-color="#CCDCA2"></stop><stop offset="1" stop-color="#8EA65A"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="141" rx="30" ry="5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#a1)"></ellipse><ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path><circle cx="80" cy="82" r="7" fill="#F59A2E"></circle><circle cx="77.9" cy="79.5" r="2.1" fill="#FFC870"></circle><ellipse cx="81.4" cy="75.0" rx="3.1" ry="1.5" fill="#5E9E4C"></ellipse></g>
+</svg><svg width="110" height="110" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="a2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F4F8E6"></stop><stop offset=".55" stop-color="#BCD08A"></stop><stop offset="1" stop-color="#7A9444"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="66" cy="138" rx="9" ry="5" fill="#A6BE6E"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#A6BE6E"></ellipse><rect x="18" y="74" width="124" height="56" rx="16" fill="#F2D4C8"></rect><rect x="24" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="38" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="52" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="66" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="80" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="94" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="108" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="122" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="136" y="74" width="5" height="56" fill="#E07A6A" opacity=".55"></rect><rect x="18" y="80" width="124" height="4" fill="#E07A6A" opacity=".55"></rect><rect x="18" y="91" width="124" height="4" fill="#E07A6A" opacity=".55"></rect><rect x="18" y="102" width="124" height="4" fill="#E07A6A" opacity=".55"></rect><rect x="18" y="113" width="124" height="4" fill="#E07A6A" opacity=".55"></rect><rect x="18" y="124" width="124" height="4" fill="#E07A6A" opacity=".55"></rect><circle cx="80" cy="100" r="40" fill="url(#a2)"></circle><ellipse cx="42" cy="106" rx="6.5" ry="9" fill="#A6BE6E" transform="rotate(20 42 106)"></ellipse><ellipse cx="118" cy="106" rx="6.5" ry="9" fill="#A6BE6E" transform="rotate(-20 118 106)"></ellipse><ellipse cx="65" cy="80" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse><g class="blink"><ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 112 Q80 116 84 112" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path><circle cx="120" cy="118" r="7" fill="#F59A2E"></circle><circle cx="117.9" cy="115.5" r="2.1" fill="#FFC870"></circle><ellipse cx="121.4" cy="111.0" rx="3.1" ry="1.5" fill="#5E9E4C"></ellipse></g>
+</svg><svg width="180" height="180" viewBox="-10 -22 180 182" role="img" aria-label="コタまる。時計台前のこたつに入り、みかんとお茶">
+<defs><radialGradient id="a3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F4F8E6"></stop><stop offset=".55" stop-color="#BCD08A"></stop><stop offset="1" stop-color="#7A9444"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="42" ry="6" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><circle cx="80" cy="92" r="50" fill="url(#a3)"></circle><ellipse cx="60" cy="66" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse><g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 105 Q80 111 85 105 Z" fill="#E8687A"></path><rect x="10" y="120" width="140" height="34" rx="12" fill="#F2D4C8"></rect><rect x="16" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="30" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="44" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="58" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="72" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="86" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="100" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="114" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="128" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="142" y="120" width="5" height="34" fill="#E07A6A" opacity=".55"></rect><rect x="10" y="126" width="140" height="4" fill="#E07A6A" opacity=".55"></rect><rect x="10" y="137" width="140" height="4" fill="#E07A6A" opacity=".55"></rect><rect x="10" y="148" width="140" height="4" fill="#E07A6A" opacity=".55"></rect>
+<rect x="4" y="114" width="152" height="8" rx="3" fill="#B07A48"></rect><rect x="4" y="114" width="152" height="3" rx="1.5" fill="#C89060"></rect>
+<ellipse cx="50" cy="114" rx="8" ry="5" fill="#A6BE6E"></ellipse><ellipse cx="110" cy="114" rx="8" ry="5" fill="#A6BE6E"></ellipse>
+<circle cx="22" cy="106" r="7" fill="#F59A2E"></circle><circle cx="19.9" cy="103.5" r="2.1" fill="#FFC870"></circle><ellipse cx="23.4" cy="99.0" rx="3.1" ry="1.5" fill="#5E9E4C"></ellipse><circle cx="34" cy="108" r="6" fill="#F59A2E"></circle><circle cx="32.2" cy="105.9" r="1.8" fill="#FFC870"></circle><ellipse cx="35.2" cy="102.0" rx="2.7" ry="1.3" fill="#5E9E4C"></ellipse><circle cx="28" cy="98" r="6" fill="#F59A2E"></circle><circle cx="26.2" cy="95.9" r="1.8" fill="#FFC870"></circle><ellipse cx="29.2" cy="92.0" rx="2.7" ry="1.3" fill="#5E9E4C"></ellipse>
+<rect x="128" y="100" width="14" height="14" rx="3" fill="#E8E2D2"></rect><path class="twinkle" d="M132 96 Q130 91 133 87 M138 96 Q136 90 139 86" fill="none" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round"></path></g>
+</svg></div>
+<p style="margin: 0; font-size: 12px; font-weight: 900; color: #5E9E4C">案A｜時計台前のこたつ</p>
+<p style="margin: 0; font-size: 22px; font-weight: 900">コタまる</p>
+<p style="margin: 0; font-size: 12.5px; line-height: 1.65">京大名物・時計台前に置かれる「こたつ」と、のんびり自由な学風。みかん → 毛布 → こたつ</p>
+<p style="margin: 0; font-size: 11.5px; font-weight: 800; color: #8A7A72; background: #F7F1EC; border-radius: 8px; padding: 4px 8px">進化：みかんを頭にのせた豆 → 毛布をしょった成体 → こたつで勉強</p>
+<ul style="margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7; color: #6B6358"><li>いちばん「京大らしいネタ」で、話題になる</li><li>体の下半分がこたつで隠れる（学部ピンはこたつ布団の上に）</li><li>動き：みかんがころん、お茶の湯気</li></ul>
+</div><div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 200px; border-radius: 18px; background: #FBF1E6; display: flex; align-items: flex-end; justify-content: center; gap: 0; padding-bottom: 8px; box-sizing: border-box"><svg width="84" height="84" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="b1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FBEFE2"></stop><stop offset=".55" stop-color="#E2BE96"></stop><stop offset="1" stop-color="#A87A52"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="141" rx="30" ry="5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><circle cx="50" cy="106" r="6" fill="#C89A70"></circle><circle cx="110" cy="106" r="6" fill="#C89A70"></circle><circle cx="50" cy="106" r="3" fill="#F8C8BC"></circle><circle cx="110" cy="106" r="3" fill="#F8C8BC"></circle><ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#b1)"></ellipse><ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<ellipse cx="80" cy="116" rx="20" ry="15" fill="#F8C8BC"></ellipse><g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path></g>
+</svg><svg width="110" height="110" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="b2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FBEFE2"></stop><stop offset=".55" stop-color="#E2BE96"></stop><stop offset="1" stop-color="#A87A52"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="66" cy="138" rx="9" ry="5" fill="#C89A70"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#C89A70"></ellipse><path class="sway" d="M112 128 Q140 130 138 108 Q136 96 126 100" fill="none" stroke="#A87A52" stroke-width="6" stroke-linecap="round"></path><circle cx="42" cy="88" r="10" fill="#C89A70"></circle><circle cx="118" cy="88" r="10" fill="#C89A70"></circle><circle cx="42" cy="88" r="5.5" fill="#F8C8BC"></circle><circle cx="118" cy="88" r="5.5" fill="#F8C8BC"></circle><circle cx="80" cy="100" r="40" fill="url(#b2)"></circle><ellipse cx="42" cy="106" rx="6.5" ry="9" fill="#C89A70" transform="rotate(20 42 106)"></ellipse><ellipse cx="118" cy="106" rx="6.5" ry="9" fill="#C89A70" transform="rotate(-20 118 106)"></ellipse><ellipse cx="65" cy="80" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse><ellipse cx="80" cy="106" rx="26" ry="19" fill="#F8C8BC"></ellipse><g class="blink"><ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 112 Q80 116 84 112" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path></g>
+</svg><svg width="180" height="180" viewBox="-10 -22 180 182" role="img" aria-label="サルまる。大きな耳としっぽ、双眼鏡とフィールドノート">
+<defs><radialGradient id="b3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FBEFE2"></stop><stop offset=".55" stop-color="#E2BE96"></stop><stop offset="1" stop-color="#A87A52"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="42" ry="6" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="62" cy="140" rx="11" ry="6" fill="#C89A70"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#C89A70"></ellipse><path class="sway" d="M120 132 Q156 134 152 104 Q148 88 134 94" fill="none" stroke="#A87A52" stroke-width="8" stroke-linecap="round"></path><circle cx="30" cy="76" r="13" fill="#C89A70"></circle><circle cx="130" cy="76" r="13" fill="#C89A70"></circle><circle cx="30" cy="76" r="7" fill="#F8C8BC"></circle><circle cx="130" cy="76" r="7" fill="#F8C8BC"></circle><circle cx="80" cy="92" r="50" fill="url(#b3)"></circle><ellipse cx="31" cy="102" rx="8" ry="11" fill="#C89A70" transform="rotate(20 31 102)"></ellipse><ellipse cx="129" cy="102" rx="8" ry="11" fill="#C89A70" transform="rotate(-20 129 102)"></ellipse><ellipse cx="60" cy="66" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse><ellipse cx="80" cy="98" rx="34" ry="24" fill="#F8C8BC"></ellipse><g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 105 Q80 111 85 105 Z" fill="#E8687A"></path><path d="M58 112 Q80 124 102 112" fill="none" stroke="#6E4428" stroke-width="2"></path>
+<rect x="68" y="120" width="10" height="16" rx="4" fill="#4A4E58"></rect><rect x="82" y="120" width="10" height="16" rx="4" fill="#4A4E58"></rect><rect x="76" y="124" width="8" height="5" fill="#2E3238"></rect><circle cx="73" cy="134" r="3" fill="#9EC6E8"></circle><circle cx="87" cy="134" r="3" fill="#9EC6E8"></circle>
+<g transform="rotate(-12 30 118)"><rect x="16" y="104" width="26" height="30" rx="3" fill="#3E7A52"></rect><rect x="20" y="108" width="18" height="22" fill="#F6EBD8"></rect><path d="M22 113 L36 113 M22 118 L36 118 M22 123 L31 123" stroke="#B0A296" stroke-width="1.4"></path></g><ellipse cx="34" cy="118" rx="8" ry="10" fill="#C89A70"></ellipse></g>
+</svg></div>
+<p style="margin: 0; font-size: 12px; font-weight: 900; color: #A87A52">案B｜サル学・フィールドワーク</p>
+<p style="margin: 0; font-size: 22px; font-weight: 900">サルまる</p>
+<p style="margin: 0; font-size: 12.5px; line-height: 1.65">京大が世界をリードしてきたサル学（霊長類研究）と、野外に出て調べる研究スタイル</p>
+<p style="margin: 0; font-size: 11.5px; font-weight: 800; color: #8A7A72; background: #F7F1EC; border-radius: 8px; padding: 4px 8px">進化：小さな耳 → 大きな耳としっぽ → 双眼鏡とフィールドノート</p>
+<ul style="margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7; color: #6B6358"><li>動物キャラなので9大学の中で見分けやすい</li><li>研究の京大を表せる</li><li>顔がピンクのお面になる（顔の決まりの例外）</li></ul>
+</div><div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 200px; border-radius: 18px; background: #F0F6E8; display: flex; align-items: flex-end; justify-content: center; gap: 0; padding-bottom: 8px; box-sizing: border-box"><svg width="84" height="84" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="c1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FBF6E8"></stop><stop offset=".55" stop-color="#E2D2A6"></stop><stop offset="1" stop-color="#A88C5C"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="141" rx="30" ry="5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><path d="M80 86 L80 74" stroke="#7A5A36" stroke-width="2.5" stroke-linecap="round"></path><g class="sway"><ellipse cx="80" cy="68" rx="6" ry="9" fill="#4E9A48"></ellipse><path d="M80 61 L80 75" stroke="#8CCB5A" stroke-width="1"></path></g><ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#c1)"></ellipse><ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path></g>
+</svg><svg width="110" height="110" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="c2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FBF6E8"></stop><stop offset=".55" stop-color="#E2D2A6"></stop><stop offset="1" stop-color="#A88C5C"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="66" cy="138" rx="9" ry="5" fill="#C8B07E"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#C8B07E"></ellipse><path d="M80 64 L80 46" stroke="#7A5A36" stroke-width="4" stroke-linecap="round"></path><g class="sway" style="animation-duration: 3s"><circle cx="68" cy="44" r="12" fill="#5EA654"></circle><circle cx="92" cy="44" r="12" fill="#4E9A48"></circle><circle cx="80" cy="34" r="13" fill="#6AB45E"></circle><ellipse cx="76" cy="31" rx="5" ry="3" fill="#FFFFFF" opacity=".35"></ellipse></g><circle cx="80" cy="100" r="40" fill="url(#c2)"></circle><ellipse cx="42" cy="106" rx="6.5" ry="9" fill="#C8B07E" transform="rotate(20 42 106)"></ellipse><ellipse cx="118" cy="106" rx="6.5" ry="9" fill="#C8B07E" transform="rotate(-20 118 106)"></ellipse><ellipse cx="65" cy="80" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse><g class="blink"><ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 112 Q80 116 84 112" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path></g>
+</svg><svg width="180" height="180" viewBox="-10 -22 180 182" role="img" aria-label="クスまる。頭に大きなクスノキの木と黒い実">
+<defs><radialGradient id="c3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FBF6E8"></stop><stop offset=".55" stop-color="#E2D2A6"></stop><stop offset="1" stop-color="#A88C5C"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="42" ry="6" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="62" cy="140" rx="11" ry="6" fill="#C8B07E"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#C8B07E"></ellipse><path d="M74 46 L76 30 M86 46 L84 30" stroke="#7A5A36" stroke-width="5" stroke-linecap="round"></path><g class="sway" style="animation-duration: 4s"><circle cx="48" cy="30" r="15" fill="#4E8E40"></circle><circle cx="112" cy="30" r="15" fill="#4E8E40"></circle><circle cx="62" cy="18" r="16" fill="#5EA654"></circle><circle cx="98" cy="18" r="16" fill="#5EA654"></circle><circle cx="80" cy="10" r="17" fill="#6AB45E"></circle><circle cx="80" cy="30" r="15" fill="#5EA654"></circle><circle cx="40" cy="42" r="10" fill="#4E8E40"></circle><circle cx="120" cy="42" r="10" fill="#4E8E40"></circle><circle cx="56" cy="26" r="2.2" fill="#2B2632"></circle><circle cx="104" cy="24" r="2.2" fill="#2B2632"></circle><circle cx="78" cy="6" r="2.2" fill="#2B2632"></circle><circle cx="118" cy="38" r="2.2" fill="#2B2632"></circle><ellipse cx="66" cy="10" rx="7" ry="4" fill="#FFFFFF" opacity=".35"></ellipse><g class="twinkle"><path d="M136 18 l2 4 4 2 -4 2 -2 4 -2 -4 -4 -2 4 -2z" fill="#FFE070"></path></g></g><circle cx="80" cy="92" r="50" fill="url(#c3)"></circle><ellipse cx="31" cy="102" rx="8" ry="11" fill="#C8B07E" transform="rotate(20 31 102)"></ellipse><ellipse cx="129" cy="102" rx="8" ry="11" fill="#C8B07E" transform="rotate(-20 129 102)"></ellipse><ellipse cx="60" cy="66" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse><g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 105 Q80 111 85 105 Z" fill="#E8687A"></path><rect x="116" y="108" width="20" height="14" rx="3" fill="#8A5A36"></rect><path d="M118 108 Q126 100 134 108" fill="none" stroke="#6E4428" stroke-width="2"></path><circle cx="126" cy="114" r="3" fill="#F2C230"></circle></g>
+</svg></div>
+<p style="margin: 0; font-size: 12px; font-weight: 900; color: #4E8E40">案C｜校章のクスノキ</p>
+<p style="margin: 0; font-size: 22px; font-weight: 900">クスまる</p>
+<p style="margin: 0; font-size: 12.5px; line-height: 1.65">京大の校章に描かれた大きなクスノキ。葉 → 若木 → 大きな木と黒い実</p>
+<p style="margin: 0; font-size: 11.5px; font-weight: 800; color: #8A7A72; background: #F7F1EC; border-radius: 8px; padding: 4px 8px">進化：つやつやの葉1枚 → 小さな木 → 大楠</p>
+<ul style="margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7; color: #6B6358"><li>大学のシンボルそのもので、説明がいらない</li><li>東大の銀杏（葉1枚）と植物どうしで少し似る</li><li>頭のリボンは木の上に移す必要あり</li></ul>
+</div><div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 200px; border-radius: 18px; background: #EEF0FA; display: flex; align-items: flex-end; justify-content: center; gap: 0; padding-bottom: 8px; box-sizing: border-box"><svg width="84" height="84" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="d1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F8F0FB"></stop><stop offset=".55" stop-color="#C9A6DC"></stop><stop offset="1" stop-color="#7E4E9E"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="141" rx="30" ry="5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#d1)"></ellipse><ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path><g class="twinkle" style="animation-duration: 1.1s"><path d="M80 84 q-4.4 -6.6000000000000005 0 -13.200000000000001 q4.4 6.6000000000000005 0 13.200000000000001z" fill="#FFB648"></path><path d="M80 84 q-2.2 -3.3000000000000003 0 -6.6000000000000005 q2.2 3.3000000000000003 0 6.6000000000000005z" fill="#FFE07A"></path></g></g>
+</svg><svg width="110" height="110" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="d2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F8F0FB"></stop><stop offset=".55" stop-color="#C9A6DC"></stop><stop offset="1" stop-color="#7E4E9E"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="66" cy="138" rx="9" ry="5" fill="#B58CCB"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#B58CCB"></ellipse><path d="M48 66 L80 40 L112 66 Z" fill="#5E8A5A"></path><circle cx="80" cy="100" r="40" fill="url(#d2)"></circle><ellipse cx="42" cy="106" rx="6.5" ry="9" fill="#B58CCB" transform="rotate(20 42 106)"></ellipse><ellipse cx="118" cy="106" rx="6.5" ry="9" fill="#B58CCB" transform="rotate(-20 118 106)"></ellipse><ellipse cx="65" cy="80" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse><g class="blink"><ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 112 Q80 116 84 112" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path><path d="M80 46 L80 62 M72 52 L88 52 M80 52 L72 62 M80 52 L88 62" stroke="#FF9A3C" stroke-width="3.2" stroke-linecap="round"></path></g>
+</svg><svg width="180" height="180" viewBox="-10 -22 180 182" role="img" aria-label="ダイまる。頭の上の山に「大」の送り火が燃える">
+<defs><radialGradient id="d3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F8F0FB"></stop><stop offset=".55" stop-color="#C9A6DC"></stop><stop offset="1" stop-color="#7E4E9E"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="42" ry="6" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="62" cy="140" rx="11" ry="6" fill="#B58CCB"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#B58CCB"></ellipse><path d="M14 60 Q46 -12 80 -12 Q114 -12 146 60 Z" fill="#3E6A44"></path><path d="M28 50 Q56 -4 80 -6" fill="none" stroke="#5A8A58" stroke-width="3"></path><g opacity=".95"><path d="M80 4 L80 22 M66 12 L94 12 M80 12 L66 30 M80 12 L94 30" stroke="#FF8A2C" stroke-width="6" stroke-linecap="round"></path><path d="M80 4 L80 22 M66 12 L94 12 M80 12 L66 30 M80 12 L94 30" stroke="#FFE07A" stroke-width="2.4" stroke-linecap="round"></path></g><g class="twinkle" style="animation-duration: 1.1s"><path d="M38 30 q-3.2 -4.800000000000001 0 -9.600000000000001 q3.2 4.800000000000001 0 9.600000000000001z" fill="#FFB648"></path><path d="M38 30 q-1.6 -2.4000000000000004 0 -4.800000000000001 q1.6 2.4000000000000004 0 4.800000000000001z" fill="#FFE07A"></path></g><g class="twinkle" style="animation-duration: 1.1s"><path d="M124 34 q-2.8 -4.199999999999999 0 -8.399999999999999 q2.8 4.199999999999999 0 8.399999999999999z" fill="#FFB648"></path><path d="M124 34 q-1.4 -2.0999999999999996 0 -4.199999999999999 q1.4 2.0999999999999996 0 4.199999999999999z" fill="#FFE07A"></path></g><circle cx="80" cy="92" r="50" fill="url(#d3)"></circle><ellipse cx="31" cy="102" rx="8" ry="11" fill="#B58CCB" transform="rotate(20 31 102)"></ellipse><ellipse cx="129" cy="102" rx="8" ry="11" fill="#B58CCB" transform="rotate(-20 129 102)"></ellipse><ellipse cx="60" cy="66" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse><g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 105 Q80 111 85 105 Z" fill="#E8687A"></path><g class="twinkle"><circle cx="142" cy="78" r="2" fill="#FFB648"></circle><circle cx="20" cy="70" r="1.6" fill="#FFB648"></circle><circle cx="136" cy="96" r="1.4" fill="#FFE07A"></circle></g></g>
+</svg></div>
+<p style="margin: 0; font-size: 12px; font-weight: 900; color: #E06A2A">案D｜大文字の送り火</p>
+<p style="margin: 0; font-size: 22px; font-weight: 900">ダイまる</p>
+<p style="margin: 0; font-size: 12.5px; line-height: 1.65">キャンパスのすぐ東、如意ヶ嶽に灯る「大」の送り火。火の粉 → 山 → 燃える「大」</p>
+<p style="margin: 0; font-size: 11.5px; font-weight: 800; color: #8A7A72; background: #F7F1EC; border-radius: 8px; padding: 4px 8px">進化：火の粉 → 小さな山と「大」 → 燃える「大」の山</p>
+<ul style="margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7; color: #6B6358"><li>京都らしさが一目でわかり、火がゆらめいて目立つ</li><li>京大ではなく京都の行事なので、大学らしさは弱め</li><li>京紫の体で9大学の中で色がかぶらない</li></ul>
+</div><div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+<div style="height: 200px; border-radius: 18px; background: #F4F2FC; display: flex; align-items: flex-end; justify-content: center; gap: 0; padding-bottom: 8px; box-sizing: border-box"><svg width="84" height="84" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="e1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F8F6FF"></stop><stop offset=".55" stop-color="#D2CCF2"></stop><stop offset="1" stop-color="#8E84CC"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="141" rx="30" ry="5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#e1)"></ellipse><ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path><circle class="twinkle" cx="104" cy="88" r="4" fill="#FFB648"></circle></g>
+</svg><svg width="110" height="110" viewBox="0 0 160 160" role="img" aria-label="">
+<defs><radialGradient id="e2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F8F6FF"></stop><stop offset=".55" stop-color="#D2CCF2"></stop><stop offset="1" stop-color="#8E84CC"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="66" cy="138" rx="9" ry="5" fill="#B4ACE2"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#B4ACE2"></ellipse><circle cx="80" cy="100" r="40" fill="url(#e2)"></circle><ellipse cx="42" cy="106" rx="6.5" ry="9" fill="#B4ACE2" transform="rotate(20 42 106)"></ellipse><ellipse cx="118" cy="106" rx="6.5" ry="9" fill="#B4ACE2" transform="rotate(-20 118 106)"></ellipse><ellipse cx="65" cy="80" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse><g class="blink"><ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 112 Q80 116 84 112" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path><g transform="rotate(-14 80 100)"><ellipse cx="80" cy="100" rx="58" ry="14" fill="none" stroke="#B4ACE2" stroke-width="2" opacity=".9"></ellipse><circle r="4.5" fill="#FFB648" style="offset-path: path('M22 100 a58 14 0 1 0 116 0 a58 14 0 1 0 -116 0'); animation: orbit 3.2s linear infinite; animation-delay: 0.0s"></circle></g></g>
+</svg><svg width="180" height="180" viewBox="-10 -22 180 182" role="img" aria-label="チュウまる。体のまわりを2本の輪と光の粒が回る">
+<defs><radialGradient id="e3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F8F6FF"></stop><stop offset=".55" stop-color="#D2CCF2"></stop><stop offset="1" stop-color="#8E84CC"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="42" ry="6" fill="#3A3A4A" opacity=".14"></ellipse><g class="squish"><ellipse cx="62" cy="140" rx="11" ry="6" fill="#B4ACE2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#B4ACE2"></ellipse><circle cx="80" cy="92" r="50" fill="url(#e3)"></circle><ellipse cx="31" cy="102" rx="8" ry="11" fill="#B4ACE2" transform="rotate(20 31 102)"></ellipse><ellipse cx="129" cy="102" rx="8" ry="11" fill="#B4ACE2" transform="rotate(-20 129 102)"></ellipse><ellipse cx="60" cy="66" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse><g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 105 Q80 111 85 105 Z" fill="#E8687A"></path><g transform="rotate(-16 80 92)"><ellipse cx="80" cy="92" rx="72" ry="16" fill="none" stroke="#B4ACE2" stroke-width="2" opacity=".9"></ellipse><circle r="4.5" fill="#FFB648" style="offset-path: path('M8 92 a72 16 0 1 0 144 0 a72 16 0 1 0 -144 0'); animation: orbit 3.6s linear infinite; animation-delay: 0.0s"></circle><circle r="4.5" fill="#FFB648" style="offset-path: path('M8 92 a72 16 0 1 0 144 0 a72 16 0 1 0 -144 0'); animation: orbit 3.6s linear infinite; animation-delay: -1.8s"></circle></g><g transform="rotate(16 80 92)"><ellipse cx="80" cy="92" rx="72" ry="16" fill="none" stroke="#B4ACE2" stroke-width="2" opacity=".9"></ellipse><circle r="4.5" fill="#5DB2EA" style="offset-path: path('M8 92 a72 16 0 1 0 144 0 a72 16 0 1 0 -144 0'); animation: orbit 4.4s linear infinite; animation-delay: 0.0s"></circle></g></g>
+</svg></div>
+<p style="margin: 0; font-size: 12px; font-weight: 900; color: #7A6ACC">案E｜中間子・研究の京大</p>
+<p style="margin: 0; font-size: 22px; font-weight: 900">チュウまる</p>
+<p style="margin: 0; font-size: 12.5px; line-height: 1.65">京大の研究から生まれた「中間子」の理論のように、体のまわりを粒が回る。日本で最初のノーベル賞の研究</p>
+<p style="margin: 0; font-size: 11.5px; font-weight: 800; color: #8A7A72; background: #F7F1EC; border-radius: 8px; padding: 4px 8px">進化：光の粒1つ → 輪が1本 → 輪2本と粒3つ</p>
+<ul style="margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7; color: #6B6358"><li>「研究の京大」を一番まっすぐ表せる</li><li>動きがきれいで、最終進化の特別感が出る</li><li>理系の印象が強く、文系の学部には合いにくい</li></ul>
+</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":720}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

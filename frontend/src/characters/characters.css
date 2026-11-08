@@ -47,3 +47,11 @@
 
 /* 一覧などで動きを止める */
 .tama-still * { animation: none !important; }
+
+/* 京大ダイまる（五山の送り火） */
+@keyframes flick{0%,100%{transform:scale(1,1)}30%{transform:scale(.85,1.15)}60%{transform:scale(1.1,.9)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-22px);opacity:0}}
+@keyframes ripple2{0%,100%{transform:translateX(0);opacity:.5}50%{transform:translateX(4px);opacity:1}}
+@keyframes pend{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+@keyframes pend2{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-6deg)}}
+@media (prefers-reduced-motion: no-preference){.flick{animation:flick 1.2s ease-in-out infinite}.rise{animation:rise 2.8s ease-out infinite;transform-box:fill-box}.ripple{animation:ripple2 2.4s ease-in-out infinite}.pend{animation:pend 1.9s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0%}.pend2{animation:pend2 1.9s ease-in-out infinite;animation-delay:-.25s;transform-box:fill-box;transform-origin:50% 0%}}
