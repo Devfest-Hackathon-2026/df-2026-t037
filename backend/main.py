@@ -73,6 +73,8 @@ class AdviseRequest(BaseModel):
     # 1〜600の整数（C-4。画面の入力欄・Firestoreのルールと同じ範囲）
     minutes: int = Field(ge=1, le=600)
     reflection: str = Field(min_length=1, max_length=2000)
+    # タイマーで測った記録か（C-23）。true のときは timerStartedAt からの経過分を上限にする
+    fromTimer: bool = False
 
 
 class PlanRequest(BaseModel):
@@ -205,6 +207,17 @@ def call_gemini(prompt: str) -> dict:
         raise HTTPException(status_code=502, detail="AIの応答を解析できませんでした")
 
 
+def check_timer_minutes(user: dict, minutes: int) -> None:
+    """タイマーで測った記録は、timerStartedAt からの経過分（切り上げ・最低1分）までにする（C-23）"""
+    started = user.get("timerStartedAt")
+    if not isinstance(started, datetime):
+        raise HTTPException(status_code=400, detail="タイマーが動いていません")
+    if started.tzinfo is None:
+        started = started.replace(tzinfo=timezone.utc)
+    if minutes > progress.timer_minutes_limit(started, datetime.now(timezone.utc)):
+        raise HTTPException(status_code=400, detail="タイマーで測った時間より長くは記録できません")
+
+
 # ---- エンドポイント ----
 @app.get("/health")
 def health():
@@ -218,9 +231,14 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
 
     user_ref = db.collection("users").document(uid)
     snap = user_ref.get()
-    grade = (snap.to_dict() or {}).get("grade") if snap.exists else None
+    user = (snap.to_dict() or {}) if snap.exists else {}
+    grade = user.get("grade")
     if grade not in GRADES:
         grade = "高校生"
+
+    # タイマーからの記録は、Geminiを呼ぶ前に分数の上限を確かめる（トランザクションの中でもう一度確かめる）
+    if data.fromTimer:
+        check_timer_minutes(user, data.minutes)
 
     result = call_gemini(build_prompt(grade, data, fetch_history(uid)))
 
@@ -262,7 +280,11 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
     """study_logs の追加と、totalExp・連続日数・育成EXP・進化・親密度の更新を1つのトランザクションで行う"""
     snap = user_ref.get(transaction=txn)
     user = (snap.to_dict() or {}) if snap.exists else {}
+    if data.fromTimer:
+        check_timer_minutes(user, data.minutes)
 
+    # 記録はシーズンの番号をつけて残す（C-25：学年を変えたあとは、新しいシーズンの計算やグラフに入れない）
+    log = {**log, "seasonId": int(user.get("seasonId") or 0), "category": progress.SUBJECT_CATEGORY.get(data.subject)}
     updates: dict = {"totalExp": firestore.Increment(total_exp_gain)}
     growth = {"growth_exp": 0, "growth_total": None, "stage": None, "bond": None,
               "evolved": False, "streak": int(user.get("streak") or 0)}
@@ -286,8 +308,7 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
         updates.update({"growthExp": new_exp, "stage": stage, "bond": bond})
         growth.update({"growth_exp": gained, "growth_total": new_exp, "stage": stage,
                        "bond": bond, "evolved": stage > old_stage})
-        log = {**log, "category": progress.SUBJECT_CATEGORY.get(data.subject),
-               "growth_exp": gained, "streak": growth["streak"]}
+        log = {**log, "growth_exp": gained, "streak": growth["streak"]}
 
     txn.set(log_ref, log)
     txn.set(user_ref, updates, merge=True)
@@ -322,11 +343,18 @@ def _commit_plan(txn, user_ref, data: PlanRequest, plan: dict) -> dict:
     snap = user_ref.get(transaction=txn)
     user = (snap.to_dict() or {}) if snap.exists else {}
 
-    # 志望校やペースを変えても育成EXPは0に戻さず、進み具合（%）を保つ
-    growth_exp = progress.rescale_growth(int(user.get("growthExp") or 0), user.get("plan"), plan)
+    reset: dict = {}
+    if progress.grade_changed(user, data.grade):
+        # 学年を変えたら、育成をはじめからにする（C-25）。記録は消さず、シーズンの番号だけ変える
+        reset = progress.season_reset_fields(user)
+        growth_exp = 0
+    else:
+        # 志望校やペースだけを変えたときは、育成EXPを0に戻さず進み具合（%）を保つ（C-18）
+        growth_exp = progress.rescale_growth(int(user.get("growthExp") or 0), user.get("plan"), plan)
     stage, bond = progress.stage_and_bond(growth_exp, plan)
 
     updates = {
+        **reset,
         "grade": data.grade,
         "examDate": data.examDate.isoformat(),
         "pace": data.pace,
@@ -341,4 +369,4 @@ def _commit_plan(txn, user_ref, data: PlanRequest, plan: dict) -> dict:
         updates["createdAt"] = firestore.SERVER_TIMESTAMP
     txn.set(user_ref, updates, merge=True)
 
-    return {"plan": plan, "growthExp": growth_exp, "stage": stage, "bond": bond}
+    return {"plan": plan, "growthExp": growth_exp, "stage": stage, "bond": bond, "seasonReset": bool(reset)}

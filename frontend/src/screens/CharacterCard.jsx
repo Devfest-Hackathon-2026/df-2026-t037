@@ -7,7 +7,7 @@ import {
   GRADE_FROM_APP, addDays, comma, daysBetween, hoursLabel, nextGoal, parseYmd,
   roughDate, streakInfo, todayHours, todayStart,
 } from "../game/display";
-import { CATEGORIES, SUBJECT_CATEGORY } from "../game/subjects";
+import { CATEGORIES, categoryOfLog, inSeason } from "../game/subjects";
 import { buildItems, sanitizeEquipped, wearsUniEquip } from "../game/items";
 import "./tama.css";
 
@@ -95,19 +95,19 @@ export default function CharacterCard({ profile, logs, menu }) {
         <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} faculty={faculty} />
       </div>
 
-      <WeekBars logs={logs} faculty={faculty} />
+      <WeekBars logs={logs} faculty={faculty} profile={profile} />
     </section>
   );
 }
 
-/** この7日の教科の割合と、志望学部の配点（黒い線） */
-function WeekBars({ logs, faculty }) {
+/** この7日の教科の割合（6教科・C-22）と、志望学部の配点（黒い線）。今のシーズンの記録だけで数える（C-25） */
+function WeekBars({ logs, faculty, profile }) {
   const since = Date.now() - 7 * DAY_MS;
-  const recent = (logs || []).filter((l) => l.dateObj && l.dateObj.getTime() >= since);
+  const recent = (logs || []).filter((l) => l.dateObj && l.dateObj.getTime() >= since && inSeason(l, profile));
   const total = recent.reduce((a, l) => a + (Number(l.minutes) || 0), 0);
   const byCat = {};
   for (const l of recent) {
-    const c = SUBJECT_CATEGORY[l.subject];
+    const c = categoryOfLog(l);
     if (c) byCat[c] = (byCat[c] || 0) + (Number(l.minutes) || 0);
   }
 

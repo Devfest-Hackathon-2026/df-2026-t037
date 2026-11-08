@@ -14,6 +14,18 @@ _DATA = json.loads((Path(__file__).parent / "universities.json").read_text(encod
 FACULTIES = {f["id"]: f for f in _DATA["faculties"]}
 UNIVERSITIES = {u["id"]: u for u in _DATA["universities"]}
 
+# 配点の教科は6つ（C-22）：数学 / 理科 / 英語 / 国語 / 地歴・公民 / 小論文・総合問題
+CATEGORIES = ("math", "sci", "eng", "jp", "soc", "essay")
+
+# 前のデータの学部id → 今のid（すでに選んでいる人のため。universities.js の FACULTY_ALIASES と同じ）
+FACULTY_ALIASES = {"keio-sfc": "keio-env"}
+
+
+def resolve_faculty_id(faculty_id: str | None) -> str | None:
+    """前のidなら今のidに読みかえる。知らないidは None"""
+    fid = FACULTY_ALIASES.get(faculty_id or "", faculty_id)
+    return fid if fid in FACULTIES else None
+
 # 学年ごとの1日の目安（時間）。高3は受験学年なので毎日8時間
 GRADE_HOURS = {"高1": 2.5, "高2": 3.5, "高3": 8.0}
 EXAM_GRADES = {"高3"}
@@ -69,7 +81,7 @@ def faculty_factor(f: dict) -> float:
 
 def make_plan(grade: str, start: date, exam_date: date, faculty_id: str, pace: str = "futsuu") -> dict:
     """シーズンのはじめに1回だけ計算して users/{uid}.plan に保存する。"""
-    f = FACULTIES[faculty_id]
+    f = FACULTIES[resolve_faculty_id(faculty_id)]
     s, e, grade_on = make_season(grade, start, exam_date)
     L = (e - s).days
     targets = {"first": min(0.1 * L, 30), "final": 0.45 * L, "bond10": 0.85 * L}
@@ -104,7 +116,7 @@ def growth_exp(minutes: int, category: str, faculty_id: str, streak: int) -> int
 
     配点に無いカテゴリ（情報など、category=None）は配点比率0%として扱う。
     """
-    w = FACULTIES[faculty_id]["weights"]
+    w = FACULTIES[resolve_faculty_id(faculty_id)]["weights"]
     return int(round(minutes * (1 + w.get(category, 0) / 100) * streak_bonus(streak)))
 
 
@@ -120,7 +132,8 @@ def bond_of(exp: int, plan: dict) -> int:
 
 
 if __name__ == "__main__":
-    # 動作確認：高3・科学大 工学院 → 22,500 / 111,900 / 211,000 になればOK
+    # 動作確認：高3・科学大 工学院（uniFactor 1.01・79コースのデータ）→ 22,700 / 113,000 / 213,100 になればOK
+    # （16学部のときの値は 22,500 / 111,900 / 211,000。C-19 で rules.js と同じ結果になるかのテストを足す）
     p = make_plan("高3", date(2027, 4, 1), date(2028, 2, 25), "kagaku-eng")
     print(p["exp"])
     print(growth_exp(20, "sci", "kagaku-eng", 6))  # 29

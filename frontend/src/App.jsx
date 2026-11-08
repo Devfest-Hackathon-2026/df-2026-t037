@@ -15,7 +15,7 @@ import Menu from "./screens/Menu";
 import Timer from "./screens/Timer";
 import Kisekae from "./screens/Kisekae";
 import ConfirmDialog from "./screens/ConfirmDialog";
-import { CATEGORIES, SUBJECT_CATEGORY, SUBJECT_GROUPS, SUBJECT_LIST } from "./game/subjects";
+import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
 import { getFaculty, getUniversity } from "./game/universities";
 import "./App.css";
@@ -29,7 +29,8 @@ const REPORT_GROUPS = [
   ...CATEGORIES.map((c) => ({ id: c.id, name: c.label, color: c.color })),
   { id: "info", name: "情報", color: SUBJECT_COLORS.情報 },
 ];
-const reportGroupOf = (subject) => SUBJECT_CATEGORY[subject] ?? (subject === "情報" ? "info" : null);
+// 前の記録（jpsoc・実技など）も categoryOfLog で今の6教科に読みかえる（C-22）
+const reportGroupOf = (log) => categoryOfLog(log) ?? (log?.subject === "情報" ? "info" : null);
 
 const MINUTE_PRESETS = [10, 20, 30, 60];
 const MINUTES_MIN = 1;
@@ -204,7 +205,7 @@ export default function App() {
   // 学年を変える入口は ≡ メニューの「設定」だけ（C-1）。予定が作り直されるので、先に確認する
   const settingsDialog = confirmSettings && (
     <ConfirmDialog
-      message="学年を変えると、今シーズンの予定（進化に必要なEXP）が作り直されます。続けますか？"
+      message="学年を変えると、今のキャラと今シーズンの育成がはじめからになります（勉強の記録の履歴は残ります）。変えますか？"
       confirmLabel="設定を開く"
       onConfirm={() => {
         setConfirmSettings(false);
@@ -312,7 +313,7 @@ export default function App() {
           </button>
         </div>
 
-        <ReportView logs={logs} />
+        <ReportView logs={logs} profile={profile} />
       </main>
       {settingsDialog}
     </div>
@@ -587,32 +588,34 @@ function ResultCard({ result }) {
 }
 
 // ===== レポートタブ =====
-function ReportView({ logs }) {
+function ReportView({ logs, profile }) {
   const [period, setPeriod] = useState("week");
   const periodDays = period === "week" ? 7 : 30;
 
   const report = useMemo(() => {
     const now = Date.now();
+    // 学習ログ（履歴）はシーズンに関係なく出す。時間・EXP・グラフは今のシーズンの記録だけで数える（C-25）
     const filtered = logs.filter((l) => now - l.dateObj.getTime() <= periodDays * DAY_MS);
+    const seasonLogs = filtered.filter((l) => inSeason(l, profile));
 
-    // 教科は配点カテゴリ（数学・理科・英語・国語・地歴・記述）＋情報にまとめて表示する
+    // 教科は配点カテゴリ（6教科）＋情報にまとめて表示する
     const subjects = REPORT_GROUPS.map((g) => {
-      const minutes = filtered
-        .filter((l) => reportGroupOf(l.subject) === g.id)
+      const minutes = seasonLogs
+        .filter((l) => reportGroupOf(l) === g.id)
         .reduce((sum, l) => sum + toNumber(l.minutes), 0);
-      const latest = logs.find((l) => reportGroupOf(l.subject) === g.id);
+      const latest = logs.find((l) => inSeason(l, profile) && reportGroupOf(l) === g.id);
       return { ...g, minutes, lastDays: latest ? daysAgo(latest.dateObj) : null };
     });
 
     const totalMinutes = subjects.reduce((sum, s) => sum + s.minutes, 0);
-    const totalExp = filtered.reduce(
+    const totalExp = seasonLogs.reduce(
       (sum, l) => sum + toNumber(l.base_exp) + toNumber(l.bonus_exp),
       0
     );
-    const highRank = filtered.filter((l) => ["S", "A"].includes(l.verbal_score)).length;
-    const highRate = filtered.length ? Math.round((highRank / filtered.length) * 100) : 0;
+    const highRank = seasonLogs.filter((l) => ["S", "A"].includes(l.verbal_score)).length;
+    const highRate = seasonLogs.length ? Math.round((highRank / seasonLogs.length) * 100) : 0;
 
-    return { filtered, subjects, totalMinutes, totalExp, highRate };
+    return { filtered, seasonCount: seasonLogs.length, subjects, totalMinutes, totalExp, highRate };
   }, [logs, periodDays]);
 
   const chartData = {
@@ -669,7 +672,7 @@ function ReportView({ logs }) {
 
         <div className="stats">
           <Stat label="合計時間" value={formatMinutes(report.totalMinutes)} />
-          <Stat label="記録回数" value={report.filtered.length} unit="回" />
+          <Stat label="記録回数" value={report.seasonCount} unit="回" />
           <Stat label="獲得EXP" value={report.totalExp} unit="EXP" />
           <Stat label="S・A率" value={report.highRate} unit="%" />
         </div>
@@ -732,7 +735,7 @@ function ReportView({ logs }) {
               return (
                 <li key={l.id} className="log-item">
                   <div className="log-top">
-                    <span className="dot" style={{ background: colorOfSubject(l.subject, SUBJECT_CATEGORY[l.subject]) }} />
+                    <span className="dot" style={{ background: colorOfSubject(l.subject, categoryOfLog(l)) }} />
                     <span className="log-subject">{toText(l.subject)}</span>
                     <span className="log-meta">
                       {`${formatDate(l.dateObj)} ・ ${formatMinutes(l.minutes)}`}

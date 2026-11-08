@@ -7,11 +7,13 @@ from __future__ import annotations
 
 from datetime import date, datetime, timedelta, timezone
 
+import math
+
 from game_rules import (
-    FACULTIES,
     GRADE_FROM_APP,
     bond_of,
     growth_exp,
+    resolve_faculty_id,
     stage_of,
     streak_threshold_minutes,
 )
@@ -23,19 +25,23 @@ JST = timezone(timedelta(hours=9))
 RANK_MULTIPLIER = {"S": 1.3, "A": 1.2, "B": 1.1, "C": 1.0}
 
 # 記録できる教科と、配点のカテゴリ。None は配点が無い教科（倍率 1.0）
+#（frontend/src/game/subjects.js の SUBJECT_CATEGORY と同じ。6教科：C-22。実技はなくした）
 SUBJECT_CATEGORY = {
     "数学": "math",
     "物理": "sci", "化学": "sci", "生物": "sci", "地学": "sci",
     "英語": "eng",
-    "国語": "jpsoc", "現代文": "jpsoc", "古典": "jpsoc", "古文": "jpsoc", "漢文": "jpsoc",
-    "日本史": "jpsoc", "世界史": "jpsoc", "地理": "jpsoc",
-    "公民": "jpsoc", "倫理": "jpsoc", "政経": "jpsoc",
-    "小論文": "essay", "総合問題": "essay", "記述": "essay", "実技": "essay",
+    "国語": "jp", "現代文": "jp", "古典": "jp", "古文": "jp", "漢文": "jp",
+    "日本史": "soc", "世界史": "soc", "地理": "soc",
+    "公民": "soc", "倫理": "soc", "政経": "soc",
+    "小論文・総合問題": "essay", "小論文": "essay", "総合問題": "essay", "記述": "essay",
     "情報": None,
-    # 今のアプリの教科名（まとめた呼び方）もそのまま受け付ける
+    # 前のアプリの教科名（まとめた呼び方）もそのまま受け付ける
     "理科": "sci",
-    "地歴・公民": "jpsoc",
+    "地歴・公民": "soc",
 }
+
+# 記録の上限（C-23）：画面とサーバーの時計のずれを少しだけ見こむ
+TIMER_CLOCK_SKEW_SEC = 30
 
 
 def today_jst() -> date:
@@ -109,7 +115,7 @@ def has_plan(user: dict) -> bool:
     return (
         isinstance(plan, dict)
         and isinstance(plan.get("exp"), dict)
-        and user.get("targetFacultyId") in FACULTIES
+        and resolve_faculty_id(user.get("targetFacultyId")) is not None
     )
 
 
@@ -132,3 +138,35 @@ def plan_is_usable(plan: dict) -> bool:
     """親密度の1段の幅が0以下になるほど短いシーズンは扱えない（bond_of が0で割ってしまう）"""
     e = plan["exp"]
     return e["first"] > 0 and e["final"] > e["first"] and e["bond10"] > e["final"]
+
+
+def timer_minutes_limit(started_at: datetime, now: datetime) -> int:
+    """タイマーで記録できる分数の上限（C-23）。画面と同じ式：経過秒を切り上げ、最低1分。
+
+    一時停止した時間もふくむので、画面で測った分数より小さくなることはない
+    """
+    elapsed = (now - started_at).total_seconds() + TIMER_CLOCK_SKEW_SEC
+    return max(1, math.ceil(elapsed / 60))
+
+
+def season_reset_fields(user: dict) -> dict:
+    """学年を変えたときに、育成をはじめからにする項目（C-25）。記録（logs）は消さずに seasonId だけ変える"""
+    return {
+        "growthExp": 0,
+        "stage": 1,
+        "bond": 0,
+        "streak": 0,
+        "todayMinutes": 0,
+        "lastStreakDate": None,
+        "restTicketWeek": None,
+        # 親密度で解放したアイテムは bond から決まるので、つけていた装備とコーデも外す
+        "equipped": {},
+        "outfits": {},
+        "seasonId": int(user.get("seasonId") or 0) + 1,
+    }
+
+
+def grade_changed(user: dict, new_grade: str) -> bool:
+    """初期設定がすんでいる人が、学年を変えたか"""
+    old = user.get("grade")
+    return bool(user.get("plan")) and bool(old) and old != new_grade

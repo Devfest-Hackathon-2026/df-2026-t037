@@ -50,6 +50,8 @@ export function makeSeason(grade, start, examDate) {
         gradeOn: d => (joined && d >= boundary ? nextGrade(grade) : grade),
     };
 }
+/** 配点の教科は6つ（C-22）：数学 / 理科 / 英語 / 国語 / 地歴・公民 / 小論文・総合問題。weights はこのキーを持つ */
+export const CATEGORY_KEYS = ['math', 'sci', 'eng', 'jp', 'soc', 'essay'];
 /** 配点どおりに勉強したときの1分あたりEXP（例：科学大 工学院 1.36） */
 export const averageMultiplier = (w) => 1 + Object.values(w).reduce((a, v) => a + (v / 100) ** 2, 0);
 /** 学部補正＝科目数（4科目で1.00、±5%/科目）×記述・実技（比率×15%）×大学内補正。幅は0.90〜1.16 */
