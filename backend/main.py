@@ -2,7 +2,7 @@
 import os
 import json
 import threading
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 
 import firebase_admin
 import google.auth
@@ -13,6 +13,9 @@ from firebase_admin import auth as fb_auth
 from firebase_admin import firestore
 from google.auth.transport.requests import Request
 from pydantic import BaseModel, Field
+
+import progress
+from game_rules import FACULTIES, PACE_FACTOR, make_plan
 
 # ---- 設定（env.yaml から読み込み） ----
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID", "pivotal-pager-514008-d0")
@@ -25,8 +28,8 @@ ENDPOINT = (
     f"/locations/{LOCATION}/publishers/google/models/{MODEL}:generateContent"
 )
 
-SUBJECTS = {"英語", "数学", "国語", "理科", "地歴・公民", "情報"}
-GRADES = {"高校1年生", "高校2年生", "高校3年生"}
+SUBJECTS = set(progress.SUBJECT_CATEGORY)
+GRADES ={"高校1年生", "高校2年生", "高校3年生"}
 RANK_EXP = {"S": 50, "A": 30, "B": 15, "C": 5}
 GRADE_POLICY = {
     "高校1年生": "本質的理解と継続習慣",
@@ -69,6 +72,14 @@ class AdviseRequest(BaseModel):
     subject: str
     minutes: int = Field(ge=5, le=600)
     reflection: str = Field(min_length=1, max_length=2000)
+
+
+class PlanRequest(BaseModel):
+    grade: str
+    examDate: date
+    pace: str
+    facultyId: str
+    nickname: str = Field(default="", max_length=20)
 
 
 RESPONSE_SCHEMA = {
@@ -219,8 +230,7 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
     bonus_exp = RANK_EXP[rank]
 
     log_ref = user_ref.collection("study_logs").document()
-    batch = db.batch()
-    batch.set(log_ref, {
+    log = {
         "subject": data.subject,
         "minutes": data.minutes,
         "reflection": data.reflection,
@@ -231,9 +241,9 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
         "advice": result.get("advice", ""),
         "model": MODEL,
         "createdAt": firestore.SERVER_TIMESTAMP,
-    })
-    batch.set(user_ref, {"totalExp": firestore.Increment(base_exp + bonus_exp)}, merge=True)
-    batch.commit()
+    }
+    # Geminiの呼び出しはトランザクションの外で済ませておく（トランザクションは再実行されることがあるため）
+    growth = _commit_log(db.transaction(), user_ref, log_ref, log, data, rank, base_exp + bonus_exp)
 
     return {
         "log_id": log_ref.id,
@@ -242,4 +252,92 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
         "bonus_exp": bonus_exp,
         "score_reason": result.get("score_reason", ""),
         "advice": result.get("advice", ""),
+        **growth,
     }
+
+
+@firestore.transactional
+def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: str, total_exp_gain: int) -> dict:
+    """study_logs の追加と、totalExp・連続日数・育成EXP・進化・親密度の更新を1つのトランザクションで行う"""
+    snap = user_ref.get(transaction=txn)
+    user = (snap.to_dict() or {}) if snap.exists else {}
+
+    updates: dict = {"totalExp": firestore.Increment(total_exp_gain)}
+    growth = {"growth_exp": 0, "growth_total": None, "stage": None, "bond": None,
+              "evolved": False, "streak": int(user.get("streak") or 0)}
+
+    grade = progress.game_grade(user.get("grade"))
+    if grade:
+        streak_fields = progress.update_streak(user, progress.today_jst(), data.minutes, grade)
+        updates.update(streak_fields)
+        growth["streak"] = streak_fields["streak"]
+
+    # 初期設定（plan）がまだの人は、今までどおり totalExp だけを足す
+    if grade and progress.has_plan(user):
+        plan = user["plan"]
+        gained = progress.growth_for_log(
+            data.minutes, data.subject, user["targetFacultyId"], growth["streak"], rank
+        )
+        old_exp = int(user.get("growthExp") or 0)
+        old_stage, _ = progress.stage_and_bond(old_exp, plan)
+        new_exp = old_exp + gained
+        stage, bond = progress.stage_and_bond(new_exp, plan)
+        updates.update({"growthExp": new_exp, "stage": stage, "bond": bond})
+        growth.update({"growth_exp": gained, "growth_total": new_exp, "stage": stage,
+                       "bond": bond, "evolved": stage > old_stage})
+        log = {**log, "category": progress.SUBJECT_CATEGORY.get(data.subject),
+               "growth_exp": gained, "streak": growth["streak"]}
+
+    txn.set(log_ref, log)
+    txn.set(user_ref, updates, merge=True)
+    return growth
+
+
+@app.post("/plan")
+def save_plan(data: PlanRequest, uid: str = Depends(verify_user)):
+    """初期設定（学年・受験日・ペース・志望学部）を保存し、make_plan の結果を plan に保存する"""
+    grade = progress.game_grade(data.grade)
+    if not grade:
+        raise HTTPException(status_code=400, detail="学年が不正です")
+    if data.pace not in PACE_FACTOR:
+        raise HTTPException(status_code=400, detail="ペースが不正です")
+    if data.facultyId not in FACULTIES:
+        raise HTTPException(status_code=400, detail="学部が不正です")
+
+    today = progress.today_jst()
+    if not (today < data.examDate <= today + timedelta(days=366 * 4)):
+        raise HTTPException(status_code=400, detail="受験日が不正です")
+
+    plan = make_plan(grade, today, data.examDate, data.facultyId, data.pace)
+    if not progress.plan_is_usable(plan):
+        raise HTTPException(status_code=400, detail="受験日までの期間が短すぎます")
+
+    user_ref = db.collection("users").document(uid)
+    return _commit_plan(db.transaction(), user_ref, data, plan)
+
+
+@firestore.transactional
+def _commit_plan(txn, user_ref, data: PlanRequest, plan: dict) -> dict:
+    snap = user_ref.get(transaction=txn)
+    user = (snap.to_dict() or {}) if snap.exists else {}
+
+    # 志望校やペースを変えても育成EXPは0に戻さず、進み具合（%）を保つ
+    growth_exp = progress.rescale_growth(int(user.get("growthExp") or 0), user.get("plan"), plan)
+    stage, bond = progress.stage_and_bond(growth_exp, plan)
+
+    updates = {
+        "grade": data.grade,
+        "examDate": data.examDate.isoformat(),
+        "pace": data.pace,
+        "targetFacultyId": data.facultyId,
+        "plan": plan,
+        "growthExp": growth_exp,
+        "stage": stage,
+        "bond": bond,
+        "nickname": data.nickname.strip(),
+    }
+    if not snap.exists:
+        updates["createdAt"] = firestore.SERVER_TIMESTAMP
+    txn.set(user_ref, updates, merge=True)
+
+    return {"plan": plan, "growthExp": growth_exp, "stage": stage, "bond": bond}

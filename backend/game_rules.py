@@ -100,9 +100,12 @@ def streak_threshold_minutes(grade: str) -> int:
 
 
 def growth_exp(minutes: int, category: str, faculty_id: str, streak: int) -> int:
-    """育成EXP＝分数×（1＋その教科の配点比率）×連続ボーナス。"""
+    """育成EXP＝分数×（1＋その教科の配点比率）×連続ボーナス。
+
+    配点に無いカテゴリ（情報など、category=None）は配点比率0%として扱う。
+    """
     w = FACULTIES[faculty_id]["weights"]
-    return int(round(minutes * (1 + w[category] / 100) * streak_bonus(streak)))
+    return int(round(minutes * (1 + w.get(category, 0) / 100) * streak_bonus(streak)))
 
 
 def stage_of(exp: int, plan: dict) -> int:
