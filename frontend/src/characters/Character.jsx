@@ -19,7 +19,11 @@ const isColor = (c) => typeof c === 'string' && /^#[0-9A-Fa-f]{3,8}$/.test(c);
 /** pins/{name}.svg の中身（外側の <svg> を外したもの）。中心が (0,0)・半径13の白い丸つき */
 function pinInner(pin) {
   const raw = pinFiles[`./pins/${PIN_ALIAS[pin] || pin}.svg`];
-  if (!raw) return '';
+  if (!raw) {
+    // ピンの絵が足りないと、最終進化でリボンだけになる。開発中に気づけるよう警告を出す
+    if (import.meta.env.DEV && pin) console.warn(`[Character] pins/${PIN_ALIAS[pin] || pin}.svg がありません`);
+    return '';
+  }
   return raw.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>\s*$/, '');
 }
 

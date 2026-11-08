@@ -239,6 +239,22 @@
   border-radius: 2px;
 }
 .tama-week-num { color: var(--t-sub); text-align: right; white-space: nowrap; }
+/* 足りない教科を1つだけ提案するカード */
+.tama-short { border-left: 4px solid; background: #FBF7F2; border-radius: 10px; padding: 8px 10px; }
+.tama-short-title { font-size: 14px; font-weight: 900; line-height: 1.4; }
+.tama-short-sub { font-size: 11px; color: var(--t-sub); margin-top: 2px; }
+.tama-week-toggle { align-self: flex-start; background: none; border: none; padding: 2px 0; font: inherit; font-size: 12px; font-weight: 700; color: var(--t-sub); cursor: pointer; }
+.tama-week-toggle:focus-visible { outline: 2px solid #E8A35A; outline-offset: 2px; border-radius: 4px; }
+.tama-week-table { width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; }
+.tama-week-table th, .tama-week-table td { padding: 5px 4px; text-align: right; border-bottom: 1px solid var(--t-track); }
+.tama-week-table thead th { font-size: 10px; color: var(--t-sub); font-weight: 700; line-height: 1.3; vertical-align: bottom; }
+.tama-week-table th:first-child { text-align: left; width: 26%; }
+.tama-week-table th:nth-child(2) { width: 34%; }
+.tama-week-table tbody th { font-weight: 800; }
+.tama-week-table td:nth-child(2) { display: flex; align-items: center; gap: 6px; }
+.tama-week-table td:nth-child(2) .tama-week-bar { flex: 1; }
+.tama-week-pct { min-width: 32px; }
+.tama-week-table tr.is-short { background: #FFF6E6; }
 
 @media (prefers-reduced-motion: reduce) {
   .tama-bar > div { transition: none; }
@@ -609,3 +625,49 @@
 }
 .tama-stepper-box input:focus { outline: none; }
 .tama-stepper-box:focus-within { box-shadow: 0 0 0 3px var(--t-main-soft); }
+
+/* ===== キャラとの会話 ===== */
+.tama-stage-box { position: relative; }
+.tama-greet { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; align-items: flex-start; gap: 8px; z-index: 1; }
+.tama-greet-bubble {
+  flex: 1; background: #FFFFFF; border: 2px solid; border-radius: 16px; padding: 8px 12px;
+  font-size: 13px; line-height: 1.55; box-shadow: 0 2px 8px rgba(74, 62, 58, 0.08);
+}
+.tama-greet-talk {
+  flex: none; border: none; color: #FFFFFF; font: inherit; font-size: 12px; font-weight: 900;
+  border-radius: 999px; padding: 8px 12px; cursor: pointer;
+}
+.tama-greet-talk:focus-visible, .tama-chat-close:focus-visible { outline: 2px solid #E8A35A; outline-offset: 2px; }
+
+.tama-chat-backdrop {
+  position: fixed; inset: 0; background: rgba(40, 30, 28, 0.45); z-index: 50;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.tama-chat {
+  width: 100%; max-width: 480px; height: min(86vh, 680px); background: var(--t-bg);
+  border-radius: 22px 22px 0 0; display: flex; flex-direction: column; padding: 12px 14px 10px; gap: 8px;
+}
+@media (min-width: 600px) {
+  .tama-chat-backdrop { align-items: center; }
+  .tama-chat { border-radius: 22px; }
+}
+.tama-chat-head { display: flex; align-items: center; gap: 10px; }
+.tama-chat-title { flex: 1; min-width: 0; }
+.tama-chat-close { border: none; background: #FFFFFF; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; color: var(--t-sub); }
+.tama-chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 4px 2px; }
+.tama-chat-empty { color: var(--t-sub); text-align: center; margin-top: 24px !important; }
+.tama-chat-msg { max-width: 82%; padding: 9px 12px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+.tama-chat-msg.char { align-self: flex-start; background: #FFFFFF; border-top-left-radius: 4px; }
+.tama-chat-msg.me { align-self: flex-end; background: var(--t-main-soft); border-top-right-radius: 4px; }
+.tama-chat-msg.safety { border: 2px solid #E8A35A; }
+.tama-chat-msg.typing { color: var(--t-sub); }
+.tama-chat-error { font-size: 12px; color: #A83030; }
+.tama-chat-form { display: flex; gap: 8px; align-items: flex-end; }
+.tama-chat-form textarea {
+  flex: 1; resize: none; border: 1.5px solid var(--t-line); border-radius: 14px; padding: 8px 10px;
+  font: inherit; font-size: 14px; background: #FFFFFF; color: var(--t-text);
+}
+.tama-chat-form textarea:focus { outline: 2px solid #E8A35A; border-color: transparent; }
+.tama-chat-form .tama-btn { flex: none; width: 72px; height: 44px; }
+.tama-chat-foot { line-height: 1.5; }
+

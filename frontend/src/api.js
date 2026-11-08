@@ -20,7 +20,7 @@ const PLAN_400_MESSAGES = {
   "受験日までの期間が短すぎます": "受験日までの期間が短すぎます。受験日を確認してください。",
 };
 
-async function postJson(path, payload, { serverError, messages400 = {} }) {
+async function postJson(path, payload, { serverError, messages400 = {}, statusMessages = {} }) {
   const user = auth.currentUser;
   if (!user) throw new Error(STATUS_MESSAGES[401]);
 
@@ -54,7 +54,7 @@ async function postJson(path, payload, { serverError, messages400 = {} }) {
       }
       if (messages400[detail]) throw new Error(messages400[detail]);
     }
-    throw new Error(STATUS_MESSAGES[res.status] || serverError);
+    throw new Error(statusMessages[res.status] || STATUS_MESSAGES[res.status] || serverError);
   }
 
   return res.json();
@@ -71,4 +71,20 @@ export function requestPlan({ grade, examDate, pace, facultyId, nickname }) {
     { grade, examDate, pace, facultyId, nickname },
     { serverError: PLAN_ERROR_MESSAGE, messages400: PLAN_400_MESSAGES }
   );
+}
+
+const CHAT_ERROR_MESSAGE = "うまく聞きとれなかったみたい。少し待ってからもう一度話しかけてね。";
+const CHAT_STATUS_MESSAGES = {
+  422: "メッセージは300字までにしてね。",
+  429: "今日はたくさん話したね！また明日お話ししよう。",
+};
+
+/** キャラとの会話。history は画面が持っている直前の会話（サーバーには保存しない） */
+export function requestChat({ message, history }) {
+  return postJson("/chat", { message, history }, { serverError: CHAT_ERROR_MESSAGE, statusMessages: CHAT_STATUS_MESSAGES });
+}
+
+/** ホームを開いたときの一言（同じ状況ならサーバーが保存した一言を返す） */
+export function requestGreeting() {
+  return postJson("/greeting", {}, { serverError: CHAT_ERROR_MESSAGE });
 }

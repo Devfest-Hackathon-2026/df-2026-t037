@@ -1,6 +1,8 @@
 // ホームのキャラ部分（デザイン元：docs/design/Launch.dc.html）
 // growthExp・stage・bond・streak はサーバーが書いた値をそのまま表示する
+import { useState } from "react";
 import { Character } from "../characters/Character";
+import { ChatSheet, GreetingBubble } from "./CharacterChat";
 import { getFaculty, getUniversity } from "../game/universities";
 import { timeToGo } from "../game/rules";
 import {
@@ -20,6 +22,9 @@ function stageStatus(stage, bond) {
 }
 
 export default function CharacterCard({ profile, logs, menu }) {
+  // フックは早期 return より前に置く
+  const [chatOpen, setChatOpen] = useState(false);
+  const [greeting, setGreeting] = useState("");
   const faculty = getFaculty(profile?.targetFacultyId);
   const uni = faculty && getUniversity(faculty.universityId);
   const plan = profile?.plan;
@@ -92,16 +97,59 @@ export default function CharacterCard({ profile, logs, menu }) {
       </div>
 
       <div className="tama-stage-box">
+        <GreetingBubble
+          greetingKey={`${todayLogCount(logs, today)}-${stage}-${profile.targetFacultyId}`}
+          color={uni.colors[2]}
+          onTalk={() => setChatOpen(true)}
+          onGreeting={setGreeting}
+        />
         <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} faculty={faculty} />
       </div>
+
+      {chatOpen && (
+        <ChatSheet
+          uni={uni}
+          stage={stage}
+          faculty={faculty}
+          name={name.split("（")[0]}
+          greeting={greeting}
+          onClose={() => setChatOpen(false)}
+        />
+      )}
 
       <WeekBars logs={logs} faculty={faculty} profile={profile} />
     </section>
   );
 }
 
-/** この7日の教科の割合（6教科・C-22）と、志望学部の配点（黒い線）。今のシーズンの記録だけで数える（C-25） */
+/** 今日の記録の数（一言を取り直すきっかけに使う） */
+function todayLogCount(logs, today) {
+  const t = today.getTime();
+  return (logs || []).filter((l) => l.dateObj && l.dateObj.getTime() >= t).length;
+}
+
+/** EXP倍率＝1＋その教科の配点比率（game/rules.js の expForLog と同じ式） */
+const multiplierOf = (goal) => `×${(1 + goal / 100).toFixed(1)}`;
+
+/** 配点より「足りない」とみなす差（ポイント）。これ未満なら配点どおりとする */
+const SHORT_THRESHOLD = 5;
+
+/**
+ * いちばん足りない教科を1つ選ぶ。配点が0%の教科は対象外。
+ * 差が同じなら配点が大きい教科を優先する
+ */
+function pickShortage(rows) {
+  const candidates = rows.filter((r) => r.goal > 0 && r.goal - r.me >= SHORT_THRESHOLD);
+  candidates.sort((a, b) => (b.goal - b.me) - (a.goal - a.me) || b.goal - a.goal);
+  return candidates[0] || null;
+}
+
+/**
+ * この7日の教科の割合（6教科・C-22）と、志望学部の配点。今のシーズンの記録だけで数える（C-25）
+ * 上：いちばん足りない教科を1つだけ提案するカード／下：開くと見出し付きの表
+ */
 function WeekBars({ logs, faculty, profile }) {
+  const [open, setOpen] = useState(false);
   const since = Date.now() - 7 * DAY_MS;
   const recent = (logs || []).filter((l) => l.dateObj && l.dateObj.getTime() >= since && inSeason(l, profile));
   const total = recent.reduce((a, l) => a + (Number(l.minutes) || 0), 0);
@@ -111,28 +159,84 @@ function WeekBars({ logs, faculty, profile }) {
     if (c) byCat[c] = (byCat[c] || 0) + (Number(l.minutes) || 0);
   }
 
+  const rows = CATEGORIES.map((c) => ({
+    ...c,
+    minutes: byCat[c.id] || 0,
+    me: total > 0 ? Math.round(((byCat[c.id] || 0) / total) * 100) : 0,
+    goal: faculty.weights[c.id] ?? 0,
+  }));
+  const top = [...rows].sort((a, b) => b.goal - a.goal)[0];
+  const short = total > 0 ? pickShortage(rows) : null;
+
+  let tip;
+  if (total === 0) {
+    tip = {
+      color: top.color,
+      title: `まずは${top.label}から始めよう。やると${multiplierOf(top.goal)}`,
+      sub: `${faculty.name}でいちばん配点が大きい教科です（${top.goal}%）`,
+    };
+  } else if (short) {
+    tip = {
+      color: short.color,
+      title: `今は${short.label}が足りません。やると${multiplierOf(short.goal)}`,
+      sub: `配点${short.goal}%に対して、この7日は${short.me}%（${short.minutes}分）`,
+    };
+  } else {
+    tip = {
+      color: "#2E9E6A",
+      title: "配点どおりのバランスです。この調子！",
+      sub: `どの教科も、配点との差が${SHORT_THRESHOLD}ポイント未満です`,
+    };
+  }
+
   return (
     <div className="tama-card tama-week">
       <p className="tama-strong small"><span>{`この7日（${total}分）と${faculty.name}の配点`}</span></p>
-      {total === 0 ? (
-        <p className="tama-note"><span>まだ記録がありません。最初の記録でキャラが育ちはじめます</span></p>
-      ) : (
-        CATEGORIES.map((c) => {
-          const me = Math.round(((byCat[c.id] || 0) / total) * 100);
-          const goal = faculty.weights[c.id] ?? 0;
-          return (
-            <div key={c.id} className="tama-week-row">
-              <span className="tama-week-name" style={{ color: c.color }}>{c.label}</span>
-              <div className="tama-week-bar">
-                <div style={{ width: `${me}%`, background: c.color }} />
-                <i style={{ left: `${goal}%` }} />
-              </div>
-              <span className="tama-week-num">{`${me}%/${goal}% ×${(1 + goal / 100).toFixed(1)}`}</span>
-            </div>
-          );
-        })
+
+      <div className="tama-short" style={{ borderColor: tip.color }}>
+        <p className="tama-short-title" style={{ color: tip.color }}><span>{tip.title}</span></p>
+        <p className="tama-short-sub"><span>{tip.sub}</span></p>
+      </div>
+
+      <button type="button" className="tama-week-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+        <span>{open ? "▲ 教科ごとの内訳を閉じる" : "▼ 教科ごとの内訳を見る"}</span>
+      </button>
+
+      {open && (
+        <>
+          <table className="tama-week-table">
+            <thead>
+              <tr>
+                <th scope="col"><span>教科</span></th>
+                <th scope="col"><span>この7日の自分</span></th>
+                <th scope="col"><span>志望学部の配点</span></th>
+                <th scope="col"><span>EXP倍率</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id} className={short && short.id === r.id ? "is-short" : undefined}>
+                  <th scope="row" style={{ color: r.color }}><span>{r.label}</span></th>
+                  <td>
+                    <div className="tama-week-bar" aria-hidden="true">
+                      <div style={{ width: `${r.me}%`, background: r.color }} />
+                      <i style={{ left: `${r.goal}%` }} />
+                    </div>
+                    <span className="tama-week-pct">{`${r.me}%`}</span>
+                  </td>
+                  <td><span>{`${r.goal}%`}</span></td>
+                  <td><span>{r.goal > 0 ? multiplierOf(r.goal) : "×1.0"}</span></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="tama-tiny">
+            <span>
+              {"この7日の自分＝勉強時間のうちその教科の割合（棒）。志望学部の配点＝2次試験の配点の割合（黒い線）。EXP倍率＝その教科を勉強したときに育成EXPが何倍になるか（1＋配点の割合）"}
+            </span>
+          </p>
+        </>
       )}
-      <p className="tama-tiny"><span>棒＝自分、黒い線＝配点、右の×＝EXP倍率</span></p>
     </div>
   );
 }

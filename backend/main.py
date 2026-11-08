@@ -12,8 +12,11 @@ from fastapi.middleware.cors import CORSMiddleware
 from firebase_admin import auth as fb_auth
 from firebase_admin import firestore
 from google.auth.transport.requests import Request
+from typing import Literal
+
 from pydantic import BaseModel, Field
 
+import chat
 import progress
 from game_rules import FACULTIES, PACE_FACTOR, make_plan
 
@@ -83,6 +86,17 @@ class PlanRequest(BaseModel):
     pace: str
     facultyId: str
     nickname: str = Field(default="", max_length=20)
+
+
+class ChatTurn(BaseModel):
+    role: Literal["user", "char"]
+    text: str = Field(min_length=1, max_length=chat.MESSAGE_MAX)
+
+
+class ChatRequest(BaseModel):
+    message: str = Field(min_length=1, max_length=chat.MESSAGE_MAX)
+    # 直前の会話（画面が持っているだけで、サーバーには保存しない）。中身は生徒側のデータとして扱う
+    history: list[ChatTurn] = Field(default_factory=list, max_length=chat.HISTORY_MAX_TURNS)
 
 
 RESPONSE_SCHEMA = {
@@ -166,7 +180,7 @@ def get_access_token() -> str:
         return credentials.token
 
 
-def call_gemini(prompt: str) -> dict:
+def call_gemini(prompt: str, schema: dict | None = None) -> dict:
     try:
         resp = requests.post(
             ENDPOINT,
@@ -179,7 +193,7 @@ def call_gemini(prompt: str) -> dict:
                 "contents": [{"role": "user", "parts": [{"text": prompt}]}],
                 "generationConfig": {
                     "responseMimeType": "application/json",
-                    "responseSchema": RESPONSE_SCHEMA,
+                    "responseSchema": schema or RESPONSE_SCHEMA,
                 },
             },
             timeout=30,
@@ -370,3 +384,71 @@ def _commit_plan(txn, user_ref, data: PlanRequest, plan: dict) -> dict:
     txn.set(user_ref, updates, merge=True)
 
     return {"plan": plan, "growthExp": growth_exp, "stage": stage, "bond": bond, "seasonReset": bool(reset)}
+
+
+# ---- キャラとの会話（chat.py）。EXP・計画・記録は書き換えない ----
+def _load_user(uid: str) -> dict:
+    snap = db.collection("users").document(uid).get()
+    return (snap.to_dict() or {}) if snap.exists else {}
+
+
+@firestore.transactional
+def _reserve_chat(txn, ref, limit: int) -> int:
+    """今日の会話回数を1つ使う。上限なら429。残り回数を返す"""
+    snap = ref.get(transaction=txn)
+    used = int((snap.to_dict() or {}).get("chats") or 0) if snap.exists else 0
+    if used >= limit:
+        raise HTTPException(status_code=429, detail="今日の会話の回数を使い切りました")
+    txn.set(ref, {"chats": used + 1, "updatedAt": firestore.SERVER_TIMESTAMP,
+                  "expireAt": datetime.now(timezone.utc) + timedelta(days=3)}, merge=True)
+    return limit - used - 1
+
+
+@app.post("/chat")
+def chat_with_character(data: ChatRequest, uid: str = Depends(verify_user)):
+    # 深刻な悩みの言葉があれば、回数の上限やAIに関係なく、決まった返事で相談先につなぐ
+    if chat.is_crisis(data.message):
+        return {"reply": chat.CRISIS_REPLY, "safety": True, "remaining": None}
+
+    today = progress.today_jst()
+    remaining = _reserve_chat(db.transaction(), chat.usage_ref(db, uid, today), chat.CHAT_DAILY_LIMIT)
+
+    user = _load_user(uid)
+    facts = chat.build_facts(user, chat.fetch_recent_logs(db, uid), today)
+    history = [h.model_dump() for h in data.history]
+    result = call_gemini(chat.build_chat_prompt(user, facts, data.message, history), chat.CHAT_SCHEMA)
+    reply = chat.clean_reply(result.get("reply", ""))
+    if not reply:
+        raise HTTPException(status_code=502, detail="AIの応答を解析できませんでした")
+    return {"reply": reply, "safety": False, "remaining": remaining}
+
+
+@app.post("/greeting")
+def greeting(uid: str = Depends(verify_user)):
+    """ホームを開いたときの一言。同じ状況（今日の記録数・進化段階）なら作り直さず保存した一言を返す"""
+    today = progress.today_jst()
+    ref = chat.usage_ref(db, uid, today)
+    user = _load_user(uid)
+    facts = chat.build_facts(user, chat.fetch_recent_logs(db, uid), today)
+    key = f"{facts.get('logs_today', 0)}-{user.get('stage') or 1}"
+
+    snap = ref.get()
+    saved = (snap.to_dict() or {}) if snap.exists else {}
+    cached = saved.get("greeting") if isinstance(saved.get("greeting"), dict) else None
+    if cached and cached.get("key") == key and cached.get("text"):
+        return {"greeting": cached["text"], "cached": True}
+    if int(saved.get("greetings") or 0) >= chat.GREETING_DAILY_LIMIT:
+        # 上限をこえたら作り直さない（費用の上限）。前の一言か、決まった一言を返す
+        text = (cached or {}).get("text") or "今日もいっしょにがんばろう！"
+        return {"greeting": text, "cached": True}
+
+    result = call_gemini(chat.build_greeting_prompt(user, facts), chat.CHAT_SCHEMA)
+    text = chat.clean_reply(result.get("reply", "")) or "今日もいっしょにがんばろう！"
+    ref.set({
+        "greetings": firestore.Increment(1),
+        "greeting": {"key": key, "text": text},
+        "updatedAt": firestore.SERVER_TIMESTAMP,
+        "expireAt": datetime.now(timezone.utc) + timedelta(days=3),
+    }, merge=True)
+    return {"greeting": text, "cached": False}
+
