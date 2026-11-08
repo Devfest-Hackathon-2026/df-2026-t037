@@ -70,7 +70,8 @@ def verify_user(authorization: str | None = Header(default=None)) -> str:
 # ---- 入出力スキーマ ----
 class AdviseRequest(BaseModel):
     subject: str
-    minutes: int = Field(ge=5, le=600)
+    # 1〜600の整数（C-4。画面の入力欄・Firestoreのルールと同じ範囲）
+    minutes: int = Field(ge=1, le=600)
     reflection: str = Field(min_length=1, max_length=2000)
 
 
