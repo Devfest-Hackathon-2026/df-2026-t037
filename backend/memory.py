@@ -34,7 +34,7 @@ SIMILAR_MAX_DISTANCE = 0.30      # コサイン距離。これより遠いもの
 MIN_REFLECTION_CHARS = 10
 DISCOVER_MIN_LOGS = 3
 DISCOVER_MAX_LOGS = 80
-BACKFILL_PER_CALL = 25
+BACKFILL_PER_CALL = 12        # 1回に作る前の記録のベクトルの数（画面の45秒の打ち切りに収める）
 DISCOVER_DAILY_LIMIT = 10
 RANK_WEIGHT = {"S": 3.0, "A": 2.0, "B": 1.0, "C": 0.3}
 
@@ -44,7 +44,7 @@ def embed(text: str, project_id: str, token: str) -> list[float]:
            f"/locations/{explore.EMBED_LOCATION}/publishers/google/models/{explore.EMBED_MODEL}:predict")
     body = {"instances": [{"content": text[:2000], "task_type": EMBED_TASK}],
             "parameters": {"outputDimensionality": explore.EMBED_DIM}}
-    r = requests.post(url, json=body, timeout=20, headers={
+    r = requests.post(url, json=body, timeout=10, headers={
         "Authorization": f"Bearer {token}", "X-Goog-User-Project": project_id, "Content-Type": "application/json"})
     if r.status_code != 200:
         # 本文には振り返りが入っていないが、念のため先頭だけ残す
@@ -95,7 +95,8 @@ def find_similar(db, uid: str, vec: list[float]) -> list[dict]:
     logs_ref = db.collection("users").document(uid).collection("study_logs")
     for d in docs:
         v = d.to_dict() or {}
-        dist = float(v.get("vector_distance") or 1.0)
+        dv = v.get("vector_distance")
+        dist = float(dv) if dv is not None else 1.0  # 同じ文章（距離0.0）も「似ている」に入れる
         if dist > SIMILAR_MAX_DISTANCE:
             continue
         log_snap = logs_ref.document(d.id).get()

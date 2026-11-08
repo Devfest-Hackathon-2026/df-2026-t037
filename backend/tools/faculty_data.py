@@ -270,13 +270,28 @@ def embed(text: str, task: str) -> list[float]:
 def cmd_embeddings() -> None:
     profiles = load_json(PROFILES_PATH, {})
     vectors = {}
+    failed = []
     for i, (fid, p) in enumerate(profiles.items(), 1):
         if not p.get("summary"):
+            print(f"{i:>2}/{len(profiles)} {p.get('university', fid)} {p.get('faculty', '')} … 紹介文が空なので飛ばします（fix で直してください）")
             continue
-        vectors[fid] = [round(v, 5) for v in embed(profile_text(p), "RETRIEVAL_DOCUMENT")]
+        for attempt in range(3):  # 429 などの一時的な失敗は少し待って再試行する
+            try:
+                vectors[fid] = [round(v, 5) for v in embed(profile_text(p), "RETRIEVAL_DOCUMENT")]
+                break
+            except Exception as e:
+                print(f"  [{fid}] 失敗（{attempt + 1}回目）: {e.__class__.__name__}")
+                time.sleep(5 * (attempt + 1))
+        else:
+            failed.append(fid)
+            continue
         print(f"{i:>2}/{len(profiles)} {p['university']} {p['faculty']}")
+        if i % 10 == 0:  # 途中経過も保存する（途中で止まっても作った分は残る）
+            save_json(EMBEDDINGS_PATH, {"model": EMBED_MODEL, "dim": EMBED_DIM, "vectors": vectors}, compact=True)
     save_json(EMBEDDINGS_PATH, {"model": EMBED_MODEL, "dim": EMBED_DIM, "vectors": vectors}, compact=True)
     print(f"{len(vectors)}件のベクトルを {EMBEDDINGS_PATH.name} に保存しました")
+    if failed:
+        print(f"作れなかった学部: {', '.join(failed)}（もう一度 embeddings を実行してください）")
 
 
 if __name__ == "__main__":

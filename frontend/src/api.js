@@ -68,8 +68,18 @@ async function postJson(path, payload, { serverError, messages400 = {}, statusMe
   return res.json();
 }
 
-export function requestAdvice({ subject, minutes, reflection }) {
-  return postJson("/advise", { subject, minutes, reflection }, { serverError: SERVER_ERROR_MESSAGE });
+// タイマーの記録は、測った時間を超えていないかサーバーでも確かめる（C-23）
+const ADVISE_400_MESSAGES = {
+  "タイマーで測った時間より長くは記録できません": "タイマーで測った時間より長くは記録できません。時間を短くしてください。",
+  "タイマーが動いていません": "タイマーの記録が見つかりませんでした。もう一度タイマーから始めてください。",
+};
+
+export function requestAdvice({ subject, minutes, reflection, fromTimer = false }) {
+  return postJson(
+    "/advise",
+    { subject, minutes, reflection, fromTimer },
+    { serverError: SERVER_ERROR_MESSAGE, messages400: ADVISE_400_MESSAGES }
+  );
 }
 
 /** 初期設定（学年・受験日・ペース・志望学部・ニックネーム）を保存し、育成の予定（plan）を作る */

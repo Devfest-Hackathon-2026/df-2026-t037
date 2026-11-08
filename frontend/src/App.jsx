@@ -102,6 +102,8 @@ export default function App() {
   const [screen, setScreen] = useState("home"); // home / timer / kisekae / record / result / explore
   const [confirmSettings, setConfirmSettings] = useState(false);
   const [logs, setLogs] = useState([]);
+  // 学習ログの最初の読み込みが終わったか（終わる前に一言を取りに行くと、記録数が0→nと変わって2回取りに行ってしまう）
+  const [logsReady, setLogsReady] = useState(false);
   const [lastResult, setLastResult] = useState(null);
 
   // 認証とプロフィールの監視
@@ -115,6 +117,7 @@ export default function App() {
       setProfile(null);
       setProfileReady(false);
       setLogs([]);
+      setLogsReady(false);
       setLastResult(null);
       setScreen("home");
       setConfirmSettings(false);
@@ -162,8 +165,12 @@ export default function App() {
             };
           })
         );
+        setLogsReady(true);
       },
-      (err) => console.error("[logs listener error]", err)
+      (err) => {
+        console.error("[logs listener error]", err);
+        setLogsReady(true);
+      }
     );
   }, [user]);
 
@@ -291,6 +298,7 @@ export default function App() {
         <CharacterCard
           profile={profile}
           logs={logs}
+          logsReady={logsReady}
           menu={
             <Menu
               timerRunning={timerRunning}

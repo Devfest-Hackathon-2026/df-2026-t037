@@ -13,11 +13,13 @@ const HISTORY_MAX = 8;
  * ホームのキャラの上に出す「一言」。greetingKey（今日の記録数・進化段階）が変わったときだけ取り直す。
  * サーバー側でも同じ状況なら保存した一言を返すので、開くたびにAIを呼ぶことはない
  */
-export function GreetingBubble({ greetingKey, color, onTalk, onGreeting }) {
+export function GreetingBubble({ enabled = true, greetingKey, color, onTalk, onGreeting }) {
   const [text, setText] = useState("");
   const [failed, setFailed] = useState(false);
 
   useEffect(() => {
+    // 学習ログの読み込みが終わるまでは取りに行かない（記録数が変わって2回取りに行くのを防ぐ）
+    if (!enabled) return undefined;
     let alive = true;
     setFailed(false);
     requestGreeting()
@@ -33,7 +35,7 @@ export function GreetingBubble({ greetingKey, color, onTalk, onGreeting }) {
     };
     // onGreeting は親の関数なので依存に入れない（入れると毎回取り直してしまう）
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [greetingKey]);
+  }, [greetingKey, enabled]);
 
   return (
     <div className="tama-greet">
@@ -63,7 +65,8 @@ export function ChatSheet({ uni, stage, faculty, name, greeting, onClose }) {
 
   useEffect(() => {
     inputRef.current?.focus();
-    const esc = (e) => e.key === "Escape" && closeRef.current();
+    // 日本語の変換を取り消す Esc では閉じない（入力途中の文が消えてしまうため）
+    const esc = (e) => e.key === "Escape" && !e.isComposing && closeRef.current();
     document.addEventListener("keydown", esc);
     return () => document.removeEventListener("keydown", esc);
   }, []);

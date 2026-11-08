@@ -279,7 +279,7 @@ export default function Timer({ uid, profile, subjects, onRecorded, onClose, onS
     const submit = () => run(async () => {
       let result = recorded;
       if (!result) {
-        result = await requestAdvice({ subject: local.subject, minutes: Number(m), reflection: text });
+        result = await requestAdvice({ subject: local.subject, minutes: Number(m), reflection: text, fromTimer: true });
         setRecorded(result);
       }
       try {

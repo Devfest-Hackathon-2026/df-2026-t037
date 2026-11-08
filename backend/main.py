@@ -140,7 +140,7 @@ def build_prompt(grade: str, data: AdviseRequest, history: list[dict], similar_b
     lines = []
     for h in history:
         ts = h.get("createdAt")
-        date = ts.strftime("%m/%d") if ts else "--/--"
+        date = memory._ymd_jst(ts)  # Firestore の時刻は UTC。日本時間の日付にそろえる（0〜9時の記録が前日にならないように）
         snippet = (h.get("reflection") or "")[:80].replace("\n", " ")
         lines.append(
             f"・{date} {h.get('subject')} {h.get('minutes')}分 "
@@ -439,47 +439,79 @@ def chat_with_character(data: ChatRequest, uid: str = Depends(verify_user)):
     today = progress.today_jst()
     remaining = _reserve_chat(db.transaction(), chat.usage_ref(db, uid, today), chat.CHAT_DAILY_LIMIT)
 
-    user = _load_user(uid)
-    facts = chat.build_facts(user, chat.fetch_recent_logs(db, uid), today)
-    history = [h.model_dump() for h in data.history]
     try:
+        user = _load_user(uid)
+        facts = chat.build_facts(user, chat.fetch_recent_logs(db, uid), today)
+        history = [h.model_dump() for h in data.history]
         result = call_gemini(chat.build_chat_prompt(user, facts, data.message, history), chat.CHAT_SCHEMA)
         reply = chat.clean_reply(result.get("reply", ""))
         if not reply:
             raise HTTPException(status_code=502, detail="AIの応答を解析できませんでした")
-    except HTTPException:
-        # AIの失敗は生徒のせいではないので、使った回数を戻す
+    except Exception:
+        # 回数を使ったあとの失敗（AI・Firestore・認証など）は生徒のせいではないので、使った回数を戻す
         chat.usage_ref(db, uid, today).set({"chats": firestore.Increment(-1)}, merge=True)
         raise
     return {"reply": reply, "safety": False, "remaining": remaining}
 
 
+GREETING_FALLBACK = "今日もいっしょにがんばろう！"
+GREETING_INFLIGHT_SEC = 60
+
+
+@firestore.transactional
+def _reserve_greeting(txn, ref, key: str, limit: int) -> tuple[str, str | None]:
+    """一言を作り直してよいかを1つのトランザクションで決める（同時に2本来ても、AIを呼ぶのは1本だけ）
+    返り値：("cached", 保存した一言) / ("busy" か "limit", 前の一言か None) / ("go", None)"""
+    snap = ref.get(transaction=txn)
+    saved = (snap.to_dict() or {}) if snap.exists else {}
+    cached = saved.get("greeting") if isinstance(saved.get("greeting"), dict) else {}
+    if cached.get("key") == key and cached.get("text"):
+        return "cached", cached["text"]
+    inflight = saved.get("greetingInflight") if isinstance(saved.get("greetingInflight"), dict) else {}
+    started = inflight.get("at")
+    if inflight.get("key") == key and isinstance(started, datetime):
+        if started.tzinfo is None:
+            started = started.replace(tzinfo=timezone.utc)
+        if (datetime.now(timezone.utc) - started).total_seconds() < GREETING_INFLIGHT_SEC:
+            return "busy", cached.get("text")
+    if int(saved.get("greetings") or 0) >= limit:
+        return "limit", cached.get("text")
+    txn.set(ref, {
+        "greetings": int(saved.get("greetings") or 0) + 1,
+        "greetingInflight": {"key": key, "at": datetime.now(timezone.utc)},
+        "updatedAt": firestore.SERVER_TIMESTAMP,
+        "expireAt": datetime.now(timezone.utc) + timedelta(days=3),
+    }, merge=True)
+    return "go", None
+
+
 @app.post("/greeting")
 def greeting(uid: str = Depends(verify_user)):
-    """ホームを開いたときの一言。同じ状況（今日の記録数・進化段階）なら作り直さず保存した一言を返す"""
+    """ホームを開いたときの一言。同じ状況（今日の記録数・進化段階・志望・ニックネーム）なら作り直さず保存した一言を返す"""
     today = progress.today_jst()
     ref = chat.usage_ref(db, uid, today)
     user = _load_user(uid)
     facts = chat.build_facts(user, chat.fetch_recent_logs(db, uid), today)
-    key = f"{facts.get('logs_today', 0)}-{user.get('stage') or 1}"
+    # 志望を変えるとキャラ（口調）も変わるので、志望とニックネームもキーに入れる
+    key = "|".join(str(x) for x in (
+        facts.get("logs_today", 0), user.get("stage") or 1, user.get("targetFacultyId") or "", facts.get("nickname") or ""))
 
-    snap = ref.get()
-    saved = (snap.to_dict() or {}) if snap.exists else {}
-    cached = saved.get("greeting") if isinstance(saved.get("greeting"), dict) else None
-    if cached and cached.get("key") == key and cached.get("text"):
-        return {"greeting": cached["text"], "cached": True}
-    if int(saved.get("greetings") or 0) >= chat.GREETING_DAILY_LIMIT:
-        # 上限をこえたら作り直さない（費用の上限）。前の一言か、決まった一言を返す
-        text = (cached or {}).get("text") or "今日もいっしょにがんばろう！"
-        return {"greeting": text, "cached": True}
+    state, text = _reserve_greeting(db.transaction(), ref, key, chat.GREETING_DAILY_LIMIT)
+    if state != "go":
+        # 保存した一言／作っている途中／上限（費用の上限）。作り直さずに返す
+        return {"greeting": text or GREETING_FALLBACK, "cached": True}
 
-    result = call_gemini(chat.build_greeting_prompt(user, facts), chat.CHAT_SCHEMA)
-    text = chat.clean_reply(result.get("reply", "")) or "今日もいっしょにがんばろう！"
+    try:
+        result = call_gemini(chat.build_greeting_prompt(user, facts), chat.CHAT_SCHEMA)
+        text = chat.clean_reply(result.get("reply", "")) or GREETING_FALLBACK
+    except Exception:
+        # 失敗したら回数を戻し、「作っている途中」の印を消す
+        ref.set({"greetings": firestore.Increment(-1), "greetingInflight": firestore.DELETE_FIELD}, merge=True)
+        raise
     ref.set({
-        "greetings": firestore.Increment(1),
         "greeting": {"key": key, "text": text},
+        "greetingInflight": firestore.DELETE_FIELD,
         "updatedAt": firestore.SERVER_TIMESTAMP,
-        "expireAt": datetime.now(timezone.utc) + timedelta(days=3),
     }, merge=True)
     return {"greeting": text, "cached": False}
 
@@ -513,7 +545,7 @@ def explore_faculties(data: ExploreRequest, uid: str = Depends(verify_user)):
             raise HTTPException(status_code=502, detail="AIの応答に失敗しました")
         picked = explore.rank(vec)
         result = call_gemini(explore.build_reason_prompt(interest, [f for f, _ in picked]), explore.REASON_SCHEMA)
-    except HTTPException:
+    except Exception:
         ref.set({"explores": firestore.Increment(-1)}, merge=True)  # AIの失敗は回数に数えない
         raise
     reasons = {}
@@ -549,7 +581,7 @@ def discover_from_reflections(uid: str = Depends(verify_user)):
         picked = explore.rank(memory.interest_vector(logs))
         evidence = {fid: memory.evidence_for(fid, logs) for fid, _ in picked}
         result = call_gemini(memory.build_discover_prompt([f for f, _ in picked], evidence), memory.DISCOVER_SCHEMA)
-    except HTTPException:
+    except Exception:
         ref.set({"discovers": firestore.Increment(-1)}, merge=True)
         raise
     reasons = {}

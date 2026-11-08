@@ -645,7 +645,7 @@
   display: flex; align-items: flex-end; justify-content: center;
 }
 .tama-chat {
-  width: 100%; max-width: 480px; height: min(86vh, 680px); background: var(--t-bg);
+  width: 100%; max-width: 480px; height: min(86vh, 680px); height: min(86dvh, 680px); background: var(--t-bg);
   border-radius: 22px 22px 0 0; display: flex; flex-direction: column; padding: 12px 14px 10px; gap: 8px;
 }
 @media (min-width: 600px) {
@@ -725,4 +725,7 @@
 .tama-discover-theme { font-size: 13px; font-weight: 800; background: var(--t-main-soft); color: var(--t-main-dark); border-radius: 999px; padding: 4px 10px; }
 .tama-discover-evidence { background: #F2F7FF; border-radius: 10px; padding: 8px 10px; }
 .tama-discover-evidence ul { margin: 4px 0 0; padding-left: 16px; font-size: 12px; line-height: 1.6; color: #4A4A5A; }
+
+/* iPhoneは16px未満の入力欄にフォーカスすると画面を拡大するので、入力欄は16pxにする */
+.tama-chat-form textarea, .tama-explore-form textarea { font-size: 16px; }
 

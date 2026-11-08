@@ -21,7 +21,7 @@ function stageStatus(stage, bond) {
   return "うまれたて";
 }
 
-export default function CharacterCard({ profile, logs, menu }) {
+export default function CharacterCard({ profile, logs, logsReady = true, menu }) {
   // フックは早期 return より前に置く
   const [chatOpen, setChatOpen] = useState(false);
   const [greeting, setGreeting] = useState("");
@@ -98,6 +98,7 @@ export default function CharacterCard({ profile, logs, menu }) {
 
       <div className="tama-stage-box">
         <GreetingBubble
+          enabled={logsReady}
           greetingKey={`${todayLogCount(logs, today)}-${stage}-${profile.targetFacultyId}`}
           color={uni.colors[2]}
           onTalk={() => setChatOpen(true)}
