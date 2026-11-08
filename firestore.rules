@@ -11,6 +11,18 @@ service cloud.firestore {
     }
 
     match /users/{uid} {
+      // growthExp・stage・bond・plan・streak は、バックエンド（Admin SDK）だけが書く（totalExp と同じ扱い）
+      // 着替え（equipped・outfits・coolForm）は本人が変えられるが、勉強タイマー中（timerStartedAt あり）は変えられない
+      function outfitOnly() {
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['equipped', 'outfits', 'coolForm']);
+      }
+      function timerOnly() {
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['timerStartedAt']);
+      }
+      function timerRunning() {
+        return resource.data.get('timerStartedAt', null) != null;
+      }
+
       allow read: if isOwner(uid);
 
       // 初回の学年登録：grade と createdAt だけ書き込める
@@ -19,9 +31,13 @@ service cloud.firestore {
         && validGrade();
 
       // 学年の変更：grade 以外（totalExp など）は変更できない
-      allow update: if isOwner(uid)
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['grade'])
-        && validGrade();
+      // 着替え：タイマー中でなければ equipped・outfits・coolForm だけ変えられる
+      // 勉強タイマー：timerStartedAt だけ変えられる
+      allow update: if (isOwner(uid)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['grade'])
+          && validGrade())
+        || (isOwner(uid) && outfitOnly() && !timerRunning())
+        || (isOwner(uid) && timerOnly());
 
       match /study_logs/{logId} {
         allow read: if isOwner(uid);
