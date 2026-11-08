@@ -109,3 +109,11 @@ export function requestExplore({ interest }) {
   return postJson("/explore", { interest }, { serverError: EXPLORE_ERROR_MESSAGE, statusMessages: EXPLORE_STATUS_MESSAGES });
 }
 
+/** G4：自分の振り返りから興味を見つける（記録が少ないときは needLogs と usedLogs が返る） */
+export function requestDiscover() {
+  return postJson("/discover", {}, {
+    serverError: EXPLORE_ERROR_MESSAGE,
+    statusMessages: { ...EXPLORE_STATUS_MESSAGES, 429: "今日はたくさん試したね！また明日やってみよう。" },
+  });
+}
+

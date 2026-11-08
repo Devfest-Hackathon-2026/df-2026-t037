@@ -1,7 +1,10 @@
 // 興味から学部をさがす（偏差値ではなく「学びたいこと・解きたい課題」から、9大学79学部を探す）
-// 意味の近さ：Vertex AI のテキスト埋め込み／理由：Gemini（学部の紹介文だけを根拠にする）。くわしくは backend/explore.py
+// 入口は2つ：
+//  1. あなたの記録から見つける（G4）：毎日の振り返りのうち、深く考えた記録から興味を見つける。backend/memory.py
+//  2. 言葉で探す：学びたいことを書いて探す。backend/explore.py
+// 意味の近さ：Vertex AI のテキスト埋め込み／理由：Gemini（学部の紹介文と本人の記録だけを根拠にする）
 import { useState } from "react";
-import { requestExplore, requestPlan } from "../api";
+import { requestDiscover, requestExplore, requestPlan } from "../api";
 import { getUniversity } from "../game/universities";
 import ConfirmDialog from "./ConfirmDialog";
 import "./tama.css";
@@ -26,16 +29,48 @@ export default function Explore({ profile, onBack }) {
   const [choosing, setChoosing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState("");
+  const [mode, setMode] = useState(null); // "records"（記録から）/ "words"（言葉で）
+  const [themes, setThemes] = useState([]);
+  const [shortage, setShortage] = useState(null);
 
   const text = interest.trim();
   const canSearch = !loading && text.length >= MIN && text.length <= MAX;
 
-  async function search(value = text) {
-    if (loading || value.length < MIN) return;
+  async function discover() {
+    if (loading) return;
     setLoading(true);
+    setMode("records");
     setError("");
     setSafety("");
     setSaved("");
+    setThemes([]);
+    setShortage(null);
+    try {
+      const r = await requestDiscover();
+      const list = Array.isArray(r?.results) ? r.results : [];
+      if (list.length === 0 && typeof r?.needLogs === "number") {
+        setShortage({ used: Number(r.usedLogs) || 0, need: r.needLogs });
+        setResults(null);
+      } else {
+        setResults(list);
+        setThemes(Array.isArray(r?.themes) ? r.themes : []);
+      }
+    } catch (e) {
+      setError(e?.message || "うまく探せませんでした。");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function search(value = text) {
+    if (loading || value.length < MIN) return;
+    setLoading(true);
+    setMode("words");
+    setError("");
+    setSafety("");
+    setSaved("");
+    setThemes([]);
+    setShortage(null);
     try {
       const r = await requestExplore({ interest: value });
       if (r?.safety) {
@@ -85,9 +120,30 @@ export default function Explore({ profile, onBack }) {
         <section className="tama tama-explore">
           <p className="tama-note">
             <span>
-              偏差値ではなく「学びたいこと」「解きたい課題」から探します。9大学79学部の紹介文と、あなたの言葉の意味の近さで、大学をまたいで5つ提案します。
+              偏差値ではなく、あなたが深く考えてきたこと・学びたいことから、9大学79学部を大学をまたいで5つ提案します。
             </span>
           </p>
+
+          <div className="tama-card tama-discover">
+            <p className="tama-strong"><span>あなたの記録から見つける</span></p>
+            <p className="tama-note">
+              <span>
+                毎日の振り返りのうち、S・Aランクで深く考えた記録や長く取り組んだ記録ほど重く見て、あなたの関心に近い学部を探します。根拠にした振り返りも一緒に表示します。
+              </span>
+            </p>
+            <button type="button" className="tama-btn block" onClick={discover} disabled={loading}>
+              <span key={loading && mode === "records" ? "l" : "s"}>
+                {loading && mode === "records" ? "記録を読んでいます…" : "記録から見つける"}
+              </span>
+            </button>
+            {shortage && (
+              <p className="tama-note tama-discover-short">
+                <span>{`振り返りのある記録が${shortage.used}件です。あと${Math.max(1, shortage.need - shortage.used)}件たまると見つけられます。下の「言葉で探す」も試してみてね。`}</span>
+              </p>
+            )}
+          </div>
+
+          <p className="tama-strong small tama-explore-or"><span>または、言葉で探す</span></p>
 
           <form
             className="tama-explore-form"
@@ -136,6 +192,17 @@ export default function Explore({ profile, onBack }) {
             </div>
           )}
 
+          {mode === "records" && themes.length > 0 && (
+            <div className="tama-discover-themes">
+              <p className="tama-strong small"><span>あなたの振り返りから見えたテーマ</span></p>
+              <div className="tama-explore-keys">
+                {themes.map((t) => (
+                  <span key={t} className="tama-discover-theme"><span>{t}</span></span>
+                ))}
+              </div>
+            </div>
+          )}
+
           {results && results.length > 0 && (
             <ol className="tama-explore-list">
               {results.map((r, i) => {
@@ -159,6 +226,18 @@ export default function Explore({ profile, onBack }) {
                       <div style={{ width: `${r.closeness}%`, background: color }} />
                     </div>
                     {r.reason && <p className="tama-explore-reason"><span>{r.reason}</span></p>}
+                    {Array.isArray(r.evidence) && r.evidence.length > 0 && (
+                      <div className="tama-discover-evidence">
+                        <p className="tama-tiny"><span>根拠にした、あなたの振り返り</span></p>
+                        <ul>
+                          {r.evidence.map((e, j) => (
+                            <li key={j}>
+                              <span>{`${e.date} ${e.subject}${e.rank ? `（${e.rank}）` : ""}「${e.snippet}」`}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
                     <p className="tama-explore-summary"><span>{r.summary}</span></p>
                     <div className="tama-explore-keys">
                       {(r.keywords || []).map((k) => (
@@ -194,7 +273,7 @@ export default function Explore({ profile, onBack }) {
 
           <p className="tama-tiny tama-explore-foot">
             <span>
-              出典：各大学の公式ページ。紹介文はAI（Gemini）が公式ページをもとに下書きし、チームで確認しています。「近さ」は、あなたの言葉と紹介文の意味の近さ（Vertex AI）で、合否や向き不向きを表すものではありません。同じ大学は最大2つまで表示します。最新の情報は必ず各大学の公式ページで確かめてください。
+              「記録から見つける」では、あなたの振り返りをAI（Vertex AI・Gemini）が読みます。ほかの人には見えず、振り返りの文章を新しくどこかへ保存することもありません（保存するのは、意味を表す数値＝ベクトルです）。出典：各大学の公式ページ。紹介文はAI（Gemini）が公式ページをもとに下書きし、チームで確認しています。「近さ」は、あなたの言葉と紹介文の意味の近さ（Vertex AI）で、合否や向き不向きを表すものではありません。同じ大学は最大2つまで表示します。最新の情報は必ず各大学の公式ページで確かめてください。
             </span>
           </p>
         </section>

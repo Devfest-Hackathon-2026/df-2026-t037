@@ -559,6 +559,9 @@ function ResultCard({ result }) {
   const advice = toText(result?.advice);
   const growth = toNumber(result?.growth_exp);
   const evolved = result?.evolved === true;
+  // G1：過去の似た振り返り（Vertex AI の埋め込み＋Firestore のベクトル検索）から見つけた、くり返しのつまずき
+  const recurring = toText(result?.recurring_note);
+  const similar = Array.isArray(result?.similar) ? result.similar.slice(0, 3) : [];
 
   return (
     <section className={`card result ${meta.className}`}>
@@ -595,6 +598,23 @@ function ResultCard({ result }) {
           <span>{advice || "アドバイスを取得できませんでした。"}</span>
         </p>
       </div>
+
+      {recurring && (
+        <div className="recurring">
+          <div className="advice-title">前の記録とのつながり</div>
+          <p><span>{`🔁 ${recurring}`}</span></p>
+          {similar.length > 0 && (
+            <ul className="recurring-list">
+              {similar.map((s, i) => (
+                <li key={i}>
+                  <span>{`${toText(s.date)} ${toText(s.subject)}${s.rank ? `（${toText(s.rank)}）` : ""}「${toText(s.snippet)}」`}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="recurring-note"><span>意味の近さで、あなたの前の振り返りから見つけました</span></p>
+        </div>
+      )}
     </section>
   );
 }

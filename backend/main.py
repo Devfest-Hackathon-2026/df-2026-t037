@@ -18,6 +18,7 @@ from pydantic import BaseModel, Field
 
 import chat
 import explore
+import memory
 import progress
 from game_rules import FACULTIES, PACE_FACTOR, make_plan
 
@@ -110,6 +111,8 @@ RESPONSE_SCHEMA = {
         "verbal_score": {"type": "STRING", "enum": ["S", "A", "B", "C"]},
         "score_reason": {"type": "STRING"},
         "advice": {"type": "STRING"},
+        # G1：過去の似た振り返りから、くり返しているつまずきが見つかったときだけ1文（なければ空）
+        "recurring_note": {"type": "STRING"},
     },
     "required": ["verbal_score", "score_reason", "advice"],
 }
@@ -133,7 +136,7 @@ def fetch_history(uid: str) -> list[dict]:
     return [d.to_dict() for d in docs]
 
 
-def build_prompt(grade: str, data: AdviseRequest, history: list[dict]) -> str:
+def build_prompt(grade: str, data: AdviseRequest, history: list[dict], similar_block: str = "") -> str:
     lines = []
     for h in history:
         ts = h.get("createdAt")
@@ -170,6 +173,7 @@ def build_prompt(grade: str, data: AdviseRequest, history: list[dict]) -> str:
 <history>
 {history_text}
 </history>
+{similar_block}
 
 今回の記録: 教科={data.subject} / 時間={data.minutes}分
 <reflection>
@@ -259,7 +263,15 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
     if data.fromTimer:
         check_timer_minutes(user, data.minutes)
 
-    result = call_gemini(build_prompt(grade, data, fetch_history(uid)))
+    # G1：振り返りをベクトルにして、過去の似た振り返りを Firestore のベクトル検索で探す（失敗しても採点は続ける）
+    vec, similar = None, []
+    try:
+        vec = memory.embed(data.reflection, PROJECT_ID, get_access_token())
+        similar = memory.find_similar(db, uid, vec)
+    except Exception:
+        vec, similar = None, []
+
+    result = call_gemini(build_prompt(grade, data, fetch_history(uid), memory.similar_prompt_block(similar)))
 
     rank = result.get("verbal_score")
     if rank not in RANK_EXP:
@@ -283,6 +295,13 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
     # Geminiの呼び出しはトランザクションの外で済ませておく（トランザクションは再実行されることがあるため）
     growth = _commit_log(db.transaction(), user_ref, log_ref, log, data, rank, base_exp + bonus_exp)
 
+    if vec is not None:
+        try:
+            memory.save_vector(db, uid, log_ref.id, vec, {**log, "createdAt": datetime.now(timezone.utc)})
+        except Exception as e:
+            print(f"[vector save skipped] {e.__class__.__name__}")
+    recurring = str(result.get("recurring_note") or "").strip() if similar else ""
+
     return {
         "log_id": log_ref.id,
         "verbal_score": rank,
@@ -290,6 +309,8 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
         "bonus_exp": bonus_exp,
         "score_reason": result.get("score_reason", ""),
         "advice": result.get("advice", ""),
+        "recurring_note": recurring[:160],
+        "similar": [{k: v for k, v in x.items() if k != "logId"} for x in similar] if recurring else [],
         **growth,
     }
 
@@ -500,4 +521,44 @@ def explore_faculties(data: ExploreRequest, uid: str = Depends(verify_user)):
         if isinstance(item, dict) and item.get("id") in explore.PROFILES:
             reasons[item["id"]] = str(item.get("reason") or "")
     return {"results": explore.results_payload(picked, reasons), "safety": False}
+
+
+# ---- G4：自分の振り返りから興味を見つける（memory.py）。自己申告ではなく、深く考えた記録から学部を探す ----
+@firestore.transactional
+def _reserve_discover(txn, ref, limit: int) -> None:
+    snap = ref.get(transaction=txn)
+    used = int((snap.to_dict() or {}).get("discovers") or 0) if snap.exists else 0
+    if used >= limit:
+        raise HTTPException(status_code=429, detail="今日の回数を使い切りました")
+    txn.set(ref, {"discovers": used + 1, "updatedAt": firestore.SERVER_TIMESTAMP,
+                  "expireAt": datetime.now(timezone.utc) + timedelta(days=3)}, merge=True)
+
+
+@app.post("/discover")
+def discover_from_reflections(uid: str = Depends(verify_user)):
+    if not explore.ready():
+        raise HTTPException(status_code=503, detail="学部の紹介文を準備中です")
+    today = progress.today_jst()
+    ref = chat.usage_ref(db, uid, today)
+    _reserve_discover(db.transaction(), ref, memory.DISCOVER_DAILY_LIMIT)
+    try:
+        logs = memory.collect_logs_with_vectors(db, uid, PROJECT_ID, get_access_token())
+        if len(logs) < memory.DISCOVER_MIN_LOGS:
+            ref.set({"discovers": firestore.Increment(-1)}, merge=True)
+            return {"results": [], "themes": [], "usedLogs": len(logs), "needLogs": memory.DISCOVER_MIN_LOGS}
+        picked = explore.rank(memory.interest_vector(logs))
+        evidence = {fid: memory.evidence_for(fid, logs) for fid, _ in picked}
+        result = call_gemini(memory.build_discover_prompt([f for f, _ in picked], evidence), memory.DISCOVER_SCHEMA)
+    except HTTPException:
+        ref.set({"discovers": firestore.Increment(-1)}, merge=True)
+        raise
+    reasons = {}
+    for item in result.get("items") or []:
+        if isinstance(item, dict) and item.get("id") in explore.PROFILES:
+            reasons[item["id"]] = str(item.get("reason") or "")
+    results = explore.results_payload(picked, reasons)
+    for r in results:
+        r["evidence"] = evidence.get(r["facultyId"], [])
+    themes = [str(t).strip()[:20] for t in (result.get("themes") or []) if str(t).strip()][:3]
+    return {"results": results, "themes": themes, "usedLogs": len(logs), "needLogs": memory.DISCOVER_MIN_LOGS}
 

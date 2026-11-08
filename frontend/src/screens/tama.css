@@ -717,3 +717,12 @@
 .tama-explore-safety { max-width: 100%; }
 .tama-explore-foot { line-height: 1.6; }
 
+/* G4：記録から見つける */
+.tama-discover { display: flex; flex-direction: column; gap: 8px; border: 2px solid var(--t-main-soft); }
+.tama-discover-short { background: #FFF6E6; border-radius: 10px; padding: 8px 10px; }
+.tama-explore-or { margin-top: 4px; color: var(--t-sub); }
+.tama-discover-themes { display: flex; flex-direction: column; gap: 6px; }
+.tama-discover-theme { font-size: 13px; font-weight: 800; background: var(--t-main-soft); color: var(--t-main-dark); border-radius: 999px; padding: 4px 10px; }
+.tama-discover-evidence { background: #F2F7FF; border-radius: 10px; padding: 8px 10px; }
+.tama-discover-evidence ul { margin: 4px 0 0; padding-left: 16px; font-size: 12px; line-height: 1.6; color: #4A4A5A; }
+

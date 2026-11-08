@@ -946,3 +946,10 @@
   font-size: 14px;
   font-weight: 800;
 }
+
+/* G1：前の記録とのつながり */
+.recurring { margin-top: 14px; padding: 12px 14px; border-radius: 14px; background: #F2F7FF; border-left: 4px solid #5B8DEF; }
+.recurring p { margin: 4px 0 0; line-height: 1.6; }
+.recurring-list { margin: 8px 0 0; padding-left: 18px; font-size: 13px; color: #5A5A6A; line-height: 1.6; }
+.recurring-note { font-size: 11px; color: #8A8A9A; }
+
