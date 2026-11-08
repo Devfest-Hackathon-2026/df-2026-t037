@@ -627,8 +627,9 @@
 .tama-stepper-box:focus-within { box-shadow: 0 0 0 3px var(--t-main-soft); }
 
 /* ===== キャラとの会話 ===== */
-.tama-stage-box { position: relative; }
-.tama-greet { position: absolute; top: 10px; left: 12px; right: 12px; display: flex; align-items: flex-start; gap: 8px; z-index: 1; }
+/* 一言の吹き出しはキャラに重ねず、上に並べる（スマホでも頭が隠れないように） */
+.tama-stage-box { height: auto; min-height: 210px; flex-direction: column; gap: 4px; padding: 12px 12px 4px; }
+.tama-greet { align-self: stretch; display: flex; align-items: flex-start; gap: 8px; }
 .tama-greet-bubble {
   flex: 1; background: #FFFFFF; border: 2px solid; border-radius: 16px; padding: 8px 12px;
   font-size: 13px; line-height: 1.55; box-shadow: 0 2px 8px rgba(74, 62, 58, 0.08);
@@ -670,4 +671,49 @@
 .tama-chat-form textarea:focus { outline: 2px solid #E8A35A; border-color: transparent; }
 .tama-chat-form .tama-btn { flex: none; width: 72px; height: 44px; }
 .tama-chat-foot { line-height: 1.5; }
+
+/* ===== 興味から学部をさがす ===== */
+.tama-explore-entry {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%;
+  background: #FFFFFF; border: 2px dashed var(--t-line); border-radius: 18px; padding: 12px 14px;
+  font: inherit; text-align: left; cursor: pointer; color: var(--t-text);
+}
+.tama-explore-entry:hover { border-color: var(--t-main); }
+.tama-explore-entry:focus-visible { outline: 2px solid #E8A35A; outline-offset: 2px; }
+.tama-explore-entry-title { font-size: 15px; font-weight: 900; }
+.tama-explore-entry-sub { font-size: 12px; color: var(--t-sub); }
+.tama-explore { display: flex; flex-direction: column; gap: 12px; }
+.tama-explore-form { display: flex; flex-direction: column; gap: 8px; }
+.tama-explore-form textarea {
+  resize: vertical; border: 1.5px solid var(--t-line); border-radius: 14px; padding: 10px 12px;
+  font: inherit; font-size: 14px; background: #FFFFFF; color: var(--t-text);
+}
+.tama-explore-form textarea:focus { outline: 2px solid #E8A35A; border-color: transparent; }
+.tama-explore-examples { display: flex; flex-wrap: wrap; gap: 6px; }
+.tama-explore-chip {
+  border: 1px solid var(--t-line); background: #FFFFFF; border-radius: 999px; padding: 5px 10px;
+  font: inherit; font-size: 12px; color: var(--t-text); cursor: pointer;
+}
+.tama-explore-chip:disabled { opacity: 0.5; cursor: default; }
+.tama-explore-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.tama-explore-card { display: flex; flex-direction: column; gap: 8px; }
+.tama-explore-top { display: flex; align-items: center; gap: 10px; }
+.tama-explore-rank {
+  flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--t-main-soft); color: var(--t-main-dark);
+  display: grid; place-items: center; font-weight: 900; font-size: 13px;
+}
+.tama-explore-name { flex: 1; min-width: 0; }
+.tama-explore-close { flex: none; text-align: right; line-height: 1.1; }
+.tama-explore-close strong { font-size: 22px; font-weight: 900; }
+.tama-bar.thin, .tama-bar.thin > div { height: 6px; }
+.tama-explore-reason { font-size: 14px; font-weight: 700; line-height: 1.6; }
+.tama-explore-summary { font-size: 12px; color: var(--t-sub); line-height: 1.6; }
+.tama-explore-keys { display: flex; flex-wrap: wrap; gap: 4px; }
+.tama-explore-key { font-size: 11px; background: #FBF7F2; border-radius: 6px; padding: 2px 6px; color: var(--t-sub); }
+.tama-explore-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tama-explore-choose { margin-left: auto; flex: none; height: 38px; padding: 0 14px; font-size: 13px; }
+.tama-explore-badge { font-size: 10px; background: #FFF1C9; border-radius: 6px; padding: 2px 6px; color: #8A6A10; }
+.tama-explore-saved { font-size: 13px; font-weight: 700; color: #2E7D4F; }
+.tama-explore-safety { max-width: 100%; }
+.tama-explore-foot { line-height: 1.6; }
 

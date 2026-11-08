@@ -14,6 +14,7 @@ import CharacterCard from "./screens/CharacterCard";
 import Menu from "./screens/Menu";
 import Timer from "./screens/Timer";
 import Kisekae from "./screens/Kisekae";
+import Explore from "./screens/Explore";
 import ConfirmDialog from "./screens/ConfirmDialog";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
@@ -98,7 +99,7 @@ export default function App() {
   const [profile, setProfile] = useState(null);
   const [profileReady, setProfileReady] = useState(false);
   const [setupEditing, setSetupEditing] = useState(false);
-  const [screen, setScreen] = useState("home"); // home / timer / kisekae / record / result
+  const [screen, setScreen] = useState("home"); // home / timer / kisekae / record / result / explore
   const [confirmSettings, setConfirmSettings] = useState(false);
   const [logs, setLogs] = useState([]);
   const [lastResult, setLastResult] = useState(null);
@@ -236,6 +237,10 @@ export default function App() {
     );
   }
 
+  if (screen === "explore") {
+    return <Explore profile={profile} onBack={() => setScreen("home")} />;
+  }
+
   if (screen === "kisekae") {
     return <Kisekae uid={user.uid} profile={profile} onBack={() => setScreen("home")} />;
   }
@@ -291,6 +296,7 @@ export default function App() {
               timerRunning={timerRunning}
               onSettings={openSettings}
               onKisekae={() => setScreen("kisekae")}
+              onExplore={() => setScreen("explore")}
             />
           }
         />
@@ -312,6 +318,12 @@ export default function App() {
             <span>✎ 終わった勉強をあとから記録する</span>
           </button>
         </div>
+
+        {/* 志望校選びを偏差値以外の入口からも：学びたいことから学部をさがす */}
+        <button type="button" className="tama tama-explore-entry" onClick={() => setScreen("explore")}>
+          <span className="tama-explore-entry-title">興味から学部をさがす</span>
+          <span className="tama-explore-entry-sub">学びたいこと・解きたい課題から、9大学79学部を見てみよう</span>
+        </button>
 
         <ReportView logs={logs} profile={profile} />
       </main>

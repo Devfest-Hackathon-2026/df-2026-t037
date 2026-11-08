@@ -17,6 +17,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 import chat
+import explore
 import progress
 from game_rules import FACULTIES, PACE_FACTOR, make_plan
 
@@ -86,6 +87,10 @@ class PlanRequest(BaseModel):
     pace: str
     facultyId: str
     nickname: str = Field(default="", max_length=20)
+
+
+class ExploreRequest(BaseModel):
+    interest: str = Field(min_length=explore.INTEREST_MIN, max_length=explore.INTEREST_MAX)
 
 
 class ChatTurn(BaseModel):
@@ -416,10 +421,15 @@ def chat_with_character(data: ChatRequest, uid: str = Depends(verify_user)):
     user = _load_user(uid)
     facts = chat.build_facts(user, chat.fetch_recent_logs(db, uid), today)
     history = [h.model_dump() for h in data.history]
-    result = call_gemini(chat.build_chat_prompt(user, facts, data.message, history), chat.CHAT_SCHEMA)
-    reply = chat.clean_reply(result.get("reply", ""))
-    if not reply:
-        raise HTTPException(status_code=502, detail="AIの応答を解析できませんでした")
+    try:
+        result = call_gemini(chat.build_chat_prompt(user, facts, data.message, history), chat.CHAT_SCHEMA)
+        reply = chat.clean_reply(result.get("reply", ""))
+        if not reply:
+            raise HTTPException(status_code=502, detail="AIの応答を解析できませんでした")
+    except HTTPException:
+        # AIの失敗は生徒のせいではないので、使った回数を戻す
+        chat.usage_ref(db, uid, today).set({"chats": firestore.Increment(-1)}, merge=True)
+        raise
     return {"reply": reply, "safety": False, "remaining": remaining}
 
 
@@ -451,4 +461,43 @@ def greeting(uid: str = Depends(verify_user)):
         "expireAt": datetime.now(timezone.utc) + timedelta(days=3),
     }, merge=True)
     return {"greeting": text, "cached": False}
+
+
+# ---- 興味から学部を逆引き（explore.py）。偏差値ではなく「学びたいこと」から9大学79学部を探す ----
+@firestore.transactional
+def _reserve_explore(txn, ref, limit: int) -> None:
+    snap = ref.get(transaction=txn)
+    used = int((snap.to_dict() or {}).get("explores") or 0) if snap.exists else 0
+    if used >= limit:
+        raise HTTPException(status_code=429, detail="今日の検索の回数を使い切りました")
+    txn.set(ref, {"explores": used + 1, "updatedAt": firestore.SERVER_TIMESTAMP,
+                  "expireAt": datetime.now(timezone.utc) + timedelta(days=3)}, merge=True)
+
+
+@app.post("/explore")
+def explore_faculties(data: ExploreRequest, uid: str = Depends(verify_user)):
+    if not explore.ready():
+        raise HTTPException(status_code=503, detail="学部の紹介文を準備中です")
+    interest = data.interest.strip()
+    if chat.is_crisis(interest):
+        return {"results": [], "safety": True, "message": chat.CRISIS_REPLY}
+
+    today = progress.today_jst()
+    ref = chat.usage_ref(db, uid, today)
+    _reserve_explore(db.transaction(), ref, explore.EXPLORE_DAILY_LIMIT)
+    try:
+        try:
+            vec = explore.embed_query(interest, PROJECT_ID, get_access_token())
+        except Exception:
+            raise HTTPException(status_code=502, detail="AIの応答に失敗しました")
+        picked = explore.rank(vec)
+        result = call_gemini(explore.build_reason_prompt(interest, [f for f, _ in picked]), explore.REASON_SCHEMA)
+    except HTTPException:
+        ref.set({"explores": firestore.Increment(-1)}, merge=True)  # AIの失敗は回数に数えない
+        raise
+    reasons = {}
+    for item in result.get("items") or []:
+        if isinstance(item, dict) and item.get("id") in explore.PROFILES:
+            reasons[item["id"]] = str(item.get("reason") or "")
+    return {"results": explore.results_payload(picked, reasons), "safety": False}
 

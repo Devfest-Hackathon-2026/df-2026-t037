@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { isChimeOn, setChimeOn } from "../lib/chime";
 import "./tama.css";
 
-export default function Menu({ timerRunning, onSettings, onKisekae, dark = false }) {
+export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, dark = false }) {
   const [open, setOpen] = useState(false);
   const [chime, setChime] = useState(() => isChimeOn());
   const ref = useRef(null);
@@ -45,6 +45,12 @@ export default function Menu({ timerRunning, onSettings, onKisekae, dark = false
             <span>図鑑</span>
             <span className="tama-menu-sub">じゅんび中</span>
           </button>
+          {onExplore && (
+            <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onExplore)}>
+              <span>興味から学部をさがす</span>
+              <span className="tama-menu-sub">9大学79学部</span>
+            </button>
+          )}
           <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onSettings)}>
             <span>設定</span>
             <span className="tama-menu-sub">学年・志望校・ペース</span>

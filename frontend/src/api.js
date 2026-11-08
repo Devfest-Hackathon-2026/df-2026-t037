@@ -12,6 +12,8 @@ const STATUS_MESSAGES = {
 };
 const SERVER_ERROR_MESSAGE = "AIの採点に失敗しました。時間をおいて再度お試しください。";
 const PLAN_ERROR_MESSAGE = "設定を保存できませんでした。時間をおいて再度お試しください。";
+const REQUEST_TIMEOUT_MS = 45000;
+const TIMEOUT_MESSAGE = "時間がかかりすぎたので、いったん止めました。少し待ってからもう一度お試しください。";
 const NETWORK_ERROR_MESSAGE = "通信に失敗しました。インターネット接続を確認してください。";
 
 // /plan の 400 は、どの項目が原因かだけをフロントの言葉で伝える
@@ -26,6 +28,9 @@ async function postJson(path, payload, { serverError, messages400 = {}, statusMe
 
   const token = await user.getIdToken();
 
+  // 返事が来ないまま「保存中…」「考え中」が終わらないのを防ぐ（AIの採点や起動直後の待ちを見込んで45秒）
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   let res;
   try {
     res = await fetch(`${API_URL}${path}`, {
@@ -35,10 +40,13 @@ async function postJson(path, payload, { serverError, messages400 = {}, statusMe
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
+      signal: controller.signal,
     });
   } catch (err) {
     console.error("[API network error]", err);
-    throw new Error(NETWORK_ERROR_MESSAGE);
+    throw new Error(err?.name === "AbortError" ? TIMEOUT_MESSAGE : NETWORK_ERROR_MESSAGE);
+  } finally {
+    clearTimeout(timer);
   }
 
   if (!res.ok) {
@@ -88,3 +96,16 @@ export function requestChat({ message, history }) {
 export function requestGreeting() {
   return postJson("/greeting", {}, { serverError: CHAT_ERROR_MESSAGE });
 }
+
+const EXPLORE_ERROR_MESSAGE = "うまく探せませんでした。少し待ってからもう一度お試しください。";
+const EXPLORE_STATUS_MESSAGES = {
+  422: "4〜200字で書いてね。",
+  429: "今日はたくさん探したね！また明日試してみよう。",
+  503: "学部の紹介文を準備中です。もう少し待ってね。",
+};
+
+/** 興味から学部を逆引き（意味の近さ：Vertex AI の埋め込み／理由：Gemini） */
+export function requestExplore({ interest }) {
+  return postJson("/explore", { interest }, { serverError: EXPLORE_ERROR_MESSAGE, statusMessages: EXPLORE_STATUS_MESSAGES });
+}
+
