@@ -1,0 +1,15 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="成体のコトまる。「A」と書かれた吹き出し">
+<defs><radialGradient id="k6b" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#EEFCF5"></stop><stop offset=".55" stop-color="#8EDDB8"></stop><stop offset="1" stop-color="#3FA47A"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="74" cy="146" rx="34" ry="5.5" fill="#2A5A44" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="138" rx="9" ry="5" fill="#62C094"></ellipse><ellipse cx="88" cy="138" rx="9" ry="5" fill="#62C094"></ellipse>
+<circle cx="75" cy="100" r="38" fill="url(#k6b)"></circle>
+<ellipse cx="39" cy="106" rx="6" ry="8.5" fill="#74CCA2" transform="rotate(20 39 106)"></ellipse><ellipse cx="111" cy="106" rx="6" ry="8.5" fill="#74CCA2" transform="rotate(-20 111 106)"></ellipse>
+<ellipse cx="61" cy="80" rx="11" ry="6.5" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="64" cy="102" rx="4" ry="5.8" fill="#2B2632"></ellipse><ellipse cx="86" cy="102" rx="4" ry="5.8" fill="#2B2632"></ellipse></g>
+<circle cx="62.6" cy="99.6" r="1.5" fill="#FFFFFF"></circle><circle cx="84.6" cy="99.6" r="1.5" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="114" rx="6" ry="3.6" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="95" cy="114" rx="6" ry="3.6" fill="#FF8FA3" opacity=".5"></ellipse>
+<ellipse cx="75" cy="113" rx="3.4" ry="2.9" fill="#E8687A"></ellipse>
+</g>
+<g class="pop"><path d="M108 34 L140 34 Q145 34 145 39 L145 54 Q145 59 140 59 L124 59 L116 67 L118 59 L108 59 Q103 59 103 54 L103 39 Q103 34 108 34 Z" fill="#FFFFFF"></path><text x="124" y="52.5" font-size="17" fill="#3FA47A" font-family="'M PLUS Rounded 1c', sans-serif" font-weight="900" text-anchor="middle">A</text></g>
+</svg>

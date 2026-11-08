@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>ミシックエフェクト</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#F5D46A}a:hover{color:#FFE48A}
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes twinkle{0%,100%{opacity:.25}50%{opacity:1}}
+@keyframes flicker{0%,100%{transform:scale(1,1)}50%{transform:scale(1.05,1.12)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+@keyframes drift{0%,100%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
+@keyframes fall{0%{transform:translate(0,-20px) rotate(0deg);opacity:0}15%{opacity:1}100%{transform:translate(14px,60px) rotate(200deg);opacity:0}}
+@media (prefers-reduced-motion: no-preference){
+.squish{animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.shadow{animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.blink{animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+.flicker{animation:flicker .9s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.rise{animation:rise 2.2s ease-out infinite}
+.drift{animation:drift 5s ease-in-out infinite}
+.fall{animation:fall 3.2s linear infinite;transform-box:fill-box;transform-origin:center}
+}
+</style>
+</helmet>
+<div style="width: 1100px; height: 640px; box-sizing: border-box; padding: 32px 36px; background: linear-gradient(135deg, #231C3A 0%, #34265A 60%, #3E2A52 100%); font-family: 'M PLUS Rounded 1c', sans-serif; color: #FFFFFF; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<div>
+<p style="margin: 0; font-size: 14px; font-weight: 800; color: #F5D46A">ミシック｜レジェンドのさらに上の最上級エフェクト</p>
+<h1 style="margin: 2px 0 0; font-size: 28px; font-weight: 900">3年間の努力と、最後の結果でしか手に入らない</h1>
+</div>
+<p style="margin: 0; font-size: 12px; color: #C8C0E0; text-align: right; line-height: 1.6">着替え画面では金のふちの特別枠に表示<br>図鑑の額縁と、試験の朝の応援にも使われる</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px"><div style="background: rgba(255,255,255,.06); border: 1.5px solid rgba(245,212,106,.5); border-radius: 24px; padding: 14px 16px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 200px; height: 200px; border-radius: 100px; background: radial-gradient(circle at 50% 45%, #3A3060 0%, #1A1530 75%); display: flex; align-items: center; justify-content: center"><svg width="190" height="190" viewBox="0 0 160 160" role="img" aria-label="不死鳥の炎のエフェクト。背中から炎の翼が燃え上がり、火の粉が舞うギンまる">
+<defs><radialGradient id="m1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="m1l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient><linearGradient id="m1f" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E8402E"></stop><stop offset=".55" stop-color="#FF9A2E"></stop><stop offset="1" stop-color="#FFE27A"></stop></linearGradient></defs>
+<circle cx="80" cy="92" r="66" fill="#FF9A2E" opacity=".16"></circle>
+<path class="flicker" d="M62 104 Q22 96 6 52 Q26 64 30 46 Q40 72 50 58 Q48 82 66 90 Z" fill="url(#m1f)"></path>
+<path class="flicker" style="animation-delay: .3s" d="M98 104 Q138 96 154 52 Q134 64 130 46 Q120 72 110 58 Q112 82 94 90 Z" fill="url(#m1f)"></path>
+<path class="flicker" style="animation-delay: .15s" d="M58 112 Q30 116 14 96 Q34 100 40 90 Q46 104 60 102 Z M102 112 Q130 116 146 96 Q126 100 120 90 Q114 104 100 102 Z" fill="#FFB648" opacity=".85"></path>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#000000" opacity=".25"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="url(#m1l)"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#m1)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse>
+<path d="M74 104 Q80 113 86 104 Z" fill="#E8687A"></path>
+</g>
+<circle class="rise" cx="28" cy="120" r="2.4" fill="#FFB648"></circle><circle class="rise" style="animation-delay: .7s" cx="132" cy="116" r="2" fill="#FFE27A"></circle><circle class="rise" style="animation-delay: 1.3s" cx="48" cy="70" r="1.8" fill="#FF9A2E"></circle><circle class="rise" style="animation-delay: 1.8s" cx="116" cy="66" r="2.2" fill="#FFB648"></circle>
+</svg></div>
+<p style="margin: 4px 0 0; font-size: 20px; font-weight: 900; color: #FFF4D6">不死鳥の炎</p>
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #F5D46A; text-align: center; line-height: 1.5">同じ模試シリーズで、志望校の判定をE→Aまで上げる（4段階アップ）</p>
+<p style="margin: 0; font-size: 11px; color: #C8C0E0; text-align: center; line-height: 1.5">成績表の写真を2回分、Geminiで読み取って比べる</p>
+</div><div style="background: rgba(255,255,255,.06); border: 1.5px solid rgba(245,212,106,.5); border-radius: 24px; padding: 14px 16px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 200px; height: 200px; border-radius: 100px; background: radial-gradient(circle at 50% 45%, #3A3060 0%, #1A1530 75%); display: flex; align-items: center; justify-content: center"><svg width="190" height="190" viewBox="0 0 160 160" role="img" aria-label="銀河のオーロラのエフェクト。背後に緑と紫の光の帯がゆらめき、星がまたたくギンまる">
+<defs><radialGradient id="m2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="m2l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient><linearGradient id="m2a" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5CF2C2" stop-opacity="0"></stop><stop offset=".3" stop-color="#5CF2C2"></stop><stop offset=".7" stop-color="#5CC8F2"></stop><stop offset="1" stop-color="#5CC8F2" stop-opacity="0"></stop></linearGradient><linearGradient id="m2b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B07AF2" stop-opacity="0"></stop><stop offset=".4" stop-color="#B07AF2"></stop><stop offset=".8" stop-color="#F27AC8"></stop><stop offset="1" stop-color="#F27AC8" stop-opacity="0"></stop></linearGradient></defs>
+<g class="drift"><path d="M-6 50 Q30 22 72 42 T166 30 L166 48 Q124 62 80 58 T-6 70 Z" fill="url(#m2a)" opacity=".75"></path></g>
+<g class="drift" style="animation-delay: -2.5s"><path d="M-6 74 Q36 50 80 66 T166 56 L166 70 Q120 82 80 80 T-6 90 Z" fill="url(#m2b)" opacity=".6"></path></g>
+<path class="twinkle" style="animation-delay: 0s" d="M16 20 L17.2 22.8 L20 24 L17.2 25.2 L16 28 L14.8 25.2 L12 24 L14.8 22.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 0.5s" d="M140 14 L141.2 16.8 L144 18 L141.2 19.2 L140 22 L138.8 19.2 L136 18 L138.8 16.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 1s" d="M150 92 L151.2 94.8 L154 96 L151.2 97.2 L150 100 L148.8 97.2 L146 96 L148.8 94.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 0.3s" d="M10 106 L11.2 108.8 L14 110 L11.2 111.2 L10 114 L8.8 111.2 L6 110 L8.8 108.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 0.8s" d="M126 128 L127.2 130.8 L130 132 L127.2 133.2 L126 136 L124.8 133.2 L122 132 L124.8 130.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 1.2s" d="M34 136 L35.2 138.8 L38 140 L35.2 141.2 L34 144 L32.8 141.2 L30 140 L32.8 138.8 Z" fill="#FFFFFF"></path>
+<circle cx="60" cy="14" r="1.4" fill="#FFFFFF" opacity=".8"></circle><circle cx="104" cy="10" r="1.2" fill="#FFFFFF" opacity=".7"></circle><circle cx="148" cy="64" r="1.3" fill="#FFFFFF" opacity=".7"></circle>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#000000" opacity=".25"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="url(#m2l)"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#m2)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse>
+<path d="M74 104 Q80 113 86 104 Z" fill="#E8687A"></path>
+</g>
+</svg></div>
+<p style="margin: 4px 0 0; font-size: 20px; font-weight: 900; color: #FFF4D6">銀河のオーロラ</p>
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #F5D46A; text-align: center; line-height: 1.5">高1・高2・高3の3シーズンすべてで親密度10（がっつりペース）</p>
+<p style="margin: 0; font-size: 11px; color: #C8C0E0; text-align: center; line-height: 1.5">アプリの記録だけで判定。3年間使い続けた人だけのもの</p>
+</div><div style="background: rgba(255,255,255,.06); border: 1.5px solid rgba(245,212,106,.5); border-radius: 24px; padding: 14px 16px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 200px; height: 200px; border-radius: 100px; background: radial-gradient(circle at 50% 45%, #3A3060 0%, #1A1530 75%); display: flex; align-items: center; justify-content: center"><svg width="190" height="190" viewBox="0 0 160 160" role="img" aria-label="満開の桜吹雪のエフェクト。金の光の輪と、舞い散る桜の花びらに包まれたギンまる">
+<defs><radialGradient id="m3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="m3l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient><radialGradient id="m3g" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#FFF4F7"></stop><stop offset="1" stop-color="#FFC8D8" stop-opacity="0"></stop></radialGradient></defs>
+<circle cx="80" cy="92" r="72" fill="url(#m3g)"></circle>
+<circle class="twinkle" cx="80" cy="92" r="60" fill="none" stroke="#F5D46A" stroke-width="3"></circle>
+<circle cx="80" cy="92" r="66" fill="none" stroke="#F5D46A" stroke-width="1" stroke-dasharray="2 6" opacity=".8"></circle>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#000000" opacity=".25"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="url(#m3l)"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#m3)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse>
+<path d="M74 104 Q80 113 86 104 Z" fill="#E8687A"></path>
+</g>
+<g transform="translate(108 26)"><circle cx="0" cy="-5" r="4" fill="#F8C8D4"></circle><circle cx="4.8" cy="-1.5" r="4" fill="#F8C8D4"></circle><circle cx="3" cy="4" r="4" fill="#F8C8D4"></circle><circle cx="-3" cy="4" r="4" fill="#F8C8D4"></circle><circle cx="-4.8" cy="-1.5" r="4" fill="#F8C8D4"></circle><circle cx="0" cy="0" r="2" fill="#F5C842"></circle></g>
+<ellipse class="fall" style="animation-delay: 0s" cx="18" cy="20" rx="4" ry="2.6" fill="#F8C8D4" transform="rotate(20 18 20)"></ellipse><ellipse class="fall" style="animation-delay: 0.6s" cx="44" cy="8" rx="4" ry="2.6" fill="#F2A6B8" transform="rotate(-30 44 8)"></ellipse><ellipse class="fall" style="animation-delay: 1.1s" cx="120" cy="14" rx="4" ry="2.6" fill="#F8C8D4" transform="rotate(40 120 14)"></ellipse><ellipse class="fall" style="animation-delay: 1.7s" cx="146" cy="40" rx="4" ry="2.6" fill="#F2A6B8" transform="rotate(10 146 40)"></ellipse><ellipse class="fall" style="animation-delay: 2.2s" cx="8" cy="70" rx="4" ry="2.6" fill="#F8C8D4" transform="rotate(-20 8 70)"></ellipse><ellipse class="fall" style="animation-delay: 0.9s" cx="136" cy="84" rx="4" ry="2.6" fill="#F8C8D4" transform="rotate(30 136 84)"></ellipse><ellipse class="fall" style="animation-delay: 2.6s" cx="30" cy="110" rx="4" ry="2.6" fill="#F2A6B8" transform="rotate(0 30 110)"></ellipse><ellipse class="fall" style="animation-delay: 1.4s" cx="110" cy="116" rx="4" ry="2.6" fill="#F8C8D4" transform="rotate(-40 110 116)"></ellipse>
+</svg></div>
+<p style="margin: 4px 0 0; font-size: 20px; font-weight: 900; color: #FFF4D6">満開の桜吹雪</p>
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #F5D46A; text-align: center; line-height: 1.5">志望校（その時の志望大学・学部）に合格する</p>
+<p style="margin: 0; font-size: 11px; color: #C8C0E0; text-align: center; line-height: 1.5">合格通知の写真をGeminiで読み取り、大学名と結果だけ保存して写真は削除</p>
+</div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1100,"height":640}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

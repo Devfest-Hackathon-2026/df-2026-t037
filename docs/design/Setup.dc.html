@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>初期設定</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#D0607A}a:hover{color:#A0405A}
+@keyframes wobble{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.08)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+@keyframes hop{0%,60%,100%{transform:translateY(0)}75%{transform:translateY(-6px)}}
+@media (prefers-reduced-motion: no-preference){
+.wobble{animation:wobble 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.shadow{animation:shadow 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.blink{animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+.hop{animation:hop 2.4s ease-in-out infinite}
+}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 20px 18px; background: #FDF8F4; font-family: 'M PLUS Rounded 1c', sans-serif; color: #4A3E3A; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; justify-content: space-between; align-items: center">
+<div>
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #D0607A">初期設定 1/2</p>
+<h1 style="margin: 2px 0 0; font-size: 22px; font-weight: 900">あなたのことを教えて</h1>
+</div>
+<svg width="72" height="72" viewBox="0 0 160 160" role="img" aria-label="たまご">
+<defs><radialGradient id="st1" cx="38%" cy="28%" r="80%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset=".6" stop-color="#FFF1DE"></stop><stop offset="1" stop-color="#E8C8A0"></stop></radialGradient></defs>
+<path class="twinkle" d="M24 40 L26 46 L32 48 L26 50 L24 56 L22 50 L16 48 L22 46 Z" fill="#F5C842"></path>
+<path class="twinkle" style="animation-delay: .8s" d="M136 30 L137.5 34 L141.5 35.5 L137.5 37 L136 41 L134.5 37 L130.5 35.5 L134.5 34 Z" fill="#F2A6B8"></path>
+<ellipse class="shadow" cx="80" cy="148" rx="34" ry="5.5" fill="#6A4A2A" opacity=".14"></ellipse>
+<g class="wobble">
+<path d="M80 20 C112 20 128 70 128 102 C128 130 106 146 80 146 C54 146 32 130 32 102 C32 70 48 20 80 20 Z" fill="url(#st1)"></path>
+<circle cx="58" cy="66" r="7" fill="#9CC4EE" opacity=".55"></circle><circle cx="104" cy="58" r="5" fill="#F2A6B8" opacity=".6"></circle><circle cx="110" cy="118" r="6" fill="#A8DA8C" opacity=".55"></circle><circle cx="48" cy="124" r="4.5" fill="#F5C842" opacity=".6"></circle>
+<path d="M50 84 L60 76 L68 86 L78 74 L88 86 L98 76 L110 84" fill="none" stroke="#D8B48A" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"></path>
+<ellipse cx="62" cy="44" rx="11" ry="7" fill="#FFFFFF" opacity=".8"></ellipse>
+<g class="blink"><ellipse cx="68" cy="104" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="104" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="101.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="101.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="116" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="116" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 114 Q80 118 84 114" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>
+</div>
+<div style="height: 6px; background: #F1E6DA; border-radius: 3px"><div style="width: 50%; height: 6px; background: #D0607A; border-radius: 3px"></div></div>
+
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 900">ニックネーム（キャラが呼んでくれる）
+<input type="text" value="ゆう" style="height: 44px; border-radius: 12px; border: 1.5px solid #E6DCD2; padding: 0 14px; font-family: inherit; font-size: 15px; font-weight: 700; color: #4A3E3A; background: #FFFFFF">
+</label>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 900">学年（1日の目安とシーズンが決まる）</p>
+<div style="display: flex; gap: 6px"><button style="flex: 1; height: 40px; border-radius: 20px; border: 1.5px solid #E6DCD2; background: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 800; color: #4A3E3A">高1</button><button style="flex: 1; height: 40px; border-radius: 20px; border: 2px solid #D0607A; background: #D0607A; font-family: inherit; font-size: 13px; font-weight: 900; color: #FFFFFF">高2</button><button style="flex: 1; height: 40px; border-radius: 20px; border: 1.5px solid #E6DCD2; background: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 800; color: #4A3E3A">高3</button></div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 900">受験日（受験学年のシーズンの終わり）</p>
+<div style="background: #FFFFFF; border-radius: 14px; border: 1.5px solid #E6DCD2; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center">
+<div><p style="margin: 0; font-size: 16px; font-weight: 900">2028年2月25日</p><p style="margin: 2px 0 0; font-size: 11px; color: #8A7A72">学年から自動で入力（国公立2次・前期）</p></div>
+<div style="text-align: right"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #D0607A; background: #FCEAF0; padding: 3px 10px; border-radius: 10px">あと474日</p><a href="#" style="font-size: 11px; font-weight: 800">変更する</a></div>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 900">ペース（あとから変えられる）</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<button style="height: 64px; border-radius: 14px; border: 1.5px solid #E6DCD2; background: #FFFFFF; font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-size: 14px; font-weight: 900; color: #4E8E28">ゆったり</span><span style="font-size: 11px; color: #8A7A72">必要EXP×0.8</span></button>
+<button style="height: 64px; border-radius: 14px; border: 2px solid #E0A21A; background: #FFF6DA; font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-size: 14px; font-weight: 900; color: #B07A10">ふつう</span><span style="font-size: 11px; color: #8A7A72">×1.0</span></button>
+<button style="height: 64px; border-radius: 14px; border: 1.5px solid #E6DCD2; background: #FFFFFF; font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px"><span style="font-size: 14px; font-weight: 900; color: #C8507A">がっつり</span><span style="font-size: 11px; color: #8A7A72">×1.2・色違い</span></button>
+</div>
+<div style="background: #FFF1C9; border-radius: 14px; padding: 10px 12px; font-size: 12px; line-height: 1.65">
+<strong>ふつう</strong>：学年の目安を毎日続けると予定どおりに育つ<br>高2の目安は1日3.5時間（冬休み・春休みは5.3時間）<br>今シーズン：今日〜2027年3月31日（143日）<br><span style="color: #8A7A72">目安の1/4（約50分）以上の日が続くとEXPが最大×1.20。週1日はおやすみ券で休んでもOK</span>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 14px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center">
+<div><p style="margin: 0; font-size: 13px; font-weight: 900">毎日のおしらせ</p><p style="margin: 2px 0 0; font-size: 11px; color: #8A7A72">21:00にキャラが声をかける</p></div>
+<span role="switch" aria-checked="true" aria-label="毎日のおしらせ" style="width: 52px; height: 30px; border-radius: 15px; background: #D0607A; display: flex; align-items: center; justify-content: flex-end; padding: 3px; box-sizing: border-box"><span style="width: 24px; height: 24px; border-radius: 12px; background: #FFFFFF"></span></span>
+</div>
+
+<a href="Select.dc.html" style="margin-top: auto; display: flex; align-items: center; justify-content: center; height: 54px; background: #D0607A; color: #FFFFFF; border-radius: 27px; font-size: 16px; font-weight: 900; text-decoration: none">次へ：志望校を選ぶ</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

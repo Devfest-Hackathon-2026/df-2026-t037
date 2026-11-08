@@ -1,0 +1,19 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="成体のキャタまる。短いキャタピラの足と、赤く光るアンテナ">
+<defs><radialGradient id="k3b" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#EEFAE4"></stop><stop offset=".55" stop-color="#A8DA8C"></stop><stop offset="1" stop-color="#5E9E4C"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="38" ry="5.5" fill="#3A4A2A" opacity=".14"></ellipse>
+<g class="squish">
+<path d="M80 60 L80 44" stroke="#6A707C" stroke-width="2.6" stroke-linecap="round"></path>
+<circle class="twinkle" cx="80" cy="41" r="7" fill="#F25C5C" opacity=".35"></circle><circle cx="80" cy="41" r="3.8" fill="#F25C5C"></circle>
+<circle cx="80" cy="96" r="40" fill="url(#k3b)"></circle>
+<ellipse cx="42" cy="102" rx="6.5" ry="9" fill="#90C878" transform="rotate(20 42 102)"></ellipse><ellipse cx="118" cy="102" rx="6.5" ry="9" fill="#90C878" transform="rotate(-20 118 102)"></ellipse>
+<ellipse cx="65" cy="74" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="68" cy="98" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="98" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="95.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="95.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="110" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="110" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 107 Q80 113 84 107 Z" fill="#E8687A"></path>
+</g>
+<rect x="48" y="130" width="64" height="16" rx="8" fill="#4A4E58"></rect><rect x="48" y="130" width="64" height="4" rx="2" fill="#6A707C"></rect>
+<g class="spinM"><circle cx="60" cy="138" r="4.8" fill="#C2C8D0"></circle><rect x="59" y="133.2" width="2" height="9.6" fill="#4A4E58"></rect></g>
+<g class="spinM"><circle cx="80" cy="138" r="4.8" fill="#C2C8D0"></circle><rect x="79" y="133.2" width="2" height="9.6" fill="#4A4E58"></rect></g>
+<g class="spinM"><circle cx="100" cy="138" r="4.8" fill="#C2C8D0"></circle><rect x="99" y="133.2" width="2" height="9.6" fill="#4A4E58"></rect></g>
+</svg>

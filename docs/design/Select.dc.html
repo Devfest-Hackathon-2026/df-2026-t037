@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>大学と学部を選ぶ</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#D0607A}a:hover{color:#A0405A}
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@media (prefers-reduced-motion: no-preference){
+.squish{animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.shadow{animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.blink{animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 20px 18px; background: #FDF8F4; font-family: 'M PLUS Rounded 1c', sans-serif; color: #4A3E3A; display: flex; flex-direction: column; gap: 11px">
+<div>
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #D0607A">初期設定 2/2</p>
+<h1 style="margin: 2px 0 0; font-size: 22px; font-weight: 900">どこをめざす？</h1>
+</div>
+
+<p style="margin: 0; font-size: 13px; font-weight: 900">1. 大学を選ぶ（キャラが決まる）</p>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px">
+<sc-for list="{{unis}}" as="u" hint-placeholder-count="9">
+<button style="height: 66px; border-radius: 16px; border: {{u.bd}}; background: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; font-family: inherit; padding: 0">
+<span style="width: 30px; height: 30px; border-radius: 15px; background: {{u.g}}; display: flex; align-items: center; justify-content: center; gap: 6px; padding-top: 3px; box-sizing: border-box"><span style="width: 3.5px; height: 5px; border-radius: 2px; background: {{u.ec}}"></span><span style="width: 3.5px; height: 5px; border-radius: 2px; background: {{u.ec}}"></span></span>
+<span style="font-size: 11px; font-weight: 800; color: #4A3E3A">{{u.n}}</span>
+</button>
+</sc-for>
+</div>
+
+<p style="margin: 4px 0 0; font-size: 13px; font-weight: 900">2. 学部・科類を選ぶ（リボンとピンが変わる）</p>
+<div style="display: flex; gap: 8px">
+<button style="flex: 1; height: 44px; border-radius: 22px; border: 2px solid #2E7CB8; background: #5DB2EA; font-family: inherit; font-size: 14px; font-weight: 900; color: #FFFFFF">理科一類</button>
+<button style="flex: 1; height: 44px; border-radius: 22px; border: 1.5px solid #E6DCD2; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 800; color: #4A3E3A">文科三類</button>
+<button style="width: 64px; height: 44px; border-radius: 22px; border: 1.5px solid #E6DCD2; background: #FFFFFF; font-family: inherit; font-size: 13px; font-weight: 800; color: #8A7A72">ほか</button>
+</div>
+
+
+<div style="background: #FFFFFF; border-radius: 22px; padding: 12px 14px; display: flex; align-items: center; gap: 12px">
+<div style="width: 118px; height: 118px; flex-shrink: 0; background: #EEF5FC; border-radius: 59px; display: flex; align-items: center; justify-content: center">
+<svg width="112" height="112" viewBox="0 0 160 160" role="img" aria-label="最終進化したギンまる。水色のリボンと三角定規のピン">
+<defs><radialGradient id="s1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="#F2C230"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#s1)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<path d="M80 40 L67 33 L67 47 Z M80 40 L93 33 L93 47 Z" fill="#5DB2EA"></path><circle cx="80" cy="40" r="3.2" fill="#2E7CB8"></circle>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 106 Q80 110 84 106" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+<circle cx="106" cy="124" r="13" fill="#FFFFFF"></circle><path d="M98 131 L114 131 L98 115 Z" fill="#5DB2EA"></path><path d="M101.5 128 L107 128 L101.5 122.5 Z" fill="#FFFFFF"></path>
+</g>
+</svg>
+</div>
+<div style="display: flex; flex-direction: column; gap: 2px">
+<p style="margin: 0; font-size: 12px; font-weight: 800; color: #8A7A72">東京大学 理科一類</p>
+<p style="margin: 0; font-size: 20px; font-weight: 900">ギンまる</p>
+<p style="margin: 0; font-size: 12px; line-height: 1.6">最終進化で水色のリボン＋三角定規<br>数学・理科・英語 ×1.27</p>
+</div>
+</div>
+
+<div style="background: #FFF1C9; border-radius: 18px; padding: 10px 14px; display: flex; flex-direction: column; gap: 3px">
+<p style="margin: 0; font-size: 13px; font-weight: 900">高2シーズン（〜3月31日・143日）の予定</p>
+<p style="margin: 0; font-size: 12px; line-height: 1.7">目安は1日3.5時間（冬休み・春休みは5.3時間）<br>1回目の進化：約50時間（11月下旬ごろ）<br>最終進化：約250時間（1月上旬ごろ）<br>親密度10：約450時間（3月上旬ごろ）→ 4月に図鑑へ</p>
+</div>
+
+<a href="Launch.dc.html" style="margin-top: auto; display: flex; align-items: center; justify-content: center; height: 54px; background: #D0607A; color: #FFFFFF; border-radius: 27px; font-size: 16px; font-weight: 900; text-decoration: none">ギンまるといっしょにがんばる</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const d = [['東大', '#E6F1FC', '#9CC4EE', '#5F8FC8'], ['科学大', '#FFF6E6', '#F6C88E', '#D08A4E'], ['千葉工大', '#EEFAE4', '#A8DA8C', '#5E9E4C'], ['慶應', '#8EA4DA', '#3E5698', '#1E2D5E'], ['一橋', '#FAF9FF', '#CFCBE6', '#8E88BA'], ['東外大', '#EEFCF5', '#8EDDB8', '#3FA47A'], ['早稲田', '#FBE2E7', '#D27A8C', '#9A2A40'], ['京大', '#F4F8E6', '#BCD08A', '#7A9444'], ['阪大', '#FFFAE6', '#F8DC86', '#D8A838']];
+return { unis: d.map(([n, a, b, c]) => ({ n, g: 'radial-gradient(circle at 38% 30%, ' + a + ' 0%, ' + b + ' 55%, ' + c + ' 100%)', ec: n === '慶應' ? '#FFFFFF' : '#2B2632', bd: n === '東大' ? '2px solid #D0607A' : '1.5px solid #EEE4DA' })) };
+}
+}
+</script>
+</body>
+</html>

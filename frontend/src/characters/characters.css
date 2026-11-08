@@ -1,0 +1,49 @@
+/* キャラクターの動き。動きを減らす設定の端末では止まる */
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.15)}}
+@keyframes flap{0%,100%{transform:rotate(0)}50%{transform:rotate(-22deg)}}
+@keyframes flapR{0%,100%{transform:rotate(0)}50%{transform:rotate(22deg)}}
+@keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes arm{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes peek{0%,40%,100%{transform:translateX(-4px)}55%,85%{transform:translateX(0)}}
+@keyframes ripple{0%{transform:scale(.7);opacity:.8}100%{transform:scale(1.1);opacity:0}}
+@keyframes chomp{0%,60%,100%{transform:translateY(0)}75%{transform:translateY(-2.5px)}}
+@keyframes step{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes flicker{0%,100%{transform:scale(1,1)}50%{transform:scale(1.05,1.12)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+@keyframes drift{0%,100%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
+@keyframes fall{0%{transform:translate(0,-20px) rotate(0deg);opacity:0}15%{opacity:1}100%{transform:translate(14px,60px) rotate(200deg);opacity:0}}
+@keyframes wobble{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes hop{0%,60%,100%{transform:translateY(0)}75%{transform:translateY(-6px)}}
+@media (prefers-reduced-motion: no-preference) {
+  .tama-char .armM { animation:arm 2s ease-in-out infinite;transform-box:view-box;transform-origin:120px 98px }
+  .tama-char .blink { animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .chomp { animation:chomp 1.6s ease-in-out infinite }
+  .tama-char .drift { animation:drift 5s ease-in-out infinite }
+  .tama-char .fall { animation:fall 3.2s linear infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .flap { animation:flap 1s ease-in-out infinite;transform-box:fill-box;transform-origin:100% 60% }
+  .tama-char .flapR { animation:flapR 1s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 60% }
+  .tama-char .flicker { animation:flicker .9s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100% }
+  .tama-char .hop { animation:hop 2.4s ease-in-out infinite }
+  .tama-char .peek { animation:peek 2.4s ease-in-out infinite }
+  .tama-char .pop { animation:pop 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 100% }
+  .tama-char .ripple { animation:ripple 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .rise { animation:rise 2.2s ease-out infinite }
+  .tama-char .shadow { animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .spinM { animation:spin 1.6s linear infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .squish { animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100% }
+  .tama-char .stepA { animation:step .8s ease-in-out infinite }
+  .tama-char .stepB { animation:step .8s ease-in-out infinite;animation-delay:.4s }
+  .tama-char .sway { animation:sway 2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100% }
+  .tama-char .swayV { animation:sway 2s ease-in-out infinite;transform-box:view-box }
+  .tama-char .tick { animation:spin 6s steps(12) infinite;transform-box:view-box }
+  .tama-char .twinkle { animation:twinkle 1.6s ease-in-out infinite }
+  .tama-char .wobble { animation:wobble 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100% }
+}
+
+/* 一覧などで動きを止める */
+.tama-still * { animation: none !important; }

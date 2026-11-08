@@ -1,0 +1,13 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="ワニまめ。頭に化石のかけらをのせた黄色い豆">
+<defs><radialGradient id="k10a" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FFFCEE"></stop><stop offset=".55" stop-color="#FAE6A6"></stop><stop offset="1" stop-color="#E0B852"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="140" rx="30" ry="5" fill="#6A4A2A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#k10a)"></ellipse>
+<g transform="rotate(-18 80 82)"><rect x="70" y="79" width="20" height="6" rx="3" fill="#EFE4CC"></rect><circle cx="70" cy="79" r="3.6" fill="#EFE4CC"></circle><circle cx="70" cy="85" r="3.6" fill="#EFE4CC"></circle><circle cx="90" cy="79" r="3.6" fill="#EFE4CC"></circle><circle cx="90" cy="85" r="3.6" fill="#EFE4CC"></circle></g>
+<ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path>
+</g>
+</svg>

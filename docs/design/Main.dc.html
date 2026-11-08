@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>遊び方と数値ルール</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#C8402E}a:hover{color:#992E20}
+</style>
+</helmet>
+<div style="width: 1600px; height: 1340px; box-sizing: border-box; padding: 36px 52px; background: #FFF8E8; font-family: 'M PLUS Rounded 1c', sans-serif; color: #3A3530; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<div>
+<p style="margin: 0 0 4px; font-size: 15px; font-weight: 800; color: #C8402E">進路たまごっち（仮）｜遊び方と数値ルール</p>
+<h1 style="margin: 0; font-size: 30px; font-weight: 900">学年で目安が変わり、1学年＝1シーズンで育てる</h1>
+</div>
+<p style="margin: 0; font-size: 12px; color: #6B6358; text-align: right; line-height: 1.6">対象は高校生（高1〜高3）。例はシーズン開始 2027年4月1日、受験日 2028年2月25日で計算<br>数字はページ内のコードで計算しているので、式を変えれば表も変わる</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 1　学年を選ぶ</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">高1〜高3。学年で1日の目安と、シーズンの長さが決まる</p></div>
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 2　シーズン＝1学年</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">受験しない学年は3月31日まで、受験学年は受験日まで。何年あっても速く育ちすぎない</p></div>
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 3　勉強してEXP</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">分数×（1＋配点比率）×連続ボーナス</p></div>
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 4　2回進化＋なかよし</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">目安を毎日続けると、シーズンの10%・45%・85%で節目に届く</p></div>
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 5　進級・卒業</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">3月31日に図鑑へ。4月に次のたまごがかえる（右のボード）</p></div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 12px 18px; display: flex; flex-direction: column">
+<p style="margin: 0 0 6px; font-size: 15px; font-weight: 900; color: #C8402E">学年ごとの目安と、1シーズンの節目（ふつう・学部補正1.00）</p>
+<div style="display: grid; grid-template-columns: 96px 1fr 70px 82px 82px 82px; font-size: 11px; font-weight: 800; color: #6B6358; border-bottom: 1.5px solid #3A3530; padding: 4px 0; gap: 8px"><span>学年</span><span>1日の目安</span><span style="text-align: center">シーズン</span><span style="text-align: center">1回目</span><span style="text-align: center">最終進化</span><span style="text-align: center">親密度10</span></div>
+<sc-for list="{{grades}}" as="g" hint-placeholder-count="3">
+<div style="display: grid; grid-template-columns: 96px 1fr 70px 82px 82px 82px; align-items: center; font-size: 12px; border-bottom: 1px solid #E8DFCC; padding: 5px 0; gap: 8px; background: {{g.bg}}">
+<span style="font-weight: 900">{{g.n}}</span>
+<span style="display: flex; align-items: center; gap: 6px"><span style="height: 10px; width: {{g.w}}; background: {{g.c}}; border-radius: 5px"></span><strong>{{g.h}}</strong></span>
+<span style="text-align: center; color: #6B6358">{{g.L}}</span>
+<span style="text-align: center">{{g.h1}}</span><span style="text-align: center; font-weight: 800">{{g.h2}}</span><span style="text-align: center">{{g.h3}}</span>
+</div>
+</sc-for>
+<p style="margin: 6px 0 0; font-size: 11px; color: #6B6358; line-height: 1.6">時間＝目安どおりに毎日勉強したときの合計時間。受験しない学年は夏・冬・春休みに目安が1.5倍。受験学年（高3）は残りの日数に関係なく毎日8時間が目安で、いつ始めても「毎日8時間で予定どおりに育つ」ように必要EXPを日数に比例させる</p>
+</div>
+<div style="background: #FFF1C9; border: 1.5px solid #3A3530; border-radius: 16px; padding: 12px 18px; display: flex; flex-direction: column; gap: 5px">
+<p style="margin: 0; font-size: 15px; font-weight: 900; color: #C8402E">必要EXPの決め方（シーズンのはじめに1回だけ計算）</p>
+<p style="margin: 0; font-size: 12px; line-height: 1.65"><strong>① シーズン</strong>：始めた日（または4月1日）から、受験しない学年は3月31日、受験学年は受験日まで。残り60日未満で始めたときは、次の学年のシーズンとつなげる</p>
+<p style="margin: 0; font-size: 12px; line-height: 1.65"><strong>② 節目</strong>：シーズンの10%（最長30日）・45%・85%が過ぎた時点までの、学年の目安時間の合計</p>
+<p style="margin: 0; font-size: 12px; line-height: 1.65"><strong>③ 必要EXP</strong>＝目標時間×60×平均倍率×学部補正×継続補正1.15×ペース（ゆったり0.8／ふつう1.0／がっつり1.2）</p>
+<p style="margin: 0; font-size: 12px; line-height: 1.65"><strong>④ 画面の表示</strong>：残りEXPを「あと何時間」に直して出す＝残りEXP÷（60×平均倍率×今の連続ボーナス）。1日の目安で割った「あと何日」も並べる</p>
+<p style="margin: 0; font-size: 11px; color: #6B6358">例：高3が11月8日に始めた場合、シーズンは109日。最終進化は約400時間、親密度10は約740時間で、毎日8時間なら予定どおり</p>
+</div>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 14px">
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 12px 18px; display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-size: 15px; font-weight: 900; color: #C8402E">連続日数ボーナス（その日のEXPにかかる）</p>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{tiers}}" as="t" hint-placeholder-count="5"><div style="background: {{t.bg}}; border-radius: 12px; padding: 6px 4px; text-align: center"><p style="margin: 0; font-size: 11px; font-weight: 800; color: #6B6358">{{t.d}}</p><p style="margin: 0; font-size: 18px; font-weight: 900">{{t.x}}</p></div></sc-for>
+</div>
+<ul style="margin: 0; padding-left: 18px; font-size: 12px; line-height: 1.7">
+<li>「続けた日」の条件は学年の目安の1/4以上（高1なら約40分、高3なら2時間）</li>
+<li><strong>おやすみ券</strong>：週に1枚。記録しない日に自動で使われ、連続が切れない。使った日はキャラが一緒にお昼寝する</li>
+<li>切れても0からではなく、それまでの半分の日数から再開する</li>
+</ul>
+</div>
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 12px 18px; display: flex; flex-direction: column">
+<p style="margin: 0 0 6px; font-size: 14px; font-weight: 900">続け方による差（科学大 工学院・シーズン何日目に届くか）</p>
+<div style="display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; font-size: 11px; font-weight: 800; color: #6B6358; border-bottom: 1.5px solid #3A3530; padding: 4px 0"><span>学年・勉強のしかた</span><span style="text-align: center">1回目</span><span style="text-align: center">最終進化</span><span style="text-align: center">親密度10</span></div>
+<sc-for list="{{sim}}" as="s" hint-placeholder-count="8">
+<div style="display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; font-size: 12px; border-bottom: 1px solid #E8DFCC; padding: 5px 0"><span style="font-weight: 800">{{s.n}}</span><span style="text-align: center">{{s.a}}</span><span style="text-align: center">{{s.b}}</span><span style="text-align: center; font-weight: 900; color: {{s.c}}">{{s.d}}</span></div>
+</sc-for>
+<p style="margin: 6px 0 0; font-size: 11px; color: #6B6358; line-height: 1.6">目安どおり毎日なら予定（高3：30・149・281日目、高1：30・164・310日目）より少し早い。足りない人は「ゆったり」で届く。高1が毎日4時間やると早めに親密度10まで行き、残りは上限なしのアイテム集め</p>
+</div>
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 12px 18px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 14px; font-weight: 900">ペース（初期設定で選ぶ・シーズンごとに変えられる）</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; font-size: 12px; line-height: 1.6">
+<div style="background: #EEF7E4; border-radius: 12px; padding: 8px 10px"><strong>ゆったり ×0.8</strong><br>部活や週5日派向け</div>
+<div style="background: #FFF1C9; border-radius: 12px; padding: 8px 10px"><strong>ふつう ×1.0</strong><br>学年の目安を毎日</div>
+<div style="background: #FCEAF0; border-radius: 12px; padding: 8px 10px"><strong>がっつり ×1.2</strong><br>最終進化が色違い</div>
+</div>
+</div>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 18px; display: flex; flex-direction: column">
+<div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px">
+<p style="margin: 0; font-size: 14px; font-weight: 900">学部ごとの差（高3シーズン・ふつう）</p>
+<p style="margin: 0; font-size: 11px; color: #6B6358">学部補正＝科目数（4科目で1.00、1科目ごとに±5%）×記述・実技（比率×15%）×大学内補正｜幅0.90〜1.16</p>
+</div>
+<p style="margin: 0 0 2px; font-size: 11px; font-weight: 800; color: #6B6358">大学・学部｜学部補正（科目×記実×大学内）・平均倍率｜必要EXP（1回目／最終進化／親密度10）</p>
+<div style="display: grid; grid-template-columns: 1fr 1fr; column-gap: 24px">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="16">
+<div style="display: grid; grid-template-columns: 110px 110px 1fr; font-size: 12px; border-bottom: 1px solid #E8DFCC; padding: 4px 0; gap: 6px"><span style="font-weight: 800">{{r.u}}</span><span>{{r.f}}</span><span style="color: #6B6358">補正×{{r.k}}（{{r.calc}}）・倍率×{{r.a}}　<strong style="color: #3A3530">{{r.e}}</strong></span></div>
+</sc-for>
+</div>
+<p style="margin: 4px 0 0; font-size: 10px; color: #6B6358">東大の大学内補正＝科類の合格最低点÷6科類の平均（2026年度、550点満点、河合塾Kei-Net）。慶應は合格最低点が非公表のため1.00（要確認）。京大・阪大は2027年度前期の2次の配点（京大 法：英200 数150 国150 地歴100、京大 工：数250 理250 英200 国100、阪大 工：数250 理250 英200）。EXPは100単位で四捨五入</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1340}}'>
+class Component extends DCLogic {
+renderVals() {
+const DAY = 864e5, START = new Date(2027, 3, 1), EXAM = new Date(2028, 1, 25), EXAM_H = new Date(2028, 1, 21);
+const G = [['高1', 2.5, 0], ['高2', 3.5, 0], ['高3', 8, 1]];
+const vac = dt => { const m = dt.getMonth() + 1, d = dt.getDate(); return (m === 7 && d >= 21) || m === 8 || (m === 12 && d >= 25) || (m === 1 && d <= 7) || (m === 3 && d >= 25) || (m === 4 && d <= 7); };
+const std = (h, ex, dt) => ex ? 8 : h * (vac(dt) ? 1.5 : 1);
+const plan = (h, ex, exam) => { const end = ex ? exam : new Date(2028, 2, 31); const L = Math.round((end - START) / DAY); const t = [Math.min(0.1 * L, 30), 0.45 * L, 0.85 * L]; return { L, t, H: t.map(tt => { let s = 0; for (let i = 0; i < tt; i++) s += std(h, ex, new Date(START.getTime() + i * DAY)); return s; }) }; };
+const r10 = v => Math.round(v / 10) * 10, r100 = v => Math.round(v / 100) * 100;
+const grades = G.map(([n, h, ex]) => { const p = plan(h, ex, EXAM); return { n, h: (ex ? '8時間（毎日）' : h + '時間（休み' + (h * 1.5) + '）'), w: (h * 12) + 'px', c: ex ? '#C8402E' : '#E0A21A', L: p.L + '日', h1: r10(p.H[0]) + '時間', h2: r10(p.H[1]) + '時間', h3: r10(p.H[2]) + '時間', bg: ex ? '#FFF6F2' : 'transparent' }; });
+const tierOf = s => s >= 30 ? 1.2 : s >= 14 ? 1.15 : s >= 7 ? 1.1 : s >= 3 ? 1.05 : 1;
+const tiers = [['1〜2日', '×1.00', '#F6F1E6'], ['3日〜', '×1.05', '#FFF6DA'], ['7日〜', '×1.10', '#FFEEC2'], ['14日〜', '×1.15', '#FFE4A8'], ['30日〜', '×1.20', '#FFD88A']].map(([d, x, bg]) => ({ d, x, bg }));
+const sim = (h, ex, r, off, pace) => { const p = plan(h, ex, EXAM), need = p.H.map(x => x * 60 * 1.36 * 1.15 * pace); let e = 0, st = 0, used = -1; const res = []; for (let i = 0; i < p.L; i++) { const dt = new Date(START.getTime() + i * DAY), wk = Math.floor(i / 7); if (!off.includes(i % 7)) { st++; e += std(h, ex, dt) * r * 60 * 1.36 * tierOf(st); } else if (used !== wk) used = wk; else st = Math.floor(st / 2); for (let j = 0; j < 3; j++) if (res[j] === undefined && e >= need[j]) res[j] = i + 1; } return res; };
+const fm = v => v === undefined ? '届かない' : v + '日目';
+const S = [['高3・毎日8時間', 8, 1, 1, [], 1], ['高3・週6日（おやすみ券）', 8, 1, 1, [6], 1], ['高3・毎日6時間', 8, 1, 0.75, [], 1], ['高3・毎日6時間＋ゆったり', 8, 1, 0.75, [], 0.8], ['高3・週5日＋ゆったり', 8, 1, 1, [5, 6], 0.8], ['高1・毎日2.5時間', 2.5, 0, 1, [], 1], ['高1・毎日4時間', 2.5, 0, 1.6, [], 1], ['高1・週5日', 2.5, 0, 1, [5, 6], 1]].map(([n, h, ex, r, off, pace]) => { const s = sim(h, ex, r, off, pace); return { n, a: fm(s[0]), b: fm(s[1]), d: fm(s[2]), c: s[2] === undefined ? '#C8402E' : '#3A3530' }; });
+const p3 = plan(8, 1, EXAM);
+const tMin = { b1: 325.01, b2: 330.47, b3: 316.32, r1: 303.39, r2: 305.0, r3: 346.09 };
+const mean = Object.values(tMin).reduce((a, b) => a + b, 0) / 6;
+const B = [18, 0, 27, 55, 0], R = [27, 27, 27, 18, 0];
+const raw = [
+['東京大学', '文科一類', 5, B, tMin.b1 / mean], ['東京大学', '文科二類', 5, B, tMin.b2 / mean], ['東京大学', '文科三類', 5, B, tMin.b3 / mean],
+['東京大学', '理科一類', 5, R, tMin.r1 / mean], ['東京大学', '理科二類', 5, R, tMin.r2 / mean], ['東京大学', '理科三類', 5, R, tMin.r3 / mean],
+['東京科学大学', '工学院', 4, [40, 40, 20, 0, 0], 1], ['千葉工業大学', '先進工学部', 3, [33, 33, 34, 0, 0], 1],
+['慶應義塾大学', '法学部', 3, [0, 0, 45, 33, 22], 1], ['慶應義塾大学', '環境情報学部', 2, [50, 0, 0, 0, 50], 1],
+['一橋大学', '社会学部', 4, [16, 0, 34, 50, 0], 1], ['東京外国語大学', '言語文化学部', 2, [0, 0, 67, 33, 0], 1],
+['早稲田大学', '政治経済学部', 5, [12, 0, 13, 25, 50], 1], ['京都大学', '法学部', 4, [25, 0, 33, 42, 0], 1], ['京都大学', '工学部', 5, [31, 31, 25, 13, 0], 1], ['大阪大学', '工学部', 4, [36, 36, 28, 0, 0], 1]
+];
+return { grades, tiers, sim: S, rows: raw.map(([u, f, s, p, ku]) => {
+const ks = 1 + 0.05 * (s - 4), ke = 1 + 0.15 * p[4] / 100, k = ks * ke * ku;
+const avg = 1 + p.reduce((a, v) => a + (v / 100) ** 2, 0);
+return { u, f, calc: ks.toFixed(2) + '×' + ke.toFixed(2) + '×' + ku.toFixed(2), k: k.toFixed(2), a: avg.toFixed(2), e: p3.H.map(h => r100(h * 60 * avg * k * 1.15).toLocaleString()).join(' / ') };
+}) };
+}
+}
+</script>
+</body>
+</html>

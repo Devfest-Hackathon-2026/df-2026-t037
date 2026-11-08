@@ -1,0 +1,20 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="不死鳥の炎のエフェクト。背中から炎の翼が燃え上がり、火の粉が舞うギンまる">
+<defs><radialGradient id="m1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="m1l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient><linearGradient id="m1f" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#E8402E"></stop><stop offset=".55" stop-color="#FF9A2E"></stop><stop offset="1" stop-color="#FFE27A"></stop></linearGradient></defs>
+<circle cx="80" cy="92" r="66" fill="#FF9A2E" opacity=".16"></circle>
+<path class="flicker" d="M62 104 Q22 96 6 52 Q26 64 30 46 Q40 72 50 58 Q48 82 66 90 Z" fill="url(#m1f)"></path>
+<path class="flicker" style="animation-delay: .3s" d="M98 104 Q138 96 154 52 Q134 64 130 46 Q120 72 110 58 Q112 82 94 90 Z" fill="url(#m1f)"></path>
+<path class="flicker" style="animation-delay: .15s" d="M58 112 Q30 116 14 96 Q34 100 40 90 Q46 104 60 102 Z M102 112 Q130 116 146 96 Q126 100 120 90 Q114 104 100 102 Z" fill="#FFB648" opacity=".85"></path>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#000000" opacity=".25"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="url(#m1l)"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#m1)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse>
+<path d="M74 104 Q80 113 86 104 Z" fill="#E8687A"></path>
+</g>
+<circle class="rise" cx="28" cy="120" r="2.4" fill="#FFB648"></circle><circle class="rise" style="animation-delay: .7s" cx="132" cy="116" r="2" fill="#FFE27A"></circle><circle class="rise" style="animation-delay: 1.3s" cx="48" cy="70" r="1.8" fill="#FF9A2E"></circle><circle class="rise" style="animation-delay: 1.8s" cx="116" cy="66" r="2.2" fill="#FFB648"></circle>
+</svg>

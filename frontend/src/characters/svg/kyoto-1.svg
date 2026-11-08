@@ -1,0 +1,16 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="ゲタまめ。おでこに小さな丸メガネをかけた抹茶色の豆">
+<defs><radialGradient id="k9a" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F6FAEC"></stop><stop offset=".55" stop-color="#CCDCA2"></stop><stop offset="1" stop-color="#8EA65A"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="140" rx="30" ry="5" fill="#3A4A2A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#k9a)"></ellipse>
+<ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path>
+<circle cx="73" cy="92" r="5" fill="#E6F4FA" opacity=".35"></circle><circle cx="87" cy="92" r="5" fill="#E6F4FA" opacity=".35"></circle>
+<circle cx="73" cy="92" r="5" fill="none" stroke="#4A3E3A" stroke-width="1.6"></circle><circle cx="87" cy="92" r="5" fill="none" stroke="#4A3E3A" stroke-width="1.6"></circle>
+<path d="M78 91 Q80.0 88 82 91" fill="none" stroke="#4A3E3A" stroke-width="1.6"></path>
+<path class="twinkle" d="M70.5 89.8 L72.5 88.2" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round"></path>
+</g>
+</svg>

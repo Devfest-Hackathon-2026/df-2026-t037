@@ -1,0 +1,15 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="成体のギンまる。小さな銀杏の葉と短い手足">
+<defs><radialGradient id="b2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#EAF3FC"></stop><stop offset=".55" stop-color="#A6CAF0"></stop><stop offset="1" stop-color="#6A98CE"></stop></radialGradient><linearGradient id="b2l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8F09A"></stop><stop offset="1" stop-color="#C8B42A"></stop></linearGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="66" cy="138" rx="9" ry="5" fill="#7AA6D8"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#7AA6D8"></ellipse>
+<g class="sway"><path d="M80 62 Q79 56 80 52" stroke="#A8740C" stroke-width="2.2" stroke-linecap="round"></path><path d="M80 52 L70 40 Q75 35 80 39 Q85 35 90 40 Z" fill="url(#b2l)"></path></g>
+<circle cx="80" cy="100" r="40" fill="url(#b2)"></circle>
+<ellipse cx="42" cy="106" rx="6.5" ry="9" fill="#8CB6E4" transform="rotate(20 42 106)"></ellipse><ellipse cx="118" cy="106" rx="6.5" ry="9" fill="#8CB6E4" transform="rotate(-20 118 106)"></ellipse>
+<ellipse cx="65" cy="78" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 112 Q80 116 84 112" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>

@@ -1,0 +1,17 @@
+// 今の firestore.rules の match /users/{uid} の中に足す（既存のルールは消さない）
+// - growthExp・stage・bond・plan・streak はバックエンドだけが書く（今の totalExp と同じ扱い）
+// - 着替え（equipped・outfits）は本人が変えられるが、勉強タイマー中（timerStartedAt あり）は変えられない
+
+function outfitOnly() {
+  return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['equipped', 'outfits', 'coolForm']);
+}
+function timerOnly() {
+  return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['timerStartedAt']);
+}
+function timerRunning() {
+  return resource.data.get('timerStartedAt', null) != null;
+}
+
+// 既存の allow update の条件に「または」で足す：
+//   || (request.auth.uid == uid && outfitOnly() && !timerRunning())
+//   || (request.auth.uid == uid && timerOnly())

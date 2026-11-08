@@ -1,0 +1,25 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="ワセまる。えんじの応援旗とメガホンを持っている">
+<defs><radialGradient id="q7" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FBE2E7"></stop><stop offset=".55" stop-color="#D27A8C"></stop><stop offset="1" stop-color="#9A2A40"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="46" ry="6" fill="#5A1A28" opacity=".14"></ellipse>
+<g class="squish">
+<path d="M40 102 Q20 128 24 150 L136 150 Q140 128 120 102 Z" fill="#26222A"></path>
+<path d="M44 112 Q32 132 34 148 L46 148 Q44 128 52 114 Z" fill="#9A2A40"></path><path d="M116 112 Q128 132 126 148 L114 148 Q116 128 108 114 Z" fill="#9A2A40"></path>
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#B85468"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#B85468"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#q7)"></circle>
+<path d="M60 52 L60 40 Q80 34 100 40 L100 52 Q80 58 60 52 Z" fill="#26262E"></path>
+<path d="M44 38 L80 22 L116 38 L80 54 Z" fill="#33333C"></path><path d="M44 38 L80 22 L80 28 L54 38 Z" fill="#4A4A56"></path>
+<circle cx="80" cy="38" r="2.5" fill="#E8C058"></circle>
+<g class="swayV" style="transform-origin: 80px 38px"><path d="M80 38 L110 46 L112 66" fill="none" stroke="#E8C058" stroke-width="2" stroke-linecap="round"></path><path d="M108 64 L116 64 L114 74 L110 74 Z" fill="#E8C058"></path></g>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#C66476" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#C66476" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="58" cy="70" rx="13" ry="7" fill="#FFFFFF" opacity=".55"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<path d="M58 84 L72 86 M102 84 L88 86" stroke="#2B2632" stroke-width="2.4" stroke-linecap="round"></path>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FFB0BE" opacity=".6"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FFB0BE" opacity=".6"></ellipse>
+<path d="M74 104 Q80 112 86 104 Z" fill="#E8687A"></path>
+<path d="M50 118 Q80 130 110 118" fill="none" stroke="#E8C058" stroke-width="2.2"></path><circle cx="50" cy="118" r="4.2" fill="#E8C058"></circle><circle cx="110" cy="118" r="4.2" fill="#E8C058"></circle>
+<line x1="24" y1="142" x2="14" y2="14" stroke="#8A5A36" stroke-width="3.2" stroke-linecap="round"></line>
+<g class="swayV" style="transform-origin: 15px 18px; animation-duration: 1.4s"><path d="M15 16 Q32 10 46 20 Q34 30 17 40 Z" fill="#9A2A40"></path><path d="M16 26 Q30 22 40 25" stroke="#FFFFFF" stroke-width="2.6" fill="none" stroke-linecap="round"></path></g>
+<path d="M124 100 L148 86 L154 110 L128 108 Z" fill="#F4F0EA"></path><path d="M148 86 L154 110" stroke="#9A2A40" stroke-width="3.5" stroke-linecap="round"></path><rect x="120" y="99" width="9" height="10" rx="2.5" fill="#9A2A40"></rect>
+</g>
+</svg>

@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>着替え</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#D0607A}a:hover{color:#A0405A}
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+@media (prefers-reduced-motion: no-preference){
+.squish{animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.shadow{animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.blink{animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center}
+.tick{animation:spin 6s steps(12) infinite;transform-box:view-box}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 16px 16px 18px; background: #FDF8F4; font-family: 'M PLUS Rounded 1c', sans-serif; color: #4A3E3A; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: center; justify-content: space-between">
+<a href="Launch.dc.html" aria-label="もどる" style="display: flex; width: 44px; height: 44px; align-items: center; justify-content: center; text-decoration: none; font-size: 24px; color: #4A3E3A">‹</a>
+<div style="text-align: center"><h1 style="margin: 0; font-size: 18px; font-weight: 900">着替え</h1><p style="margin: 0; font-size: 9.5px; color: #8A7A72">メニューか目安達成の日に開く（タイマー中は不可）</p></div>
+<span style="width: 44px; font-size: 11px; font-weight: 800; color: #8A7A72; text-align: right">4／5</span>
+</div>
+
+<div style="position: relative; height: 158px; border-radius: 26px; background: radial-gradient(circle at 50% 45%, #FFFBF2 0%, #FCF0DE 70%); display: flex; align-items: center; justify-content: center">
+<svg width="150" height="150" viewBox="0 0 160 160" role="img" aria-label="着替え中のチクまる。実験ゴーグル、マフラー、銀杏バッジ、コンパスを装備し、キラキラのエフェクト">
+<defs><radialGradient id="ks1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FFF6E6"></stop><stop offset=".55" stop-color="#F6C88E"></stop><stop offset="1" stop-color="#D08A4E"></stop></radialGradient></defs>
+<path class="twinkle" d="M24 46 L26 52 L32 54 L26 56 L24 62 L22 56 L16 54 L22 52 Z" fill="#F5C842"></path>
+<path class="twinkle" style="animation-delay: .6s" d="M140 40 L141.5 44 L145.5 45.5 L141.5 47 L140 51 L138.5 47 L134.5 45.5 L138.5 44 Z" fill="#F5C842"></path>
+<path class="twinkle" style="animation-delay: 1.1s" d="M20 120 L21.5 124 L25.5 125.5 L21.5 127 L20 131 L18.5 127 L14.5 125.5 L18.5 124 Z" fill="#F5C842"></path>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#6A4A2A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="66" cy="138" rx="9" ry="5" fill="#DC9A60"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#DC9A60"></ellipse>
+<circle cx="80" cy="100" r="40" fill="url(#ks1)"></circle>
+<ellipse cx="80" cy="62" rx="19" ry="4.5" fill="#8A5A2B"></ellipse>
+<rect x="71" y="40" width="18" height="22" rx="2" fill="#F4EAD2"></rect><rect x="71" y="40" width="4" height="22" fill="#E0D2B0"></rect>
+<path d="M68 40 L80 29 L92 40 Z" fill="#A86A34"></path>
+<circle cx="80" cy="50" r="5.8" fill="#FFFFFF"></circle><circle cx="80" cy="50" r="1.1" fill="#4A3E3A"></circle>
+<line class="tick" style="transform-origin: 80px 50px" x1="80" y1="50" x2="80" y2="45.8" stroke="#4A3E3A" stroke-width="1.4" stroke-linecap="round"></line>
+<path d="M42 82 Q80 68 118 82" stroke="#5A6470" stroke-width="3.4" fill="none"></path>
+<circle cx="69" cy="77" r="7" fill="#BFE6F5"></circle><circle cx="69" cy="77" r="7" fill="none" stroke="#5A6470" stroke-width="2.2"></circle><circle cx="91" cy="77" r="7" fill="#BFE6F5"></circle><circle cx="91" cy="77" r="7" fill="none" stroke="#5A6470" stroke-width="2.2"></circle>
+<ellipse cx="42" cy="106" rx="6.5" ry="9" fill="#E8AE72" transform="rotate(20 42 106)"></ellipse>
+<path d="M126 80 L120 110 M126 80 L133 110" stroke="#5A6470" stroke-width="2.6" stroke-linecap="round"></path><circle cx="126" cy="79" r="3" fill="#F5C842"></circle>
+<ellipse cx="120" cy="104" rx="6.5" ry="9" fill="#E8AE72" transform="rotate(-30 120 104)"></ellipse>
+<g class="blink"><ellipse cx="68" cy="100" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="100" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="97.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="97.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="111" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="111" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 109 Q80 113 84 109" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+<path d="M44 118 Q80 134 116 118 L114 127 Q80 143 46 127 Z" fill="#E0565A"></path><path d="M54 122 L53 132 M68 126 L68 136 M92 126 L92 136 M106 122 L107 132" stroke="#FFFFFF" stroke-width="2.2" opacity=".85"></path>
+<path d="M100 130 L108 148 L96 148 Z" fill="#C8444A"></path>
+<circle cx="62" cy="128" r="6.5" fill="#FFFFFF"></circle><path d="M62 131.5 L57 125.5 Q59.5 123 62 124.5 Q64.5 123 67 125.5 Z" fill="#F2C230"></path>
+</g>
+</svg>
+<div style="position: absolute; left: 10px; bottom: 10px; display: flex; gap: 6px">
+<button style="height: 32px; padding: 0 12px; border-radius: 16px; border: none; background: #FFFFFF; font-family: inherit; font-size: 12px; font-weight: 800; color: #4A3E3A">ぜんぶ外す</button>
+<button style="height: 32px; padding: 0 12px; border-radius: 16px; border: none; background: #FFFFFF; font-family: inherit; font-size: 12px; font-weight: 800; color: #4A3E3A">おまかせ</button>
+</div>
+<div style="position: absolute; right: 10px; top: 10px; display: flex; gap: 4px">
+<button aria-label="コーデ1" style="width: 32px; height: 32px; border-radius: 16px; border: 2px solid #D0607A; background: #FFFFFF; font-family: inherit; font-size: 12px; font-weight: 900; color: #D0607A">1</button>
+<button aria-label="コーデ2" style="width: 32px; height: 32px; border-radius: 16px; border: none; background: #FFFFFF; font-family: inherit; font-size: 12px; font-weight: 900; color: #B0A296">2</button>
+<button aria-label="コーデ3" style="width: 32px; height: 32px; border-radius: 16px; border: none; background: #FFFFFF; font-family: inherit; font-size: 12px; font-weight: 900; color: #B0A296">3</button>
+</div>
+<p style="position: absolute; right: 12px; bottom: 12px; margin: 0; font-size: 10px; color: #8A7A72">コーデを3つまで保存</p>
+</div>
+
+<div style="display: flex; gap: 6px; overflow: hidden">
+<span style="flex-shrink: 0; height: 30px; padding: 0 12px; border-radius: 15px; background: #4A3E3A; color: #FFFFFF; font-size: 12px; font-weight: 900; display: flex; align-items: center">すべて</span>
+<span style="flex-shrink: 0; height: 30px; padding: 0 11px; border-radius: 15px; background: #FFFFFF; font-size: 12px; font-weight: 800; display: flex; align-items: center">頭</span>
+<span style="flex-shrink: 0; height: 30px; padding: 0 11px; border-radius: 15px; background: #FFFFFF; font-size: 12px; font-weight: 800; display: flex; align-items: center">首・胸</span>
+<span style="flex-shrink: 0; height: 30px; padding: 0 11px; border-radius: 15px; background: #FFFFFF; font-size: 12px; font-weight: 800; display: flex; align-items: center">手</span>
+<span style="flex-shrink: 0; height: 30px; padding: 0 11px; border-radius: 15px; background: #FFFFFF; font-size: 12px; font-weight: 800; display: flex; align-items: center">背中</span>
+<span style="flex-shrink: 0; height: 30px; padding: 0 11px; border-radius: 15px; background: #FFFFFF; font-size: 12px; font-weight: 800; display: flex; align-items: center">エフェクト</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 7px">
+<button aria-label="実験ゴーグル（頭）装備中" style="position: relative; height: 64px; border-radius: 14px; border: 2.5px solid #D0607A; background: #FCEAF0; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px; background: #D0607A; color: #FFFFFF; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center">✓</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">頭</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><path d="M4 20 Q20 12 36 20" stroke="#5A6470" stroke-width="3" fill="none"></path><circle cx="14" cy="21" r="6" fill="#BFE6F5" stroke="#5A6470" stroke-width="2"></circle><circle cx="26" cy="21" r="6" fill="#BFE6F5" stroke="#5A6470" stroke-width="2"></circle></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">実験ゴーグル</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">理科マスター★5</span></button><button aria-label="レスキューヘルメット（頭）未入手：キャタまるの親密度3" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E2D6CA; background: #F4EFE9; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: #8A7A72">ロック</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">頭</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .45;"><path d="M6 26 Q6 8 20 8 Q34 8 34 26 Z" fill="#F28C28"></path><rect x="4" y="25" width="32" height="5" rx="2.5" fill="#E07A18"></rect><circle cx="20" cy="17" r="4" fill="#FFF3B0"></circle></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">レスキューヘルメット</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">キャタまるの親密度3</span></button><button aria-label="桜の花かんむり（頭）" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px solid #EEE4DA; background: #FFFFFF; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">頭</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><circle cx="7" cy="24" r="4.5" fill="#F8C8D4"></circle><circle cx="13" cy="17" r="4.5" fill="#F2A6B8"></circle><circle cx="20" cy="14" r="4.5" fill="#F8C8D4"></circle><circle cx="27" cy="17" r="4.5" fill="#F2A6B8"></circle><circle cx="33" cy="24" r="4.5" fill="#F8C8D4"></circle><circle cx="20" cy="14" r="1.6" fill="#F5C842"></circle></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">桜の花かんむり</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">3月の着せかえ</span></button><button aria-label="合格はちまき（頭）未入手：試験の日" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E2D6CA; background: #F4EFE9; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: #8A7A72">ロック</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">頭</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .45;"><rect x="4" y="15" width="30" height="10" rx="3" fill="#FFFFFF" stroke="#E6DCD2" stroke-width="1.5"></rect><circle cx="19" cy="20" r="3.5" fill="#E0565A"></circle><path d="M33 20 L38 31 M33 20 L39 25" stroke="#E6DCD2" stroke-width="2.5" stroke-linecap="round"></path></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">合格はちまき</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">試験の日</span></button><button aria-label="マフラー（首）装備中" style="position: relative; height: 64px; border-radius: 14px; border: 2.5px solid #D0607A; background: #FCEAF0; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px; background: #D0607A; color: #FFFFFF; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center">✓</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">首</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><path d="M4 14 Q20 22 36 14 L36 21 Q20 29 4 21 Z" fill="#E0565A"></path><path d="M10 18 L10 24 M18 20 L18 26" stroke="#FFFFFF" stroke-width="2"></path><path d="M26 22 L30 36 L22 36 Z" fill="#C8444A"></path></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">マフラー</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">12月の着せかえ</span></button><button aria-label="赤い蝶ネクタイ（首）未入手：ペンまるの親密度5" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E2D6CA; background: #F4EFE9; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: #8A7A72">ロック</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">首</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .45;"><path d="M20 20 L8 13 L8 27 Z M20 20 L32 13 L32 27 Z" fill="#D8404A"></path><circle cx="20" cy="20" r="3" fill="#A82A34"></circle></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">赤い蝶ネクタイ</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">ペンまるの親密度5</span></button><button aria-label="銀メダル（首）" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px solid #EEE4DA; background: #FFFFFF; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">首</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><path d="M14 4 L20 16 L26 4" stroke="#5DB2EA" stroke-width="4" fill="none"></path><circle cx="20" cy="25" r="10" fill="#C8CED8"></circle><text x="20" y="29" font-size="10" text-anchor="middle" font-weight="900" fill="#5A6470" font-family="sans-serif">2</text></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">銀メダル</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">累計10万EXP</span></button><button aria-label="銀杏バッジ（胸）装備中" style="position: relative; height: 64px; border-radius: 14px; border: 2.5px solid #D0607A; background: #FCEAF0; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px; background: #D0607A; color: #FFFFFF; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center">✓</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">胸</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><circle cx="20" cy="20" r="14" fill="#FFFFFF" stroke="#E6DCD2" stroke-width="1.5"></circle><path d="M20 28 L10 16 Q15 11 20 14 Q25 11 30 16 Z" fill="#F2C230"></path></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">銀杏バッジ</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">図鑑：高1のギンまる</span></button><button aria-label="コンパス★3（手）装備中" style="position: relative; height: 64px; border-radius: 14px; border: 2.5px solid #D0607A; background: #FCEAF0; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px; background: #D0607A; color: #FFFFFF; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center">✓</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">手</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><path d="M20 6 L12 34 M20 6 L28 34" stroke="#5A6470" stroke-width="3" stroke-linecap="round"></path><circle cx="20" cy="6" r="3.5" fill="#F5C842"></circle><text x="33" y="12" font-size="9" font-weight="900" fill="#E0A21A" font-family="sans-serif">★3</text></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">コンパス★3</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">数学マスター</span></button><button aria-label="和がさ（手）未入手：ゲタまるの親密度3" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E2D6CA; background: #F4EFE9; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: #8A7A72">ロック</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">手</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .45;"><path d="M3 20 Q20 2 37 20 Q31 17 26 20 Q20 17 14 20 Q9 17 3 20 Z" fill="#D8404A"></path><path d="M20 5 L20 20 M11 10 L14 19 M29 10 L26 19" stroke="#F4D8D0" stroke-width="1"></path><path d="M20 20 L20 35 Q20 38 16 37" stroke="#8A5A36" stroke-width="2.4" fill="none" stroke-linecap="round"></path></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">和がさ</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">ゲタまるの親密度3</span></button><button aria-label="白衣（背中）" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px solid #EEE4DA; background: #FFFFFF; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">背中</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><path d="M12 6 L28 6 L34 36 L6 36 Z" fill="#F7F8FA" stroke="#D8DDE6" stroke-width="1.5"></path><path d="M16 6 L20 16 L24 6" fill="none" stroke="#C8CED8" stroke-width="1.5"></path><rect x="24" y="22" width="6" height="5" fill="#E2E6EE"></rect></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">白衣</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">連続30日の称号</span></button><button aria-label="旅のリュック（背中）" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px solid #EEE4DA; background: #FFFFFF; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">背中</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><rect x="8" y="9" width="24" height="27" rx="8" fill="#D88A48"></rect><rect x="12" y="21" width="16" height="10" rx="3" fill="#B8682E"></rect><rect x="10" y="4" width="20" height="6" rx="3" fill="#5DB2EA"></rect></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">旅のリュック</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">8月の着せかえ</span></button>
+</div>
+
+<p style="margin: 2px 0 0; font-size: 12px; font-weight: 900">エフェクト（1つ）</p>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px">
+<button aria-label="キラキラ（効果）装備中" style="position: relative; height: 64px; border-radius: 14px; border: 2.5px solid #D0607A; background: #FCEAF0; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px; background: #D0607A; color: #FFFFFF; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center">✓</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">効果</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><path d="M14 6 L16 13 L23 15 L16 17 L14 24 L12 17 L5 15 L12 13 Z" fill="#F5C842"></path><path d="M28 20 L29.5 25 L34.5 26.5 L29.5 28 L28 33 L26.5 28 L21.5 26.5 L26.5 25 Z" fill="#F5C842"></path></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">キラキラ</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">金の額縁の子がいる</span></button><button aria-label="ハート（効果）" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px solid #EEE4DA; background: #FFFFFF; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">効果</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><path d="M8 15 C8 8 18 8 20 14 C22 8 32 8 32 15 C32 23 20 29 20 32 C20 29 8 23 8 15 Z" fill="#E05C8A"></path></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">ハート</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">親密度10の子がいる</span></button><button aria-label="雪（効果）" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px solid #EEE4DA; background: #FFFFFF; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">効果</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style=""><g stroke="#8CC8F0" stroke-width="2.4" stroke-linecap="round"><path d="M20 6 L20 34 M8 13 L32 27 M8 27 L32 13"></path></g></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">雪</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">12月の着せかえ</span></button><button aria-label="金のふち（効果）未入手：今の子の親密度7" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E2D6CA; background: #F4EFE9; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: #8A7A72">ロック</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">効果</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .45;"><circle cx="20" cy="20" r="13" fill="none" stroke="#F2C230" stroke-width="4"></circle><circle cx="20" cy="20" r="8" fill="#FFF3B0"></circle></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">金のふち</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">今の子の親密度7</span></button><button aria-label="虹のオーラ（効果）未入手：累計20万EXP" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E2D6CA; background: #F4EFE9; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: #8A7A72">ロック</span>
+<span style="position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296">効果</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .45;"><path d="M6 30 A14 14 0 0 1 34 30" fill="none" stroke="#F28C9C" stroke-width="3"></path><path d="M10 30 A10 10 0 0 1 30 30" fill="none" stroke="#F5C842" stroke-width="3"></path><path d="M14 30 A6 6 0 0 1 26 30" fill="none" stroke="#8CC8F0" stroke-width="3"></path></svg>
+<span style="font-size: 10px; font-weight: 900; color: #4A3E3A; line-height: 1.2">虹のオーラ</span>
+<span style="font-size: 8.5px; color: #8A7A72; line-height: 1.2">累計20万EXP</span></button>
+</div>
+
+<p style="margin: 2px 0 0; font-size: 12px; font-weight: 900; color: #C8962A">レジェンド（とても難しい・模試の成績など）</p>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px">
+<button aria-label="A判定の王冠（頭）未入手：志望校の模試でA判定" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E0B040; background: #FFF8E4; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 3px; left: 5px; font-size: 9px; font-weight: 900; color: #C8962A">頭</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .55"><path d="M6 30 L8 12 L15 20 L20 8 L25 20 L32 12 L34 30 Z" fill="#F5C842"></path><rect x="6" y="29" width="28" height="5" rx="2" fill="#E0A21A"></rect><circle cx="20" cy="8" r="2.2" fill="#E8584A"></circle><text x="20" y="27" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle" font-family="sans-serif">A</text></svg>
+<span style="font-size: 9.5px; font-weight: 900; color: #4A3E3A; line-height: 1.15">A判定の王冠</span>
+<span style="font-size: 8px; color: #8A7A72; line-height: 1.15">志望校の模試でA判定</span></button><button aria-label="逆転の翼（背中）未入手：模試の判定を2段階以上アップ" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E0B040; background: #FFF8E4; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 3px; left: 5px; font-size: 9px; font-weight: 900; color: #C8962A">背中</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .55"><path d="M19 24 Q8 8 2 15 Q6 19 3 25 Q10 26 8 31 Q14 30 19 28 Z" fill="#FFFFFF" stroke="#F2C230" stroke-width="1.6"></path><path d="M21 24 Q32 8 38 15 Q34 19 37 25 Q30 26 32 31 Q26 30 21 28 Z" fill="#FFFFFF" stroke="#F2C230" stroke-width="1.6"></path><path d="M20 30 L20 12 M15 17 L20 11 L25 17" stroke="#E0A21A" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span style="font-size: 9.5px; font-weight: 900; color: #4A3E3A; line-height: 1.15">逆転の翼</span>
+<span style="font-size: 8px; color: #8A7A72; line-height: 1.15">模試の判定を2段階以上アップ</span></button><button aria-label="偏差値70の星章（胸）未入手：模試の総合偏差値70以上" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E0B040; background: #FFF8E4; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 3px; left: 5px; font-size: 9px; font-weight: 900; color: #C8962A">胸</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .55"><path d="M20 3 L24.5 14 L36 14.5 L27 22 L30 34 L20 27.5 L10 34 L13 22 L4 14.5 L15.5 14 Z" fill="#7A5CD0"></path><text x="20" y="24" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle" font-family="sans-serif">70</text></svg>
+<span style="font-size: 9.5px; font-weight: 900; color: #4A3E3A; line-height: 1.15">偏差値70の星章</span>
+<span style="font-size: 8px; color: #8A7A72; line-height: 1.15">模試の総合偏差値70以上</span></button><button aria-label="流れ星（効果）未入手：模試の1教科で全国上位1%" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E0B040; background: #FFF8E4; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 3px; left: 5px; font-size: 9px; font-weight: 900; color: #C8962A">効果</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .55"><path d="M4 36 L22 18" stroke="#B49AF2" stroke-width="4" stroke-linecap="round" opacity=".45"></path><path d="M8 36 L22 22" stroke="#B49AF2" stroke-width="2" stroke-linecap="round" opacity=".7"></path><path d="M27 6 L29.5 12.5 L36 13 L31 17.5 L32.5 24 L27 20.5 L21.5 24 L23 17.5 L18 13 L24.5 12.5 Z" fill="#F5C842"></path></svg>
+<span style="font-size: 9.5px; font-weight: 900; color: #4A3E3A; line-height: 1.15">流れ星</span>
+<span style="font-size: 8px; color: #8A7A72; line-height: 1.15">模試の1教科で全国上位1%</span></button><button aria-label="太陽のオーラ（効果）未入手：365日連続で記録" style="position: relative; height: 64px; border-radius: 14px; border: 1.5px dashed #E0B040; background: #FFF8E4; font-family: inherit; padding: 4px 2px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px">
+<span style="position: absolute; top: 3px; left: 5px; font-size: 9px; font-weight: 900; color: #C8962A">効果</span>
+<svg width="28" height="28" viewBox="0 0 40 40" aria-hidden="true" style="opacity: .55"><g stroke="#FFB648" stroke-width="2.6" stroke-linecap="round"><path d="M20 3 L20 8 M20 32 L20 37 M3 20 L8 20 M32 20 L37 20 M8 8 L11.5 11.5 M28.5 28.5 L32 32 M8 32 L11.5 28.5 M28.5 11.5 L32 8"></path></g><circle cx="20" cy="20" r="8.5" fill="#FFB648"></circle><circle cx="17.5" cy="17.5" r="2.5" fill="#FFE2A8"></circle></svg>
+<span style="font-size: 9.5px; font-weight: 900; color: #4A3E3A; line-height: 1.15">太陽のオーラ</span>
+<span style="font-size: 8px; color: #8A7A72; line-height: 1.15">365日連続で記録</span></button>
+</div>
+<p style="margin: 2px 0 0; font-size: 12px; font-weight: 900; color: #7A5CD0">ミシック（最上級エフェクト）</p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<button aria-label="不死鳥の炎、未入手：判定をEからAへ" style="height: 56px; border-radius: 14px; border: 1.5px solid #C8A040; background: linear-gradient(135deg, #2B2248, #4A2E6A); font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="font-size: 11px; font-weight: 900; color: #FFB648">不死鳥の炎</span><span style="font-size: 8.5px; color: #D8D0F0">判定をE→Aに</span></button>
+<button aria-label="銀河のオーロラ、未入手：3シーズンすべて親密度10" style="height: 56px; border-radius: 14px; border: 1.5px solid #C8A040; background: linear-gradient(135deg, #2B2248, #4A2E6A); font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="font-size: 11px; font-weight: 900; color: #7AF2D0">銀河のオーロラ</span><span style="font-size: 8.5px; color: #D8D0F0">3年とも親密度10</span></button>
+<button aria-label="満開の桜吹雪、未入手：志望校に合格" style="height: 56px; border-radius: 14px; border: 1.5px solid #C8A040; background: linear-gradient(135deg, #2B2248, #4A2E6A); font-family: inherit; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px"><span style="font-size: 11px; font-weight: 900; color: #FFB8CC">満開の桜吹雪</span><span style="font-size: 8.5px; color: #D8D0F0">志望校に合格</span></button>
+</div>
+
+<a href="Launch.dc.html" style="margin-top: auto; display: flex; align-items: center; justify-content: center; height: 48px; background: #D0607A; color: #FFFFFF; border-radius: 24px; font-size: 16px; font-weight: 900; text-decoration: none">この姿にする</a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="キャタまめ。足が小さな車輪の緑の豆">
+<defs><radialGradient id="k3a" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F2FCEA"></stop><stop offset=".55" stop-color="#B8E2A0"></stop><stop offset="1" stop-color="#72B05E"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="30" ry="5" fill="#3A4A2A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="80" cy="110" rx="32" ry="29" fill="url(#k3a)"></ellipse>
+<ellipse cx="68" cy="94" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="112" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="112" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="110" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="110" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="122" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="122" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 121 Q80 124 83 121" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path>
+</g>
+<g class="spinM"><circle cx="66" cy="140" r="6.5" fill="#6A707C"></circle><rect x="65" y="134" width="2" height="12" fill="#C2C8D0"></rect></g>
+<g class="spinM"><circle cx="94" cy="140" r="6.5" fill="#6A707C"></circle><rect x="93" y="134" width="2" height="12" fill="#C2C8D0"></rect></g>
+</svg>

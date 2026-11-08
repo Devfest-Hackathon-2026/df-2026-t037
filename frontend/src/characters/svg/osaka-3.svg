@@ -1,0 +1,20 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="最終進化のワニまる。マチカネワニのフードとしっぽ">
+<defs><radialGradient id="k10c" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FFFAE6"></stop><stop offset=".55" stop-color="#F8DC86"></stop><stop offset="1" stop-color="#D8A838"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#6A4A2A" opacity=".14"></ellipse>
+<g class="swayV" style="transform-origin: 118px 124px; animation-duration: 2.6s"><path d="M116 116 Q144 116 152 96 Q150 110 158 110 Q148 132 114 132 Z" fill="#6AAE5A"></path><circle cx="134" cy="118" r="2.4" fill="#4A8A3E"></circle><circle cx="144" cy="112" r="2" fill="#4A8A3E"></circle></g>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#E2B850"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#E2B850"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#k10c)"></circle>
+<ellipse cx="31" cy="102" rx="8" ry="11" fill="#ECC662" transform="rotate(20 31 102)"></ellipse><ellipse cx="129" cy="102" rx="8" ry="11" fill="#ECC662" transform="rotate(-20 129 102)"></ellipse>
+<path d="M30 88 Q26 38 80 34 Q134 38 130 88 Q108 75 80 75 Q52 75 30 88 Z" fill="#6AAE5A"></path>
+<path d="M48 52 Q80 38 112 52" stroke="#8CCB72" stroke-width="4.5" fill="none" stroke-linecap="round"></path>
+<circle cx="66" cy="40" r="3.2" fill="#4A8A3E"></circle><circle cx="73" cy="37" r="3.2" fill="#4A8A3E"></circle><circle cx="80" cy="36" r="3.2" fill="#4A8A3E"></circle><circle cx="87" cy="37" r="3.2" fill="#4A8A3E"></circle><circle cx="94" cy="40" r="3.2" fill="#4A8A3E"></circle>
+<g class="chomp"><path d="M33.0 85.1 L39.0 85.1 L36.0 89.6 Z" fill="#FFFFFF"></path><path d="M41.0 81.7 L47.0 81.7 L44.0 86.2 Z" fill="#FFFFFF"></path><path d="M49.0 79.1 L55.0 79.1 L52.0 83.6 Z" fill="#FFFFFF"></path><path d="M57.0 77.1 L63.0 77.1 L60.0 81.6 Z" fill="#FFFFFF"></path><path d="M65.0 75.7 L71.0 75.7 L68.0 80.2 Z" fill="#FFFFFF"></path><path d="M73.0 75.1 L79.0 75.1 L76.0 79.6 Z" fill="#FFFFFF"></path><path d="M81.0 75.1 L87.0 75.1 L84.0 79.6 Z" fill="#FFFFFF"></path><path d="M89.0 75.7 L95.0 75.7 L92.0 80.2 Z" fill="#FFFFFF"></path><path d="M97.0 77.1 L103.0 77.1 L100.0 81.6 Z" fill="#FFFFFF"></path><path d="M105.0 79.1 L111.0 79.1 L108.0 83.6 Z" fill="#FFFFFF"></path><path d="M113.0 81.7 L119.0 81.7 L116.0 86.2 Z" fill="#FFFFFF"></path><path d="M121.0 85.1 L127.0 85.1 L124.0 89.6 Z" fill="#FFFFFF"></path></g>
+<circle cx="60" cy="38" r="9" fill="#6AAE5A"></circle><circle cx="60" cy="37.5" r="5.2" fill="#FFFFFF"></circle><ellipse cx="60.6" cy="37.7" rx="1.8" ry="3.8" fill="#2B2632"></ellipse><circle cx="100" cy="38" r="9" fill="#6AAE5A"></circle><circle cx="100" cy="37.5" r="5.2" fill="#FFFFFF"></circle><ellipse cx="100.6" cy="37.7" rx="1.8" ry="3.8" fill="#2B2632"></ellipse>
+<g class="blink"><ellipse cx="66" cy="100" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="100" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="97.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="97.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="114" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="114" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 111 Q80 117 85 111 Z" fill="#E8687A"></path>
+
+</g>
+</svg>

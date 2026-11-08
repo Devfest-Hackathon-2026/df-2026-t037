@@ -1,0 +1,18 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="成体のペンまる。白い羽ペンを持ち、胸に銀のバッジ">
+<defs><radialGradient id="k4b" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#8EA4DA"></stop><stop offset=".55" stop-color="#3E5698"></stop><stop offset="1" stop-color="#1E2D5E"></stop></radialGradient><radialGradient id="k4bw" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset="1" stop-color="#D6DCEA"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#1E2D5E" opacity=".16"></ellipse>
+<g class="squish">
+<ellipse cx="66" cy="138" rx="9" ry="5" fill="#F0B848"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#F0B848"></ellipse>
+<circle cx="80" cy="100" r="40" fill="url(#k4b)"></circle>
+<ellipse cx="80" cy="106" rx="29" ry="30" fill="url(#k4bw)"></ellipse>
+<ellipse cx="42" cy="106" rx="6.5" ry="10" fill="#34497E" transform="rotate(20 42 106)"></ellipse>
+<g class="swayV" style="transform-origin: 122px 100px"><path d="M121 100 Q126 74 142 58 Q139 78 126 101 Z" fill="#FFFFFF"></path><path d="M123 101 L140 61" stroke="#C8CED8" stroke-width="1.2"></path></g>
+<ellipse cx="120" cy="98" rx="6.5" ry="10" fill="#34497E" transform="rotate(-35 120 98)"></ellipse>
+<ellipse cx="64" cy="72" rx="11" ry="6" fill="#FFFFFF" opacity=".35"></ellipse>
+<g class="blink"><ellipse cx="70" cy="96" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="90" cy="96" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="68.6" cy="93.6" r="1.6" fill="#FFFFFF"></circle><circle cx="88.6" cy="93.6" r="1.6" fill="#FFFFFF"></circle>
+<path d="M76.5 103 L83.5 103 L80 107.5 Z" fill="#F0B848"></path>
+<ellipse cx="60" cy="106" rx="6" ry="3.5" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="100" cy="106" rx="6" ry="3.5" fill="#FF8FA3" opacity=".5"></ellipse>
+<circle cx="80" cy="123" r="7.5" fill="#C8CED8"></circle><path d="M76 127 L84 119" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round"></path>
+</g>
+</svg>

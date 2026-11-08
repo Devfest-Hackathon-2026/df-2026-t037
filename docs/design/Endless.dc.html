@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>上限なしのアイテム</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6A4FC2}a:hover{color:#4A2FA2}
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+@keyframes swing{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@media (prefers-reduced-motion: no-preference){
+.squish{animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.shadow{animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.blink{animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+.swing{animation:swing 1.8s ease-in-out infinite;transform-box:view-box}
+}
+</style>
+</helmet>
+<div style="width: 1280px; height: 1060px; box-sizing: border-box; padding: 44px 52px; background: #F4F2FF; font-family: 'M PLUS Rounded 1c', sans-serif; color: #4A3E3A; display: flex; flex-direction: column; gap: 18px">
+<div>
+<p style="margin: 0 0 4px; font-size: 14px; font-weight: 800; color: #6A4FC2">上限なしのアイテム｜最初から集められるもの＋親密度10のあとのもの</p>
+<h1 style="margin: 0; font-size: 32px; font-weight: 900">受験の日まで、集めるものがなくならない</h1>
+</div>
+
+<div style="display: flex; gap: 18px">
+<div style="width: 300px; flex-shrink: 0; background: #FFFFFF; border-radius: 22px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 900; color: #6A4FC2">累計 120,000EXP のギンまる（理一）</p>
+<div style="width: 250px; height: 250px; border-radius: 125px; background: #EEF5FC; display: flex; align-items: center; justify-content: center">
+<svg width="240" height="240" viewBox="0 0 160 160" role="img" aria-label="銀メダルを下げ、コンパスを持ち、赤いマフラーを巻いたギンまる">
+<defs><radialGradient id="e1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><radialGradient id="e1m" cx="40%" cy="35%" r="70%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset="1" stop-color="#A8B0BC"></stop></radialGradient></defs>
+<path class="twinkle" d="M18 30 L20 36 L26 38 L20 40 L18 46 L16 40 L10 38 L16 36 Z" fill="#F5C842"></path>
+<path class="twinkle" style="animation-delay: .8s" d="M142 24 L143.5 28 L147.5 29.5 L143.5 31 L142 35 L140.5 31 L136.5 29.5 L140.5 28 Z" fill="#B49AF2"></path>
+<ellipse class="shadow" cx="80" cy="150" rx="42" ry="6" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="142" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="142" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L60 6 Q70 -4 80 4 Q90 -4 100 6 Z" fill="#F2C230"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#e1)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse>
+<path d="M138 60 L130 92 M138 60 L148 90" stroke="#5A6470" stroke-width="2.4" stroke-linecap="round"></path><circle cx="138" cy="58" r="3.4" fill="#F5C842"></circle>
+<ellipse cx="132" cy="96" rx="8" ry="11" fill="#86B2E2" transform="rotate(-10 132 96)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<path d="M80 40 L67 33 L67 47 Z M80 40 L93 33 L93 47 Z" fill="#5DB2EA"></path><circle cx="80" cy="40" r="3.2" fill="#2E7CB8"></circle>
+<g class="blink"><ellipse cx="66" cy="90" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="90" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="87.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="87.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="103" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse><ellipse cx="105" cy="103" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse>
+<path d="M76 101 Q80 105 84 101" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+<path d="M34 108 Q80 126 126 108 L124 120 Q80 138 36 120 Z" fill="#E0565A"></path>
+<path d="M48 115 L47 127 M64 119 L64 131 M96 119 L96 131 M112 115 L113 127" stroke="#FFFFFF" stroke-width="2.4" opacity=".85"></path>
+<path d="M104 124 L112 146 L100 146 Z" fill="#C8444A"></path>
+<g class="swing" style="transform-origin: 80px 124px"><path d="M74 124 L80 136 L86 124" fill="none" stroke="#5DB2EA" stroke-width="3"></path><circle cx="80" cy="141" r="8" fill="url(#e1m)"></circle><text x="80" y="144.5" text-anchor="middle" font-size="9" font-weight="900" fill="#5A6470" font-family="sans-serif">2</text></g>
+</g>
+</svg>
+</div>
+<p style="margin: 0; font-size: 12px; color: #8A7A72; text-align: center; line-height: 1.6">銀メダル（10万EXP）・数学のコンパス★3・12月のマフラー。装備は5つまで同時につけられる</p>
+</div>
+
+<div style="flex: 1; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px">
+<div style="background: #FFFFFF; border-radius: 20px; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 11px; font-weight: 900; color: #3FA47A">最初から</p>
+<h2 style="margin: 0; font-size: 18px; font-weight: 900">① 教科マスター装備</h2>
+<p style="margin: 0; font-size: 13px; line-height: 1.7">教科カテゴリごとに、累計50時間（3,000分）で★が1つ。★5ごとに色が銅→銀→金→虹→虹＋1…</p>
+<div style="display: flex; gap: 8px; flex-wrap: wrap; font-size: 12px; font-weight: 800">
+<span style="background: #E7F0FA; padding: 3px 9px; border-radius: 10px">数学：コンパス</span><span style="background: #E7F0FA; padding: 3px 9px; border-radius: 10px">理科：フラスコ</span><span style="background: #EFE9FA; padding: 3px 9px; border-radius: 10px">英語：辞書</span><span style="background: #EFE9FA; padding: 3px 9px; border-radius: 10px">国地：筆</span><span style="background: #FCEDE6; padding: 3px 9px; border-radius: 10px">記実：万年筆</span>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 20px; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 11px; font-weight: 900; color: #D0607A">親密度10のあと</p>
+<h2 style="margin: 0; font-size: 18px; font-weight: 900">② おみやげ図鑑</h2>
+<p style="margin: 0; font-size: 13px; line-height: 1.7">2,000EXPごとにキャラが「おみやげ」を1つ持ってくる。大学ごとに12種類。2周目は金色版、3周目は虹色版、以降は★つき</p>
+<div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px">
+<sc-for list="{{book}}" as="b" hint-placeholder-count="12"><div style="height: 22px; border-radius: 7px; background: {{b}}"></div></sc-for>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 20px; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 11px; font-weight: 900; color: #3FA47A">最初から</p>
+<h2 style="margin: 0; font-size: 18px; font-weight: 900">③ 記念メダル</h2>
+<p style="margin: 0; font-size: 13px; line-height: 1.7">累計50,000EXPごとに1枚。銅（5万）→銀（10万）→金（15万）→虹（20万）→以降は虹に数字が増える。首から下げられる</p>
+</div>
+<div style="background: #FFFFFF; border-radius: 20px; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 11px; font-weight: 900; color: #3FA47A">最初から</p>
+<h2 style="margin: 0; font-size: 18px; font-weight: 900">④ 連続記録の称号</h2>
+<p style="margin: 0; font-size: 13px; line-height: 1.7">7日「三日坊主こえ」、30日「習慣の達人」、100日「百日の道」、以降100日ごとに「○百日の道」。名前の横に表示される</p>
+</div>
+<div style="background: #FFFFFF; border-radius: 20px; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 11px; font-weight: 900; color: #3FA47A">最初から</p>
+<h2 style="margin: 0; font-size: 18px; font-weight: 900">⑤ 季節の着せかえ</h2>
+<p style="margin: 0; font-size: 13px; line-height: 1.7">その月の勉強が標準ペースの半分をこえると、月ごとの装備が1つ（例：1日3時間の時期なら月45時間）。翌年は色違い</p>
+<p style="margin: 0; font-size: 12px; color: #8A7A72">例：11月 手ぶくろ／12月 マフラー／1月 合格だるま／2月 お守り／3月 桜の花かんむり</p>
+</div>
+<div style="background: #FFFFFF; border-radius: 20px; padding: 14px 18px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 11px; font-weight: 900; color: #6A4FC2">試験の日</p>
+<h2 style="margin: 0; font-size: 18px; font-weight: 900">⑥ 合格祈願のはちまき</h2>
+<p style="margin: 0; font-size: 13px; line-height: 1.7">登録した試験日の朝に届く。標準ペースに対してどれだけ勉強したかで、はちまきの文字の色が金に近づく</p>
+</div>
+</div>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 20px; padding: 14px 20px; display: flex; gap: 24px; align-items: center">
+<h2 style="margin: 0; font-size: 16px; font-weight: 900; flex-shrink: 0; line-height: 1.5">目安<br><span style="font-size: 12px; color: #8A7A72">直前期 1日8時間・約650EXP</span></h2>
+<p style="margin: 0; font-size: 14px; line-height: 1.7">おみやげ＝約3日に1つ ／ 教科マスター★＝1教科に1日2.5時間なら20日に1つ ／ 記念メダル＝約2.5か月に1枚 ／ 季節の着せかえ＝毎月1つ。親密度10は目安どおりなら受験の約1.5か月前なので、直前期の毎日にごほうびが続く</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1060}}'>
+class Component extends DCLogic {
+renderVals() {
+const got = 7;
+return { book: Array.from({ length: 12 }, (_, i) => i < got ? ['#F5C842', '#8CC8F0', '#F5B5C8', '#A8D58A', '#F2A65A', '#B49AF2', '#F28C6B'][i] : '#ECE8F4') };
+}
+}
+</script>
+</body>
+</html>
