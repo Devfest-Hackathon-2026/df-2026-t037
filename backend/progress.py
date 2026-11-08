@@ -13,7 +13,9 @@ from game_rules import (
     GRADE_FROM_APP,
     bond_of,
     growth_exp,
+    growth_exp_raw,
     resolve_faculty_id,
+    round_half_up,
     stage_of,
     streak_threshold_minutes,
 )
@@ -106,8 +108,8 @@ def update_streak(user: dict, today: date, minutes: int, grade: str) -> dict:
 
 def growth_for_log(minutes: int, subject: str, faculty_id: str, streak: int, rank: str | None) -> int:
     """育成EXP＝分数×（1＋志望学部の配点比率）×連続ボーナス×言語化ランク倍率"""
-    base = growth_exp(minutes, SUBJECT_CATEGORY.get(subject), faculty_id, streak)
-    return int(round(base * RANK_MULTIPLIER.get(rank or "", 1.0)))
+    raw = growth_exp_raw(minutes, SUBJECT_CATEGORY.get(subject), faculty_id, streak)
+    return round_half_up(raw * RANK_MULTIPLIER.get(rank or "", 1.0))
 
 
 def has_plan(user: dict) -> bool:

@@ -269,10 +269,14 @@ def embed(text: str, task: str) -> list[float]:
 
 def cmd_embeddings() -> None:
     profiles = load_json(PROFILES_PATH, {})
-    vectors = {}
+    # 前に作ったベクトルを引き継ぐ（同じモデル・次元のときだけ）。途中で失敗しても前の分は消さない
+    old = load_json(EMBEDDINGS_PATH, {})
+    keep = old.get("model") == EMBED_MODEL and int(old.get("dim") or 0) == EMBED_DIM
+    vectors = dict(old.get("vectors") or {}) if keep else {}
     failed = []
     for i, (fid, p) in enumerate(profiles.items(), 1):
         if not p.get("summary"):
+            vectors.pop(fid, None)
             print(f"{i:>2}/{len(profiles)} {p.get('university', fid)} {p.get('faculty', '')} … 紹介文が空なので飛ばします（fix で直してください）")
             continue
         for attempt in range(3):  # 429 などの一時的な失敗は少し待って再試行する

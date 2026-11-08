@@ -505,12 +505,12 @@ def greeting(uid: str = Depends(verify_user)):
         result = call_gemini(chat.build_greeting_prompt(user, facts), chat.CHAT_SCHEMA)
         text = chat.clean_reply(result.get("reply", "")) or GREETING_FALLBACK
     except Exception:
-        # 失敗したら回数を戻し、「作っている途中」の印を消す
-        ref.set({"greetings": firestore.Increment(-1), "greetingInflight": firestore.DELETE_FIELD}, merge=True)
+        # 失敗したら回数だけ戻す。「作っている途中」の印は消さない（別の処理の印を消してしまうことがあるため。60秒で無効になる）
+        ref.set({"greetings": firestore.Increment(-1)}, merge=True)
         raise
+    # 保存した一言は「作っている途中」の確認より先に見るので、印はそのままでよい
     ref.set({
         "greeting": {"key": key, "text": text},
-        "greetingInflight": firestore.DELETE_FIELD,
         "updatedAt": firestore.SERVER_TIMESTAMP,
     }, merge=True)
     return {"greeting": text, "cached": False}
@@ -575,9 +575,14 @@ def discover_from_reflections(uid: str = Depends(verify_user)):
     _reserve_discover(db.transaction(), ref, memory.DISCOVER_DAILY_LIMIT)
     try:
         logs = memory.collect_logs_with_vectors(db, uid, PROJECT_ID, get_access_token())
-        if len(logs) < memory.DISCOVER_MIN_LOGS:
-            ref.set({"discovers": firestore.Increment(-1)}, merge=True)
-            return {"results": [], "themes": [], "usedLogs": len(logs), "needLogs": memory.DISCOVER_MIN_LOGS}
+    except Exception:
+        ref.set({"discovers": firestore.Increment(-1)}, merge=True)
+        raise
+    if len(logs) < memory.DISCOVER_MIN_LOGS:
+        # 記録が足りないときは回数に数えない（try の外で1回だけ戻す）
+        ref.set({"discovers": firestore.Increment(-1)}, merge=True)
+        return {"results": [], "themes": [], "usedLogs": len(logs), "needLogs": memory.DISCOVER_MIN_LOGS}
+    try:
         picked = explore.rank(memory.interest_vector(logs))
         evidence = {fid: memory.evidence_for(fid, logs) for fid, _ in picked}
         result = call_gemini(memory.build_discover_prompt([f for f, _ in picked], evidence), memory.DISCOVER_SCHEMA)

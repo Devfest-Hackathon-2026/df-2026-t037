@@ -107,17 +107,27 @@ def streak_bonus(streak: int) -> float:
     return 1.2 if streak >= 30 else 1.15 if streak >= 14 else 1.1 if streak >= 7 else 1.05 if streak >= 3 else 1.0
 
 
+def round_half_up(x: float) -> int:
+    """四捨五入（画面の JavaScript の Math.round と同じ）。Python の round は偶数丸めなので、x.5 で画面と1ずれる"""
+    return int(math.floor(x + 0.5))
+
+
 def streak_threshold_minutes(grade: str) -> int:
-    return round(GRADE_HOURS[grade] * 60 / 4)
+    return round_half_up(GRADE_HOURS[grade] * 60 / 4)
+
+
+def growth_exp_raw(minutes: int, category: str, faculty_id: str, streak: int) -> float:
+    """丸める前の育成EXP。ランク倍率を掛ける前に丸めると1ずれるので、丸めは最後に1回だけにする"""
+    w = FACULTIES[resolve_faculty_id(faculty_id)]["weights"]
+    return minutes * (1 + w.get(category, 0) / 100) * streak_bonus(streak)
 
 
 def growth_exp(minutes: int, category: str, faculty_id: str, streak: int) -> int:
-    """育成EXP＝分数×（1＋その教科の配点比率）×連続ボーナス。
+    """育成EXP＝分数×（1＋その教科の配点比率）×連続ボーナス（画面の expForLog と同じ）。
 
     配点に無いカテゴリ（情報など、category=None）は配点比率0%として扱う。
     """
-    w = FACULTIES[resolve_faculty_id(faculty_id)]["weights"]
-    return int(round(minutes * (1 + w.get(category, 0) / 100) * streak_bonus(streak)))
+    return round_half_up(growth_exp_raw(minutes, category, faculty_id, streak))
 
 
 def stage_of(exp: int, plan: dict) -> int:
