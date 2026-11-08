@@ -8,6 +8,7 @@ import {
   roughDate, streakInfo, todayHours, todayStart,
 } from "../game/display";
 import { CATEGORIES, SUBJECT_CATEGORY } from "../game/subjects";
+import { buildItems, sanitizeEquipped, wearsUniEquip } from "../game/items";
 import "./tama.css";
 
 const DAY_MS = 864e5;
@@ -18,7 +19,7 @@ function stageStatus(stage, bond) {
   return "うまれたて";
 }
 
-export default function CharacterCard({ profile, logs }) {
+export default function CharacterCard({ profile, logs, menu }) {
   const faculty = getFaculty(profile?.targetFacultyId);
   const uni = faculty && getUniversity(faculty.universityId);
   const plan = profile?.plan;
@@ -38,6 +39,8 @@ export default function CharacterCard({ profile, logs }) {
   const seasonLeft = seasonEnd ? Math.max(0, daysBetween(today, seasonEnd)) : null;
   const s = streakInfo(streak);
   const name = uni.stageNames[stage - 1] || uni.character;
+  const items = buildItems({ universityId: uni.id, growthExp: exp, bond });
+  const showEquip = stage === 3 && wearsUniEquip(sanitizeEquipped(profile.equipped, items), items);
 
   return (
     <section className="tama tama-home">
@@ -49,10 +52,13 @@ export default function CharacterCard({ profile, logs }) {
             <span className="tama-stage" style={{ color: uni.colors[2] }}>{stageStatus(stage, bond)}</span>
           </p>
         </div>
-        <div className="tama-streak">
-          <p className="tama-note"><span>{`連続 ${streak}日`}</span></p>
-          <p className="tama-streak-x"><span>{s.bonus}</span></p>
-          <p className="tama-tiny"><span>{s.hint}</span></p>
+        <div className="tama-head-right">
+          <div className="tama-streak">
+            <p className="tama-note"><span>{`連続 ${streak}日`}</span></p>
+            <p className="tama-streak-x"><span>{s.bonus}</span></p>
+            <p className="tama-tiny"><span>{s.hint}</span></p>
+          </div>
+          {menu}
         </div>
       </div>
 
@@ -85,7 +91,7 @@ export default function CharacterCard({ profile, logs }) {
       </div>
 
       <div className="tama-stage-box">
-        <Character uni={uni.id} stage={stage} variant={bond >= 5 ? "equip" : "normal"} size={200} />
+        <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} />
       </div>
 
       <WeekBars logs={logs} faculty={faculty} />

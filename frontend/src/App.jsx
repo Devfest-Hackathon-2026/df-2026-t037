@@ -11,6 +11,9 @@ import { auth, db, loginAsGuest, loginWithGoogle } from "./firebase";
 import { requestAdvice } from "./api";
 import SetupFlow from "./screens/SetupFlow";
 import CharacterCard from "./screens/CharacterCard";
+import Menu from "./screens/Menu";
+import Timer from "./screens/Timer";
+import Kisekae from "./screens/Kisekae";
 import "./App.css";
 
 ChartJS.register(ArcElement, Tooltip);
@@ -89,9 +92,11 @@ export default function App() {
   const [profile, setProfile] = useState(null);
   const [profileReady, setProfileReady] = useState(false);
   const [setupEditing, setSetupEditing] = useState(false);
+  const [screen, setScreen] = useState("home"); // home / timer / kisekae
   const [tab, setTab] = useState("record");
   const [logs, setLogs] = useState([]);
   const [lastResult, setLastResult] = useState(null);
+  const [recordPreset, setRecordPreset] = useState(null);
 
   // 認証とプロフィールの監視
   useEffect(() => {
@@ -105,12 +110,15 @@ export default function App() {
       setProfileReady(false);
       setLogs([]);
       setLastResult(null);
+      setScreen("home");
+      setRecordPreset(null);
       if (!currentUser) return;
 
       unsubProfile = onSnapshot(
         doc(db, "users", currentUser.uid),
         (snap) => {
-          setProfile(snap.exists() ? snap.data() : null);
+          // timerStartedAt はサーバー時刻。書き込み直後も null にならないよう見積もり値を使う
+          setProfile(snap.exists() ? snap.data({ serverTimestamps: "estimate" }) : null);
           setProfileReady(true);
         },
         (err) => {
@@ -185,14 +193,67 @@ export default function App() {
     );
   }
 
+  const timerRunning = Boolean(profile?.timerStartedAt);
+  const openSettings = () => setSetupEditing(true);
+
+  // 計測中のタイマーがあれば、再読み込みしてもタイマーの画面にもどる
+  if (timerRunning || screen === "timer") {
+    return (
+      <Timer
+        uid={user.uid}
+        profile={profile}
+        subjects={SUBJECTS.map((s) => s.name)}
+        onSettings={openSettings}
+        onClose={() => setScreen("home")}
+        onFinish={({ subject, minutes }) => {
+          setRecordPreset({ subject, minutes, key: Date.now() });
+          setLastResult(null);
+          setTab("record");
+          setScreen("home");
+          setTimeout(() => document.getElementById("record-tabs")?.scrollIntoView({ behavior: "smooth" }), 0);
+        }}
+      />
+    );
+  }
+
+  if (screen === "kisekae") {
+    return <Kisekae uid={user.uid} profile={profile} onBack={() => setScreen("home")} />;
+  }
+
   return (
     <div className="app">
-      <Header grade={profile?.grade} onGradeClick={() => setSetupEditing(true)} />
+      <Header grade={profile?.grade} onGradeClick={openSettings} />
 
       <main className="container main">
-        <CharacterCard profile={profile} logs={logs} />
+        <CharacterCard
+          profile={profile}
+          logs={logs}
+          menu={
+            <Menu
+              timerRunning={timerRunning}
+              onSettings={openSettings}
+              onKisekae={() => setScreen("kisekae")}
+            />
+          }
+        />
 
-        <nav className="tabs">
+        <div className="tama tama-home-actions">
+          <button type="button" className="tama-btn" onClick={() => setScreen("timer")}>
+            <span>タイマーで勉強</span>
+          </button>
+          <button
+            type="button"
+            className="tama-btn ghost"
+            onClick={() => {
+              setTab("record");
+              document.getElementById("record-tabs")?.scrollIntoView({ behavior: "smooth" });
+            }}
+          >
+            <span>手で記録</span>
+          </button>
+        </div>
+
+        <nav className="tabs" id="record-tabs">
           <button
             type="button"
             className={`tab ${tab === "record" ? "active" : ""}`}
@@ -210,7 +271,12 @@ export default function App() {
         </nav>
 
         {tab === "record" ? (
-          <RecordView lastResult={lastResult} onResult={setLastResult} />
+          <RecordView
+            key={recordPreset?.key ?? "manual"}
+            preset={recordPreset}
+            lastResult={lastResult}
+            onResult={setLastResult}
+          />
         ) : (
           <ReportView logs={logs} />
         )}
@@ -290,9 +356,12 @@ function Header({ grade, onGradeClick }) {
 }
 
 // ===== 記録タブ =====
-function RecordView({ lastResult, onResult }) {
-  const [subject, setSubject] = useState("数学");
-  const [minutes, setMinutes] = useState(60);
+function RecordView({ preset, lastResult, onResult }) {
+  // タイマーを終了したときは、その教科と分数を入れた状態で開く
+  const [subject, setSubject] = useState(
+    preset && SUBJECTS.some((s) => s.name === preset.subject) ? preset.subject : "数学"
+  );
+  const [minutes, setMinutes] = useState(preset?.minutes ?? 60);
   const [reflection, setReflection] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");

@@ -243,3 +243,186 @@
 @media (prefers-reduced-motion: reduce) {
   .tama-bar > div { transition: none; }
 }
+
+/* ===== メニュー（≡） ===== */
+.tama-menu { position: relative; }
+.tama-menu-btn {
+  width: 36px;
+  height: 44px;
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B0A296;
+  font-family: inherit;
+  font-size: 20px;
+}
+.tama-menu-btn.dark { width: 36px; height: 36px; border-radius: 18px; background: #34425A; color: #FFFFFF; font-size: 18px; }
+.tama-menu-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  width: 230px;
+  background: #FFFFFF;
+  color: #3A3530;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+}
+.tama-menu-item {
+  height: 44px;
+  border: 0;
+  background: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: #3A3530;
+  text-align: left;
+}
+.tama-menu-item:hover:not(:disabled) { background: #FCF4EA; }
+.tama-menu-item:disabled { opacity: 0.55; cursor: not-allowed; }
+.tama-menu-sep { border-top: 1px solid #EEE4DA; margin: 2px 0; }
+.tama-menu-locked { padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; opacity: 0.55; }
+.tama-menu-lockrow { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; }
+.tama-menu-sub { font-size: 11px; font-weight: 500; color: #6B5E58; }
+
+/* ===== ホームのボタン ===== */
+.tama-home-actions { display: flex; gap: 8px; }
+.tama-btn.outline {
+  flex: 1;
+  background: transparent;
+  border: 1.5px solid #4A5A74;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* ===== 勉強タイマー（Timer.dc.html） ===== */
+.tama-timer {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 20px 18px 24px;
+  background: #1F2A3A;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.tama-timer > * { max-width: 440px; }
+.tama-timer-top { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+.tama-timer-kicker { font-size: 13px; font-weight: 800; color: #A8B4C8; display: flex; align-items: center; gap: 6px; }
+.tama-dot { display: inline-block; width: 8px; height: 8px; border-radius: 4px; background: #F25C5C; }
+.tama-dot.paused { background: #A8B4C8; }
+@media (prefers-reduced-motion: no-preference) {
+  .tama-dot:not(.paused) { animation: twinkle 1.6s ease-in-out infinite; }
+}
+.tama-timer-label { align-self: stretch; font-size: 13px; font-weight: 900; color: #CFD8E6; }
+.tama-wrap.center { justify-content: center; }
+.tama-timer-chip {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  border: 1.5px solid #4A5A74;
+  background: transparent;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+.tama-timer-chip.on { background: #2E3E58; border-color: #F5C842; color: #F5C842; }
+.tama-timer-subject { margin-top: 4px; font-size: 14px; font-weight: 900; background: #2E3E58; padding: 6px 14px; border-radius: 14px; }
+.tama-ring { position: relative; width: 220px; height: 220px; }
+.tama-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.tama-ring-time { font-size: 46px; font-weight: 900; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+.tama-ring-goal { font-size: 12px; color: #A8B4C8; }
+.tama-timer-buddy { display: flex; align-items: center; gap: 10px; }
+.tama-bubble { background: #FFFFFF; color: #3A3530; border-radius: 16px; padding: 8px 12px; font-size: 13px; font-weight: 800; line-height: 1.5; max-width: 170px; }
+.tama-timer-exp { font-size: 13px; color: #CFD8E6; text-align: center; }
+.tama-timer-exp strong { color: #F5C842; font-size: 17px; }
+.tama-timer-hint { font-size: 11px; color: #A8B4C8; text-align: center; }
+.tama-timer-actions { margin-top: auto; width: 100%; display: flex; gap: 10px; }
+.tama-timer-actions .tama-btn { height: 52px; border-radius: 26px; font-size: 15px; }
+.tama-timer-quit { display: flex; gap: 12px; align-items: center; font-size: 12px; color: #CFD8E6; }
+.tama-link.light { color: #CFD8E6; font-size: 12px; }
+
+/* ===== 着替え（Kisekae.dc.html） ===== */
+.tama-kisekae { gap: 8px; padding: 16px 16px 18px; }
+.tama-kise-head { display: flex; align-items: center; justify-content: space-between; }
+.tama-back { width: 44px; height: 44px; border: 0; background: none; font-size: 24px; color: var(--t-text); font-family: inherit; }
+.tama-kise-title { text-align: center; }
+.tama-kise-title h1 { margin: 0; font-size: 18px; font-weight: 900; }
+.tama-kise-title p { font-size: 9.5px; color: var(--t-sub); }
+.tama-kise-count { width: 44px; font-size: 11px; font-weight: 800; color: var(--t-sub); text-align: right; }
+.tama-kise-stage {
+  position: relative;
+  height: 158px;
+  border-radius: 26px;
+  background: radial-gradient(circle at 50% 45%, #FFFBF2 0%, #FCF0DE 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tama-kise-tools { position: absolute; left: 10px; bottom: 10px; display: flex; gap: 6px; }
+.tama-kise-tools button {
+  height: 32px; padding: 0 12px; border-radius: 16px; border: none; background: #FFFFFF;
+  font-family: inherit; font-size: 12px; font-weight: 800; color: var(--t-text);
+}
+.tama-kise-outfits { position: absolute; right: 10px; top: 10px; display: flex; gap: 4px; }
+.tama-kise-outfits button {
+  width: 32px; height: 32px; border-radius: 16px; border: none; background: #FFFFFF;
+  font-family: inherit; font-size: 12px; font-weight: 900; color: #B0A296;
+}
+.tama-kise-outfits button.on { border: 2px solid var(--t-main); color: var(--t-main); }
+.tama-kise-save { position: absolute; right: 12px; bottom: 12px; font-size: 10px; color: var(--t-sub); }
+.tama-kise-filters { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+.tama-kise-filters button {
+  flex-shrink: 0; height: 30px; padding: 0 11px; border-radius: 15px; border: 0; background: #FFFFFF;
+  font-family: inherit; font-size: 12px; font-weight: 800; color: var(--t-text);
+}
+.tama-kise-filters button.on { background: var(--t-text); color: #FFFFFF; font-weight: 900; }
+.tama-kise-grid { display: grid; gap: 7px; }
+.tama-kise-grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tama-kise-grid.five { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+.tama-label.legend { color: #C8962A; font-size: 12px; }
+.tama-item {
+  position: relative;
+  min-height: 64px;
+  border-radius: 14px;
+  border: 1.5px solid #EEE4DA;
+  background: #FFFFFF;
+  font-family: inherit;
+  padding: 16px 2px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  text-align: center;
+}
+.tama-item.on { border: 2.5px solid var(--t-main); background: var(--t-main-soft); }
+.tama-item.lockedItem { border: 1.5px dashed #E2D6CA; background: #F4EFE9; cursor: default; }
+.tama-item.legend { border: 1.5px dashed #E0B040; background: #FFF8E4; }
+.tama-item-check {
+  position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px;
+  background: var(--t-main); color: #FFFFFF; font-size: 12px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+}
+.tama-item-lock { position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: var(--t-sub); }
+.tama-item-slot { position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296; }
+.tama-item.legend .tama-item-slot { color: #C8962A; }
+.tama-item-name { font-size: 10px; font-weight: 900; color: var(--t-text); line-height: 1.2; }
+.tama-item-note { font-size: 8.5px; color: var(--t-sub); line-height: 1.2; }
+.tama-head-right { display: flex; align-items: center; gap: 6px; }
