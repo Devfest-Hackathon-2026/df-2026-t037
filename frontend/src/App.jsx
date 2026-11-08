@@ -14,22 +14,27 @@ import CharacterCard from "./screens/CharacterCard";
 import Menu from "./screens/Menu";
 import Timer from "./screens/Timer";
 import Kisekae from "./screens/Kisekae";
+import ConfirmDialog from "./screens/ConfirmDialog";
+import { CATEGORIES, SUBJECT_CATEGORY, SUBJECT_GROUPS, SUBJECT_LIST } from "./game/subjects";
+import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
+import { getFaculty, getUniversity } from "./game/universities";
 import "./App.css";
 
 ChartJS.register(ArcElement, Tooltip);
 
 // ===== 定数 =====
-const SUBJECTS = [
-  { name: "英語", color: "#3B82F6" },
-  { name: "数学", color: "#EF4444" },
-  { name: "国語", color: "#F59E0B" },
-  { name: "理科", color: "#10B981" },
-  { name: "地歴・公民", color: "#F97316" },
-  { name: "情報", color: "#8B5CF6" },
+// 教科は docs/design/Henkou.dc.html ② の並び（game/subjects.js）。色は game/subjectColors.js（C-3）
+// レポートは配点カテゴリごとにまとめる（前の記録の「国語」「理科」なども同じカテゴリに入る）
+const REPORT_GROUPS = [
+  ...CATEGORIES.map((c) => ({ id: c.id, name: c.label, color: c.color })),
+  { id: "info", name: "情報", color: SUBJECT_COLORS.情報 },
 ];
-const SUBJECT_COLOR = Object.fromEntries(SUBJECTS.map((s) => [s.name, s.color]));
+const reportGroupOf = (subject) => SUBJECT_CATEGORY[subject] ?? (subject === "情報" ? "info" : null);
 
-const MINUTE_PRESETS = [15, 30, 45, 60, 90, 120];
+const MINUTE_PRESETS = [10, 20, 30, 60];
+const MINUTES_MIN = 1;
+const MINUTES_MAX = 600;
+const isValidMinutes = (v) => /^\d+$/.test(String(v)) && Number(v) >= MINUTES_MIN && Number(v) <= MINUTES_MAX;
 
 const RANK_META = {
   S: { title: "深いメタ認知", className: "rank-s" },
@@ -92,11 +97,10 @@ export default function App() {
   const [profile, setProfile] = useState(null);
   const [profileReady, setProfileReady] = useState(false);
   const [setupEditing, setSetupEditing] = useState(false);
-  const [screen, setScreen] = useState("home"); // home / timer / kisekae
-  const [tab, setTab] = useState("record");
+  const [screen, setScreen] = useState("home"); // home / timer / kisekae / record / result
+  const [confirmSettings, setConfirmSettings] = useState(false);
   const [logs, setLogs] = useState([]);
   const [lastResult, setLastResult] = useState(null);
-  const [recordPreset, setRecordPreset] = useState(null);
 
   // 認証とプロフィールの監視
   useEffect(() => {
@@ -111,7 +115,7 @@ export default function App() {
       setLogs([]);
       setLastResult(null);
       setScreen("home");
-      setRecordPreset(null);
+      setConfirmSettings(false);
       if (!currentUser) return;
 
       unsubProfile = onSnapshot(
@@ -194,25 +198,40 @@ export default function App() {
   }
 
   const timerRunning = Boolean(profile?.timerStartedAt);
-  const openSettings = () => setSetupEditing(true);
+  const faculty = getFaculty(profile?.targetFacultyId);
+  const characterName = getUniversity(faculty?.universityId)?.character || "キャラ";
+
+  // 学年を変える入口は ≡ メニューの「設定」だけ（C-1）。予定が作り直されるので、先に確認する
+  const settingsDialog = confirmSettings && (
+    <ConfirmDialog
+      message="学年を変えると、今シーズンの予定（進化に必要なEXP）が作り直されます。続けますか？"
+      confirmLabel="設定を開く"
+      onConfirm={() => {
+        setConfirmSettings(false);
+        setSetupEditing(true);
+      }}
+      onCancel={() => setConfirmSettings(false)}
+    />
+  );
+  const openSettings = () => setConfirmSettings(true);
 
   // 計測中のタイマーがあれば、再読み込みしてもタイマーの画面にもどる
   if (timerRunning || screen === "timer") {
     return (
-      <Timer
-        uid={user.uid}
-        profile={profile}
-        subjects={SUBJECTS.map((s) => s.name)}
-        onSettings={openSettings}
-        onClose={() => setScreen("home")}
-        onFinish={({ subject, minutes }) => {
-          setRecordPreset({ subject, minutes, key: Date.now() });
-          setLastResult(null);
-          setTab("record");
-          setScreen("home");
-          setTimeout(() => document.getElementById("record-tabs")?.scrollIntoView({ behavior: "smooth" }), 0);
-        }}
-      />
+      <>
+        <Timer
+          uid={user.uid}
+          profile={profile}
+          subjects={SUBJECT_LIST}
+          onSettings={openSettings}
+          onClose={() => setScreen("home")}
+          onRecorded={(result) => {
+            setLastResult(result);
+            setScreen("result");
+          }}
+        />
+        {settingsDialog}
+      </>
     );
   }
 
@@ -220,9 +239,47 @@ export default function App() {
     return <Kisekae uid={user.uid} profile={profile} onBack={() => setScreen("home")} />;
   }
 
+  if (screen === "record") {
+    return (
+      <RecordScreen
+        characterName={characterName}
+        lastResult={lastResult}
+        onResult={setLastResult}
+        onBack={() => {
+          setLastResult(null);
+          setScreen("home");
+        }}
+      />
+    );
+  }
+
+  if (screen === "result" && lastResult) {
+    return (
+      <div className="app">
+        <main className="container main">
+          <div className="tama tama-subhead">
+            <button
+              type="button"
+              className="tama-back"
+              aria-label="ホームへ"
+              onClick={() => {
+                setLastResult(null);
+                setScreen("home");
+              }}
+            >
+              <span>‹</span>
+            </button>
+            <h1><span>記録しました</span></h1>
+          </div>
+          <ResultCard result={lastResult} />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="app">
-      <Header grade={profile?.grade} onGradeClick={openSettings} />
+      <Header grade={profile?.grade} />
 
       <main className="container main">
         <CharacterCard
@@ -237,50 +294,27 @@ export default function App() {
           }
         />
 
+        {/* C-2：メインの行動（タイマー）と、あとからの記録（文字リンク）を形で分ける */}
         <div className="tama tama-home-actions">
-          <button type="button" className="tama-btn" onClick={() => setScreen("timer")}>
-            <span>タイマーで勉強</span>
+          <button type="button" className="tama-btn main" onClick={() => setScreen("timer")}>
+            <span aria-hidden="true">⏱</span>
+            <span>タイマーで勉強をはじめる</span>
           </button>
           <button
             type="button"
-            className="tama-btn ghost"
+            className="tama-textlink"
             onClick={() => {
-              setTab("record");
-              document.getElementById("record-tabs")?.scrollIntoView({ behavior: "smooth" });
+              setLastResult(null);
+              setScreen("record");
             }}
           >
-            <span>手で記録</span>
+            <span>✎ 終わった勉強をあとから記録する</span>
           </button>
         </div>
 
-        <nav className="tabs" id="record-tabs">
-          <button
-            type="button"
-            className={`tab ${tab === "record" ? "active" : ""}`}
-            onClick={() => setTab("record")}
-          >
-            <span>✍️ 記録する</span>
-          </button>
-          <button
-            type="button"
-            className={`tab ${tab === "report" ? "active" : ""}`}
-            onClick={() => setTab("report")}
-          >
-            <span>📊 レポート</span>
-          </button>
-        </nav>
-
-        {tab === "record" ? (
-          <RecordView
-            key={recordPreset?.key ?? "manual"}
-            preset={recordPreset}
-            lastResult={lastResult}
-            onResult={setLastResult}
-          />
-        ) : (
-          <ReportView logs={logs} />
-        )}
+        <ReportView logs={logs} />
       </main>
+      {settingsDialog}
     </div>
   );
 }
@@ -331,7 +365,7 @@ function LoginScreen() {
 }
 
 // ===== ヘッダー =====
-function Header({ grade, onGradeClick }) {
+function Header({ grade }) {
   return (
     <header className="app-header">
       <div className="container header-inner">
@@ -343,9 +377,8 @@ function Header({ grade, onGradeClick }) {
           </div>
         </div>
         <div className="header-right">
-          <button type="button" className="grade-chip" onClick={onGradeClick}>
-            <span>{grade || "学年未設定"}</span>
-          </button>
+          {/* 学年はただの文字（C-1）。変えるときは ≡ メニューの「設定」から */}
+          <span className="grade-text">{grade || "学年未設定"}</span>
           <button type="button" className="btn-ghost" onClick={() => signOut(auth)}>
             <span>ログアウト</span>
           </button>
@@ -355,22 +388,22 @@ function Header({ grade, onGradeClick }) {
   );
 }
 
-// ===== 記録タブ =====
-function RecordView({ preset, lastResult, onResult }) {
-  // タイマーを終了したときは、その教科と分数を入れた状態で開く
-  const [subject, setSubject] = useState(
-    preset && SUBJECTS.some((s) => s.name === preset.subject) ? preset.subject : "数学"
-  );
-  const [minutes, setMinutes] = useState(preset?.minutes ?? 60);
+// ===== 記録（あとから）：docs/design/Henkou.dc.html ② =====
+function RecordScreen({ characterName, lastResult, onResult, onBack }) {
+  const [subject, setSubject] = useState("物理");
+  const [minutes, setMinutes] = useState("");
   const [reflection, setReflection] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   const length = reflection.trim().length;
+  // C-4：1〜600の整数だけ。それ以外は保存ボタンを押せない（Firestoreのルールと同じ範囲）
+  const minutesOk = isValidMinutes(minutes);
+  const showMinutesError = minutes !== "" && !minutesOk;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!length || loading) return;
+    if (!length || !minutesOk || loading) return;
     setLoading(true);
     setError("");
     try {
@@ -390,106 +423,115 @@ function RecordView({ preset, lastResult, onResult }) {
   };
 
   return (
-    <>
-      <section className="card">
-        <h2 className="card-title">今日の学びを記録</h2>
-        <p className="card-sub">何時間やったかより「何が分かったか」がEXPになります</p>
+    <div className="app">
+      <main className="container main tama tama-record">
+        <div className="tama-subhead">
+          <button type="button" className="tama-back" aria-label="もどる" onClick={onBack}>
+            <span>‹</span>
+          </button>
+          <h1><span>勉強をあとから記録</span></h1>
+        </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="field">
-            <div className="field-label">
-              <span>教科</span>
-            </div>
-            <div className="subject-grid">
-              {SUBJECTS.map((s) => (
-                <button
-                  type="button"
-                  key={s.name}
-                  className={`subject-chip ${subject === s.name ? "active" : ""}`}
-                  style={{ "--chip-color": s.color }}
-                  onClick={() => setSubject(s.name)}
-                >
-                  <span className="dot" style={{ background: s.color }} />
-                  <span>{s.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="field">
-            <div className="field-label">
-              <span>学習時間</span>
-            </div>
-            <div className="minutes-row">
-              {MINUTE_PRESETS.map((m) => (
-                <button
-                  type="button"
-                  key={m}
-                  className={`preset ${Number(minutes) === m ? "active" : ""}`}
-                  onClick={() => setMinutes(m)}
-                >
-                  <span>{formatMinutes(m)}</span>
-                </button>
-              ))}
-              <label className="minutes-input">
-                <input
-                  type="number"
-                  min="5"
-                  max="600"
-                  step="5"
-                  value={minutes}
-                  onChange={(e) => setMinutes(e.target.value)}
-                />
-                <span>分</span>
-              </label>
-            </div>
-          </div>
-
-          <div className="field">
-            <div className="field-label">
-              <span>学びの言語化</span>
-              <span className="field-hint">Sランクのヒント</span>
-            </div>
-            <div className="tips">
-              {S_TIPS.map((t) => (
-                <span key={t} className="tip">{t}</span>
-              ))}
-            </div>
-            <textarea
-              className="textarea"
-              value={reflection}
-              maxLength={2000}
-              onChange={(e) => setReflection(e.target.value)}
-              placeholder="例: 加法定理を単位円の図から導出した。cos(α−β)を2点間の距離で表すと、暗記していた式が回転の性質から出てくると分かった。"
-            />
-            <div className={`counter ${length >= GOOD_LENGTH ? "good" : ""}`}>
-              <span>
-                {`${length >= GOOD_LENGTH ? "✓ 十分な量です" : `目安 ${GOOD_LENGTH}字`} ・ ${length}/2000`}
+        <form onSubmit={handleSubmit} className="tama-record-form">
+          <p className="tama-record-label"><span>教科（1つ選ぶ）</span></p>
+          {SUBJECT_GROUPS.map((g) => (
+            <div key={g.category} className="tama-subject-row">
+              <span className="tama-subject-group" style={{ color: CATEGORIES.find((c) => c.id === g.category)?.color }}>
+                {g.label}
               </span>
+              {g.items.map((name) => {
+                const color = colorOfSubject(name, g.category);
+                const on = subject === name;
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    className={`tama-subject-chip ${on ? "on" : ""}`}
+                    style={on ? { background: color, borderColor: color } : undefined}
+                    aria-pressed={on}
+                    onClick={() => setSubject(name)}
+                  >
+                    <span>{name}</span>
+                  </button>
+                );
+              })}
             </div>
+          ))}
+
+          <p className="tama-record-label"><span>時間</span></p>
+          <div className="tama-minute-presets">
+            {MINUTE_PRESETS.map((m) => (
+              <button
+                type="button"
+                key={m}
+                className={Number(minutes) === m && minutesOk ? "on" : ""}
+                onClick={() => setMinutes(String(m))}
+              >
+                <span>{`${m}分`}</span>
+              </button>
+            ))}
+          </div>
+          <div className="tama-minute-input">
+            <label htmlFor="record-minutes"><span>直接入力</span></label>
+            <input
+              id="record-minutes"
+              type="number"
+              min={MINUTES_MIN}
+              max={MINUTES_MAX}
+              step="1"
+              inputMode="numeric"
+              value={minutes}
+              aria-invalid={showMinutesError}
+              onChange={(e) => setMinutes(e.target.value)}
+            />
+            <span>分</span>
+            <span className="tama-note">1〜600分・1分単位</span>
+          </div>
+          {showMinutesError && <p className="tama-field-err"><span>1〜600分で入力してね</span></p>}
+
+          <div className="tama-record-label with-hint">
+            <span>ふりかえり</span>
+            <span className="tama-note">Sランクのヒント</span>
+          </div>
+          <div className="tips">
+            {S_TIPS.map((t) => (
+              <span key={t} className="tip">{t}</span>
+            ))}
+          </div>
+          <textarea
+            className="tama-textarea"
+            value={reflection}
+            maxLength={2000}
+            onChange={(e) => setReflection(e.target.value)}
+            placeholder="例：セミナー物理の運動方程式 基本例題12〜15。糸の張力の向きをまちがえた。明日の朝、例題14を解き直す"
+          />
+          <div className={`counter ${length >= GOOD_LENGTH ? "good" : ""}`}>
+            <span>
+              {`${length >= GOOD_LENGTH ? "✓ 十分な量です" : `目安 ${GOOD_LENGTH}字`} ・ ${length}/2000`}
+            </span>
           </div>
 
-          <button type="submit" className="btn-primary" disabled={loading || !length}>
+          {error && (
+            <div className="tama-error">
+              <span>{error}</span>
+            </div>
+          )}
+
+          <button type="submit" className="tama-btn block" disabled={loading || !length || !minutesOk}>
             {loading ? (
               <span key="loading" className="btn-inner">
                 <span className="spinner" />
                 <span>AIが思考の深さを採点中…</span>
               </span>
             ) : (
-              <span key="idle">記録してAIの評価を受け取る</span>
+              <span key="idle">{`記録して${characterName}にEXPをあげる`}</span>
             )}
           </button>
-
-          {error && (
-            <div className="error-box">
-              <span>{error}</span>
-            </div>
-          )}
         </form>
-      </section>
 
-      {lastResult && <ResultCard result={lastResult} />}
-    </>
+        {lastResult && <ResultCard result={lastResult} />}
+      </main>
+    </div>
   );
 }
 
@@ -553,12 +595,13 @@ function ReportView({ logs }) {
     const now = Date.now();
     const filtered = logs.filter((l) => now - l.dateObj.getTime() <= periodDays * DAY_MS);
 
-    const subjects = SUBJECTS.map((s) => {
+    // 教科は配点カテゴリ（数学・理科・英語・国語・地歴・記述）＋情報にまとめて表示する
+    const subjects = REPORT_GROUPS.map((g) => {
       const minutes = filtered
-        .filter((l) => l.subject === s.name)
+        .filter((l) => reportGroupOf(l.subject) === g.id)
         .reduce((sum, l) => sum + toNumber(l.minutes), 0);
-      const latest = logs.find((l) => l.subject === s.name);
-      return { ...s, minutes, lastDays: latest ? daysAgo(latest.dateObj) : null };
+      const latest = logs.find((l) => reportGroupOf(l.subject) === g.id);
+      return { ...g, minutes, lastDays: latest ? daysAgo(latest.dateObj) : null };
     });
 
     const totalMinutes = subjects.reduce((sum, s) => sum + s.minutes, 0);
@@ -648,7 +691,7 @@ function ReportView({ logs }) {
                 const pct = Math.round((s.minutes / report.totalMinutes) * 100);
                 const warn = s.lastDays === null || s.lastDays >= 5;
                 return (
-                  <li key={s.name}>
+                  <li key={s.id}>
                     <span className="dot" style={{ background: s.color }} />
                     <div>
                       <span className="legend-name">{s.name}</span>
@@ -679,7 +722,7 @@ function ReportView({ logs }) {
         </p>
         {report.filtered.length === 0 ? (
           <div className="empty" key="log-empty">
-            <span>記録タブから最初の学びを残しましょう</span>
+            <span>タイマーか「あとから記録」で、最初の学びを残しましょう</span>
           </div>
         ) : (
           <ul className="log-list" key="log-list">
@@ -689,7 +732,7 @@ function ReportView({ logs }) {
               return (
                 <li key={l.id} className="log-item">
                   <div className="log-top">
-                    <span className="dot" style={{ background: SUBJECT_COLOR[l.subject] || "#94a3b8" }} />
+                    <span className="dot" style={{ background: colorOfSubject(l.subject, SUBJECT_CATEGORY[l.subject]) }} />
                     <span className="log-subject">{toText(l.subject)}</span>
                     <span className="log-meta">
                       {`${formatDate(l.dateObj)} ・ ${formatMinutes(l.minutes)}`}

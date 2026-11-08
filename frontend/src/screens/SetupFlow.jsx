@@ -277,7 +277,7 @@ function SelectStep({
       {uni && faculty && (
         <div className="tama-card tama-preview">
           <div className="tama-preview-ball" style={{ background: uni.colors[0] }}>
-            <Character uni={uni.id} stage={3} size={112} />
+            <Character uni={uni.id} stage={3} size={112} faculty={faculty} />
           </div>
           <div className="tama-preview-text">
             <p className="tama-note strong"><span>{`${uni.name} ${faculty.name}`}</span></p>

@@ -1,10 +1,12 @@
 // ホーム右上の灰色の「≡」メニュー（図鑑・設定・着替え）。着替えの入口はここだけ
 // 勉強タイマー中は着替えを鍵マークつきで薄く表示し、押せないようにする（Timer.dc.html）
 import { useEffect, useRef, useState } from "react";
+import { isChimeOn, setChimeOn } from "../lib/chime";
 import "./tama.css";
 
 export default function Menu({ timerRunning, onSettings, onKisekae, dark = false }) {
   const [open, setOpen] = useState(false);
+  const [chime, setChime] = useState(() => isChimeOn());
   const ref = useRef(null);
 
   useEffect(() => {
@@ -45,6 +47,20 @@ export default function Menu({ timerRunning, onSettings, onKisekae, dark = false
           </button>
           <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onSettings)}>
             <span>設定</span>
+            <span className="tama-menu-sub">学年・志望校・ペース</span>
+          </button>
+          <button
+            type="button"
+            role="menuitemcheckbox"
+            aria-checked={chime}
+            className="tama-menu-item"
+            onClick={() => {
+              setChimeOn(!chime);
+              setChime(!chime);
+            }}
+          >
+            <span>終わりの音</span>
+            <span className={`tama-switch ${chime ? "on" : ""}`} aria-hidden="true"><span /></span>
           </button>
           <div className="tama-menu-sep" />
           {timerRunning ? (

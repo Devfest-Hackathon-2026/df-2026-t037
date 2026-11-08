@@ -225,7 +225,7 @@
   justify-content: center;
 }
 .tama-week { border-radius: 18px; padding: 10px 14px; display: flex; flex-direction: column; gap: 5px; }
-.tama-week-row { display: grid; grid-template-columns: 40px 1fr 104px; align-items: center; gap: 8px; font-size: 12px; }
+.tama-week-row { display: grid; grid-template-columns: 62px 1fr 104px; align-items: center; gap: 8px; font-size: 12px; }
 .tama-week-name { font-weight: 800; }
 .tama-week-bar { position: relative; height: 10px; background: var(--t-track); border-radius: 5px; }
 .tama-week-bar > div { height: 10px; border-radius: 5px; }
@@ -297,7 +297,7 @@
 .tama-menu-sub { font-size: 11px; font-weight: 500; color: #6B5E58; }
 
 /* ===== ホームのボタン ===== */
-.tama-home-actions { display: flex; gap: 8px; }
+.tama-home-actions { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
 .tama-btn.outline {
   flex: 1;
   background: transparent;
@@ -426,3 +426,186 @@
 .tama-item-name { font-size: 10px; font-weight: 900; color: var(--t-text); line-height: 1.2; }
 .tama-item-note { font-size: 8.5px; color: var(--t-sub); line-height: 1.2; }
 .tama-head-right { display: flex; align-items: center; gap: 6px; }
+
+/* ===== 2026-11-08 の変更（docs/design/Henkou.dc.html ①〜③-2） ===== */
+
+/* C-2：メインの行動は横いっぱいのピンクのボタン、あとからの記録は文字リンク */
+.tama-btn.main {
+  height: 56px;
+  border-radius: 28px;
+  font-size: 17px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.tama-btn.block { flex: none; width: 100%; }
+.tama-textlink {
+  align-self: center;
+  padding: 6px 10px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  color: #8A7A72;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.tama-textlink:hover { color: var(--t-text); }
+
+/* C-1：学年はただの文字 */
+.grade-text { font-size: 13px; font-weight: 800; color: #8A7A72; padding: 0 4px; }
+
+/* 戻るボタンつきの見出し */
+.tama-subhead { display: flex; align-items: center; gap: 6px; }
+.tama-subhead h1 { margin: 0; font-size: 20px; font-weight: 900; }
+
+/* ② 記録（あとから） */
+.tama-record { max-width: 520px; }
+.tama-record-form {
+  background: var(--t-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.tama-record-label { font-size: 13px; font-weight: 800; margin-top: 4px; }
+.tama-record-label.with-hint { display: flex; justify-content: space-between; align-items: baseline; }
+.tama-subject-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.tama-subject-group { width: 58px; font-size: 11px; font-weight: 900; }
+.tama-subject-chip {
+  height: 32px;
+  padding: 0 11px;
+  border-radius: 16px;
+  border: 2px solid #DAD6CC;
+  background: #FFFFFF;
+  color: #1F2328;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+/* 色の上の白い文字は太字14px以上（C-3） */
+.tama-subject-chip.on { color: #FFFFFF; font-size: 14px; font-weight: 900; }
+.tama-minute-presets { display: flex; gap: 8px; }
+.tama-minute-presets button {
+  flex: 1;
+  height: 42px;
+  border-radius: 12px;
+  border: 2px solid #DAD6CC;
+  background: #FFFFFF;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--t-text);
+}
+.tama-minute-presets button.on { border-color: var(--t-main); background: var(--t-main-soft); color: var(--t-main-dark); font-weight: 900; }
+.tama-minute-input { display: flex; align-items: center; gap: 8px; font-size: 13px; flex-wrap: wrap; }
+.tama-minute-input label { color: #5B5F66; }
+.tama-minute-input input {
+  width: 90px;
+  height: 44px;
+  border-radius: 12px;
+  border: 2.5px solid var(--t-main);
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--t-text);
+  background: #FFFFFF;
+}
+.tama-minute-input input[aria-invalid="true"] { border-color: #B03050; }
+.tama-field-err { font-size: 12px; font-weight: 800; color: #B03050; }
+.tama-textarea {
+  min-height: 104px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #E6DCD2;
+  border-radius: 12px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--t-text);
+  background: #FFFFFF;
+  resize: vertical;
+}
+
+/* 確認ダイアログ（C-1） */
+.tama-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(40, 30, 28, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.tama-dialog { width: 100%; max-width: 360px; background: #FFFFFF; border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.tama-dialog-msg { font-size: 14px; font-weight: 800; line-height: 1.7; color: var(--t-text); }
+.tama-dialog-actions { display: flex; gap: 8px; }
+.tama-dialog-actions .tama-btn { height: 48px; font-size: 14px; }
+
+/* メニューの「終わりの音」スイッチ（C-6） */
+.tama-switch { width: 40px; height: 24px; border-radius: 12px; background: #DAD6CC; display: flex; align-items: center; padding: 3px; box-sizing: border-box; }
+.tama-switch > span { width: 18px; height: 18px; border-radius: 9px; background: #FFFFFF; transition: transform 0.15s ease; }
+.tama-switch.on { background: var(--t-main); }
+.tama-switch.on > span { transform: translateX(16px); }
+
+/* ③・③-2 タイマー（Henkou の紺 #1C2A4E） */
+.tama-timer.navy { background: #1C2A4E; }
+.tama-timer.navy .tama-timer-kicker { color: #9FB0D6; }
+.tama-timer.navy .tama-timer-subject { background: #2A3A66; display: flex; align-items: center; gap: 6px; }
+.tama-subj-dot { display: inline-block; width: 10px; height: 10px; border-radius: 5px; margin-right: 6px; flex-shrink: 0; }
+.tama-ring.small { width: 190px; height: 190px; }
+.tama-ring-time.small { font-size: 36px; }
+.tama-ring-done { font-size: 13px; font-weight: 800; color: #F2C230; }
+.tama-chime-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: #2A3A66; border-radius: 20px; padding: 6px 14px;
+  font-size: 13px; font-weight: 800; color: #FFFFFF;
+}
+.tama-ask { align-self: stretch; background: #24345E; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.tama-ask-title { font-size: 18px; font-weight: 900; }
+.tama-ask-sub { font-size: 12px; color: #9FB0D6; }
+.tama-ask-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tama-ask-grid button {
+  height: 48px; border-radius: 14px; border: 0; background: #2A3A66; color: #FFFFFF;
+  font-family: inherit; font-size: 15px; font-weight: 900;
+}
+.tama-ask-grid button:hover, .tama-ask-grid button:focus-visible { background: #F2C230; color: #3A2A00; }
+.tama-ask-custom { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.tama-ask-custom label { color: #9FB0D6; }
+.tama-ask-custom input {
+  width: 74px; height: 40px; border-radius: 10px; border: 2px solid #4A5C8E; background: transparent;
+  padding: 0 10px; box-sizing: border-box; font-family: inherit; font-size: 16px; font-weight: 800; color: #FFFFFF;
+}
+.tama-ask-custom button {
+  margin-left: auto; height: 40px; padding: 0 14px; border-radius: 20px; border: 0;
+  background: #FFFFFF; color: #1C2A4E; font-family: inherit; font-weight: 900;
+}
+.tama-ask-custom button:disabled { opacity: 0.45; cursor: not-allowed; }
+.tama-ask-err { font-size: 12px; font-weight: 800; color: #F2C230; }
+.tama-timer-hint.left { align-self: stretch; text-align: left; line-height: 1.6; color: #9FB0D6; }
+.tama-timer.navy .tama-btn.outline { border-color: #4A5C8E; }
+.tama-white-card {
+  align-self: stretch; background: #FFFFFF; color: var(--t-text);
+  border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
+}
+.tama-white-card .tama-note { font-size: 11.5px; line-height: 1.6; }
+.tama-stepper { display: flex; align-items: center; gap: 10px; }
+.tama-stepper > button {
+  width: 44px; height: 44px; border-radius: 22px; border: 2px solid #E6DCD2; background: #FFFFFF;
+  font-family: inherit; font-size: 22px; font-weight: 900; color: #8A7A72; flex-shrink: 0;
+}
+.tama-stepper > button:disabled { opacity: 0.4; cursor: not-allowed; }
+.tama-stepper-box {
+  flex: 1; height: 52px; border-radius: 14px; border: 2.5px solid var(--t-main);
+  display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 14px; font-weight: 900;
+}
+.tama-stepper-box input {
+  width: 4.5ch; border: 0; background: transparent; text-align: right;
+  font-family: inherit; font-size: 26px; font-weight: 900; color: var(--t-text);
+}
+.tama-stepper-box input:focus { outline: none; }
+.tama-stepper-box:focus-within { box-shadow: 0 0 0 3px var(--t-main-soft); }

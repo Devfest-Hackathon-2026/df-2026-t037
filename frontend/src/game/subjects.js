@@ -1,3 +1,5 @@
+import { CATEGORY_COLORS } from './subjectColors';
+
 // 教科と配点カテゴリの対応（backend/progress.py の SUBJECT_CATEGORY と同じ。片方を変えたらもう片方も直すこと）
 // null は配点が無い教科（情報など）。EXPの倍率は1.0
 export const SUBJECT_CATEGORY = {
@@ -13,11 +15,21 @@ export const SUBJECT_CATEGORY = {
   '地歴・公民': 'jpsoc',
 };
 
-/** 配点カテゴリの表示（Launch.dc.html の色） */
+/** 配点カテゴリの表示。色は subjectColors.js（C-3）にまとめてある */
 export const CATEGORIES = [
-  { id: 'math', label: '数学', color: '#2468B8' },
-  { id: 'sci', label: '理科', color: '#3A8DDE' },
-  { id: 'eng', label: '英語', color: '#7240B8' },
-  { id: 'jpsoc', label: '国地', color: '#A07BE0' },
-  { id: 'essay', label: '記実', color: '#B8461C' },
+  { id: 'math', label: '数学', color: CATEGORY_COLORS.math },
+  { id: 'sci', label: '理科', color: CATEGORY_COLORS.sci },
+  { id: 'eng', label: '英語', color: CATEGORY_COLORS.eng },
+  { id: 'jpsoc', label: '国語・地歴', color: CATEGORY_COLORS.jpsoc },
+  { id: 'essay', label: '記述', color: CATEGORY_COLORS.essay },
 ];
+
+/** 記録画面・タイマーで選べる科目（docs/design/Henkou.dc.html ②） */
+export const SUBJECT_GROUPS = [
+  { category: 'math', label: '数学', items: ['数学', '情報'] },
+  { category: 'sci', label: '理科', items: ['物理', '化学', '生物'] },
+  { category: 'eng', label: '英語', items: ['英語'] },
+  { category: 'jpsoc', label: '国語・地歴', items: ['現代文', '古典', '日本史', '世界史'] },
+  { category: 'essay', label: '記述', items: ['小論文', '実技'] },
+];
+export const SUBJECT_LIST = SUBJECT_GROUPS.flatMap((g) => g.items);

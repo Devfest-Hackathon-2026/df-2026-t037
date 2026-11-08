@@ -46,7 +46,8 @@ export default function CharacterCard({ profile, logs, menu }) {
     <section className="tama tama-home">
       <div className="tama-head">
         <div>
-          <p className="tama-note strong"><span>{`志望：${uni.name} ${faculty.name}`}</span></p>
+          {/* 学年はただの文字（C-1）。変える入口は ≡ メニューの「設定」だけ */}
+          <p className="tama-note strong"><span>{`${grade}｜志望：${uni.name} ${faculty.name}`}</span></p>
           <p className="tama-name big">
             <span>{name}</span>
             <span className="tama-stage" style={{ color: uni.colors[2] }}>{stageStatus(stage, bond)}</span>
@@ -91,7 +92,7 @@ export default function CharacterCard({ profile, logs, menu }) {
       </div>
 
       <div className="tama-stage-box">
-        <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} />
+        <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} faculty={faculty} />
       </div>
 
       <WeekBars logs={logs} faculty={faculty} />
