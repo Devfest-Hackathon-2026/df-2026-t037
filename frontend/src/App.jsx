@@ -836,9 +836,6 @@ function ReportView({ logs, profile }) {
           <Stat label="S・A率" value={report.highRate} unit="%" />
         </div>
 
-        <h3 className="report-sub"><span>勉強時間の変遷</span></h3>
-        <StudyTime key={periodDays} logs={logs} days={periodDays} />
-
         <h3 className="report-sub"><span>教科のバランス</span></h3>
         {report.totalMinutes > 0 ? (
           <div className="chart-area" key="chart">
@@ -879,6 +876,10 @@ function ReportView({ logs, profile }) {
             <span>この期間の記録はまだありません</span>
           </div>
         )}
+
+        {/* 勉強時間の変遷：日・週・月を切り替える1つの棒グラフ（上の7日／30日とは別に切り替える） */}
+        <h3 className="report-sub"><span>勉強時間の変遷</span></h3>
+        <StudyTime logs={logs} />
       </section>
 
       <section className="card">

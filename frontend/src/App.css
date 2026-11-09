@@ -1001,3 +1001,9 @@
 .stime-none { color: var(--muted); }
 .stime-foot { margin: 0; font-size: 11px; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .stime-stack { transition: none; } }
+
+.stime-modes { align-self: stretch; display: grid; grid-template-columns: repeat(3, 1fr); }
+.stime-nav { display: flex; align-items: center; justify-content: space-between; }
+.stime-title { font-size: 13px; font-weight: 800; }
+.stime-arrow { width: 32px; height: 32px; border-radius: 50%; border: 1.5px solid #EEE4DA; background: #FFFFFF; font-size: 18px; font-weight: 900; color: var(--text, #4A3E3A); cursor: pointer; font-family: inherit; }
+.stime-arrow:disabled { opacity: 0.3; cursor: default; }

@@ -1,13 +1,23 @@
-// 勉強時間の変遷（スマホのスクリーンタイムのような日ごとの棒グラフ）
-// 教科の色で積み上げ・点線は1日平均。棒を押すとその日の内訳が出る。学年を変える前の記録も時間としてそのまま数える
+// 勉強時間の変遷（スマホのスクリーンタイムのように「日・週・月」を切り替える1つの棒グラフ）
+// 日：1時間ごと（記録した時刻から勉強した分だけさかのぼって割りふる）／週：7日／月：30日
+// 教科の色で積み上げ・点線は平均。‹ › で前の日・週へ。棒を押すと内訳が出る
 import { useMemo, useState } from "react";
 import { CATEGORIES, categoryOfLog } from "../game/subjects";
 import { colorOfSubject } from "../game/subjectColors";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
+const HOUR_MS = 60 * 60 * 1000;
 // 配点の6教科に入らない記録（情報など）。色は教科のバランスの「情報」と同じ
 const OTHER = { id: "other", label: "情報など", color: colorOfSubject("情報", null) };
+const KINDS = [...CATEGORIES, OTHER];
 const WEEK = ["日", "月", "火", "水", "木", "金", "土"];
+const MODES = [
+  { id: "day", label: "日" },
+  { id: "week", label: "週" },
+  { id: "month", label: "月" },
+];
+// 読み込んでいる記録は直近30日分なので、さかのぼれるのはそこまで
+const MAX_BACK = { day: 29, week: 3, month: 0 };
 
 const fmt = (min) => {
   const m = Math.max(0, Math.round(min));
@@ -15,68 +25,133 @@ const fmt = (min) => {
   return h === 0 ? `${m}分` : m % 60 === 0 ? `${h}時間` : `${h}時間${m % 60}分`;
 };
 const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+const md = (d) => `${d.getMonth() + 1}/${d.getDate()}`;
+const emptyBar = (key, start, end) => ({ key, start, end, total: 0, parts: Object.fromEntries(KINDS.map((c) => [c.id, 0])) });
+const kindOf = (l) => {
+  const c = categoryOfLog(l);
+  return c && CATEGORIES.some((x) => x.id === c) ? c : "other";
+};
 
-export default function StudyTime({ logs, days }) {
+/** 記録を「終わった時刻（createdAt）から minutes 分さかのぼった時間帯」として、棒の区切りに割りふる */
+function fill(bars, logs) {
+  for (const l of logs || []) {
+    if (!l.dateObj) continue;
+    const min = Number(l.minutes) || 0;
+    if (min <= 0) continue;
+    const end = l.dateObj.getTime();
+    const start = end - min * 60000;
+    const k = kindOf(l);
+    for (const b of bars) {
+      const overlap = Math.min(end, b.end) - Math.max(start, b.start);
+      if (overlap > 0) {
+        const m = overlap / 60000;
+        b.parts[k] += m;
+        b.total += m;
+      }
+    }
+  }
+}
+
+export default function StudyTime({ logs }) {
+  const [mode, setMode] = useState("week");
+  const [back, setBack] = useState(0);
   const [picked, setPicked] = useState(null);
 
   const data = useMemo(() => {
     const today = startOfDay(new Date());
-    const bucket = (offset) => {
-      const date = new Date(today.getTime() - offset * DAY_MS);
-      return { date, total: 0, parts: Object.fromEntries([...CATEGORIES, OTHER].map((c) => [c.id, 0])) };
-    };
-    const cur = Array.from({ length: days }, (_, i) => bucket(days - 1 - i));
-    let prevTotal = 0;
-    for (const l of logs || []) {
-      if (!l.dateObj) continue;
-      const diff = Math.floor((today.getTime() - startOfDay(l.dateObj).getTime()) / DAY_MS);
-      const min = Number(l.minutes) || 0;
-      if (diff >= 0 && diff < days) {
-        const b = cur[days - 1 - diff];
-        const cat = categoryOfLog(l);
-        b.parts[cat && b.parts[cat] !== undefined ? cat : "other"] += min;
-        b.total += min;
-      } else if (diff >= days && diff < days * 2) {
-        prevTotal += min;
-      }
+    let bars;
+    let prev = null;
+    let title;
+    if (mode === "day") {
+      const day = new Date(today.getTime() - back * DAY_MS);
+      bars = Array.from({ length: 24 }, (_, h) => {
+        const s = day.getTime() + h * HOUR_MS;
+        return emptyBar(h, s, s + HOUR_MS);
+      });
+      title = back === 0 ? "今日" : back === 1 ? "きのう" : `${md(day)}（${WEEK[day.getDay()]}）`;
+    } else {
+      const n = mode === "week" ? 7 : 30;
+      const last = today.getTime() - back * 7 * DAY_MS;
+      bars = Array.from({ length: n }, (_, i) => {
+        const s = last - (n - 1 - i) * DAY_MS;
+        return emptyBar(i, s, s + DAY_MS);
+      });
+      if (mode === "week") prev = emptyBar("prev", bars[0].start - 7 * DAY_MS, bars[0].start);
+      title = back === 0 ? (mode === "week" ? "直近7日" : "直近30日") : `${md(new Date(bars[0].start))}〜${md(new Date(bars[n - 1].start))}`;
     }
-    const total = cur.reduce((s, b) => s + b.total, 0);
-    const avg = total / days;
-    const max = Math.max(60, ...cur.map((b) => b.total), avg);
-    // 目盛りは30分・1時間・2時間…のきりのいい数
-    const unit = [30, 60, 120, 180, 240, 360, 480].find((u) => max / u <= 4) || 600;
+    fill(prev ? [...bars, prev] : bars, logs);
+    const total = bars.reduce((s, b) => s + b.total, 0);
+    // 平均：日は「勉強した時間帯の平均」ではなく1日の合計を出す。週・月は1日平均
+    const avg = mode === "day" ? null : total / bars.length;
+    // 前の週の分が30日の記録の外になるときは比べない
+    const prevInRange = prev && prev.start >= today.getTime() - 29 * DAY_MS;
+    const change = prevInRange && prev.total > 0 ? Math.round(((total - prev.total) / prev.total) * 100) : null;
+    const max = Math.max(mode === "day" ? 30 : 60, ...bars.map((b) => b.total), avg || 0);
+    const unit = mode === "day"
+      ? (max <= 30 ? 15 : 30)
+      : [30, 60, 120, 180, 240, 360, 480].find((u) => max / u <= 4) || 600;
     const top = Math.ceil(max / unit) * unit;
-    // 前の同じ期間と比べる（読み込んでいる記録は30日分なので、7日のときだけ）
-    const canCompare = days * 2 <= 30;
-    const change = canCompare && prevTotal > 0 ? Math.round(((total - prevTotal) / prevTotal) * 100) : null;
-    return { cur, total, avg, top, unit, change, canCompare, prevTotal };
-  }, [logs, days]);
+    return { bars, total, avg, change, top, unit, title, prevInRange };
+  }, [logs, mode, back]);
 
-  const sel = picked != null ? data.cur[picked] : null;
+  const switchMode = (m) => {
+    setMode(m);
+    setBack(0);
+    setPicked(null);
+  };
+  const go = (d) => {
+    setBack((b) => Math.max(0, Math.min(MAX_BACK[mode], b + d)));
+    setPicked(null);
+  };
+
+  const sel = picked != null ? data.bars[picked] : null;
+  const selLabel = sel
+    ? mode === "day"
+      ? `${sel.key}時台`
+      : `${md(new Date(sel.start))}（${WEEK[new Date(sel.start).getDay()]}）`
+    : null;
   const ticks = Array.from({ length: Math.round(data.top / data.unit) + 1 }, (_, i) => i * data.unit);
+  const tickLabel = (t) => (t === 0 ? "0" : t % 60 === 0 ? `${t / 60}時間` : `${t}分`);
+  const barLabel = (b, i) => {
+    if (mode === "day") return i % 6 === 0 ? `${i}時` : "";
+    const d = new Date(b.start);
+    if (mode === "week") return WEEK[d.getDay()];
+    return (data.bars.length - 1 - i) % 7 === 0 ? md(d) : "";
+  };
 
   return (
     <div className="stime">
+      <div className="segmented stime-modes" role="tablist" aria-label="グラフの期間">
+        {MODES.map((m) => (
+          <button key={m.id} type="button" role="tab" aria-selected={mode === m.id} className={mode === m.id ? "active" : ""} onClick={() => switchMode(m.id)}>
+            <span>{m.label}</span>
+          </button>
+        ))}
+      </div>
+
+      <div className="stime-nav">
+        <button type="button" className="stime-arrow" onClick={() => go(1)} disabled={back >= MAX_BACK[mode]} aria-label="前へ"><span>‹</span></button>
+        <span className="stime-title">{data.title}</span>
+        <button type="button" className="stime-arrow" onClick={() => go(-1)} disabled={back === 0} aria-label="次へ"><span>›</span></button>
+      </div>
+
       <div className="stime-head">
         <div>
-          <p className="stime-kicker"><span>{sel ? `${sel.date.getMonth() + 1}月${sel.date.getDate()}日（${WEEK[sel.date.getDay()]}）` : "1日の平均"}</span></p>
-          <p className="stime-big"><span>{fmt(sel ? sel.total : data.avg)}</span></p>
+          <p className="stime-kicker"><span>{sel ? selLabel : mode === "day" ? "この日の合計" : "1日の平均"}</span></p>
+          <p className="stime-big"><span>{fmt(sel ? sel.total : mode === "day" ? data.total : data.avg)}</span></p>
         </div>
-        {!sel && data.change !== null && (
+        {!sel && mode === "week" && data.change !== null && (
           <p className={`stime-change ${data.change >= 0 ? "up" : "down"}`}>
-            <span>{`${data.change >= 0 ? "▲" : "▼"} 前の${days}日より${Math.abs(data.change)}%${data.change >= 0 ? "増" : "減"}`}</span>
+            <span>{`${data.change >= 0 ? "▲" : "▼"} 前の週より${Math.abs(data.change)}%${data.change >= 0 ? "増" : "減"}`}</span>
           </p>
-        )}
-        {!sel && data.canCompare && data.change === null && data.total > 0 && (
-          <p className="stime-change"><span>{`前の${days}日は記録なし`}</span></p>
         )}
       </div>
 
-      <div className="stime-chart" role="img" aria-label={`直近${days}日の日ごとの勉強時間。1日平均${fmt(data.avg)}`}>
+      <div className="stime-chart" role="img" aria-label={`${data.title}の勉強時間 合計${fmt(data.total)}`}>
         <div className="stime-grid">
           {ticks.map((t) => (
             <div key={t} className="stime-tick" style={{ bottom: `${(t / data.top) * 100}%` }}>
-              <span>{t === 0 ? "0" : t % 60 === 0 ? `${t / 60}時間` : `${t}分`}</span>
+              <span>{tickLabel(t)}</span>
             </div>
           ))}
           {data.avg > 0 && (
@@ -85,23 +160,21 @@ export default function StudyTime({ logs, days }) {
             </div>
           )}
         </div>
-        <div className={`stime-bars ${days > 7 ? "many" : ""}`}>
-          {data.cur.map((b, i) => (
+        <div className={`stime-bars ${data.bars.length > 7 ? "many" : ""}`}>
+          {data.bars.map((b, i) => (
             <button
-              key={b.date.getTime()}
+              key={b.key}
               type="button"
               className={`stime-bar ${picked === i ? "on" : ""} ${picked != null && picked !== i ? "dim" : ""}`}
               onClick={() => setPicked(picked === i ? null : i)}
-              aria-label={`${b.date.getMonth() + 1}月${b.date.getDate()}日 ${fmt(b.total)}`}
+              aria-label={`${mode === "day" ? `${i}時台` : md(new Date(b.start))} ${fmt(b.total)}`}
             >
               <span className="stime-stack" style={{ height: `${(b.total / data.top) * 100}%` }}>
-                {[...CATEGORIES, OTHER].filter((c) => b.parts[c.id] > 0).map((c) => (
+                {KINDS.filter((c) => b.parts[c.id] > 0).map((c) => (
                   <span key={c.id} style={{ flexGrow: b.parts[c.id], background: c.color }} />
                 ))}
               </span>
-              <span className={`stime-day ${i === days - 1 ? "last" : ""}`}>
-                {days <= 7 ? WEEK[b.date.getDay()] : (days - 1 - i) % 7 === 0 ? `${b.date.getMonth() + 1}/${b.date.getDate()}` : ""}
-              </span>
+              <span className={`stime-day ${i === data.bars.length - 1 ? "last" : ""}`}>{barLabel(b, i)}</span>
             </button>
           ))}
         </div>
@@ -109,17 +182,19 @@ export default function StudyTime({ logs, days }) {
 
       {sel ? (
         <ul className="stime-detail">
-          {[...CATEGORIES, OTHER].filter((c) => sel.parts[c.id] > 0).map((c) => (
+          {KINDS.filter((c) => sel.parts[c.id] >= 0.5).map((c) => (
             <li key={c.id}>
               <span className="dot" style={{ background: c.color }} />
               <span>{c.label}</span>
               <strong>{fmt(sel.parts[c.id])}</strong>
             </li>
           ))}
-          {sel.total === 0 && <li className="stime-none"><span>この日の記録はありません</span></li>}
+          {sel.total < 0.5 && <li className="stime-none"><span>この時間の記録はありません</span></li>}
         </ul>
       ) : (
-        <p className="stime-foot"><span>{`直近${days}日の合計 ${fmt(data.total)}｜棒を押すとその日の内訳`}</span></p>
+        <p className="stime-foot">
+          <span>{mode === "day" ? "記録した時刻から、勉強した分だけさかのぼって表示｜棒を押すと内訳" : `合計 ${fmt(data.total)}｜棒を押すとその日の内訳`}</span>
+        </p>
       )}
     </div>
   );
