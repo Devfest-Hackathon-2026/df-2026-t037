@@ -13,7 +13,7 @@
 <circle cx="66.5" cy="85.5" r="1.8" fill="#FFFFFF"></circle><circle cx="90.5" cy="85.5" r="1.8" fill="#FFFFFF"></circle>
 <path d="M76 96 L84 96 L80 101 Z" fill="#F0B848"></path>
 <ellipse cx="57" cy="100" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="103" cy="100" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse>
-<g class="twinkle"><circle cx="80" cy="120" r="10" fill="#F0C858"></circle><path d="M75 115 L85 125 M85 115 L75 125" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"></path></g>
+<g class="pen-badge"><circle cx="80" cy="120" r="10" fill="#F0C858"></circle><path d="M75 115 L85 125 M85 115 L75 125" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"></path></g>
 
 </g>
 </svg>
