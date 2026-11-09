@@ -78,7 +78,7 @@ export function characterSvg({ uni, stage, variant = 'normal', faculty = null, w
   if (!raw) return '';
   // 色違いは最終進化だけ（装備つき・片方だけの絵もふくむ）
   const base = shiny && stage === 3 ? shinyColors(raw, uni).replace(/<\/svg>\s*$/, `${SHINY_SPARKLES}</svg>`) : raw;
-  const worn = wear || grade ? withWear(base, wear, stage, grade, { uni, variant: name.slice(uni.length + 1) }) : base;
+  const worn = wear || grade ? withWear(base, wear, stage, grade, { uni, variant: name.slice(uni.length + 1), shiny: Boolean(shiny && stage === 3) }) : base;
   return stage === 3 ? withFacultyMarks(worn, uni, faculty?.ribbon) : worn;
 }
 

@@ -161,28 +161,38 @@ const BADGE_AT = {
   'osaka-3': 'translate(80 52) scale(.9)', 'osaka-lv3': 'translate(80 52) scale(.9)',
   'osaka-lv5': 'translate(80 52) scale(.9)', 'osaka-equip': 'translate(80 52) scale(.9)',
 };
-const gradeBadge = (at = BADGE_HOME) =>
+const gradeBadge = (at = BADGE_HOME, fill = '#3D5A99') =>
   `<g class="grade-badge" transform="${at}">` +
-  `<path d="M0 -9 L8 -5 L8 3 Q8 8 0 11 Q-8 8 -8 3 L-8 -5 Z" fill="#3D5A99" stroke="#F5C33B" stroke-width="1.8" stroke-linejoin="round"></path>` +
+  `<path d="M0 -9 L8 -5 L8 3 Q8 8 0 11 Q-8 8 -8 3 L-8 -5 Z" fill="${fill}" stroke="#F5C33B" stroke-width="1.8" stroke-linejoin="round"></path>` +
   `<text x="0" y="4.6" font-size="10" font-weight="900" text-anchor="middle" fill="#FFFFFF" font-family="'M PLUS Rounded 1c', sans-serif">Ⅱ</text>` +
   `<path class="twinkle" d="M7 -11 l1 2.2 2.2 1 -2.2 1 -1 2.2 -1 -2.2 -2.2 -1 2.2 -1z" fill="#FFE07A"></path>` +
   `</g>`;
-const HACHIMAKI =
+// 白い鉢巻（赤い字）。体が白いと見えなくなるので、そのときは赤い鉢巻（白い字）にする
+const WHITE_BAND = { band: '#FFFFFF', edge: '#C9CBD8', dot: '#E5484D', text: '#C8102E' };
+const RED_BAND = { band: '#E5484D', edge: '#A8202E', dot: '#FFFFFF', text: '#FFFFFF' };
+const hachimaki = ({ band, edge, dot, text }) =>
   `<g class="grade-hachimaki">` +
   // 結び目のうしろで風になびく2本のはし
-  `<path class="hachi-tail" d="M121 63 Q133 58 142 64 Q134 66 123 67 Z" fill="#FFFFFF" stroke="#D9DAE6" stroke-width="1"></path>` +
-  `<path class="hachi-tail2" d="M121 66 Q132 70 138 79 Q129 76 121 70 Z" fill="#FFFFFF" stroke="#D9DAE6" stroke-width="1"></path>` +
+  `<path class="hachi-tail" d="M121 63 Q133 58 142 64 Q134 66 123 67 Z" fill="${band}" stroke="${edge}" stroke-width="1"></path>` +
+  `<path class="hachi-tail2" d="M121 66 Q132 70 138 79 Q129 76 121 70 Z" fill="${band}" stroke="${edge}" stroke-width="1"></path>` +
   // 額にまいた帯（体の丸にそって少し曲げる）
-  `<path d="M43 57 Q80 49 117 57 L123 68 Q80 61 37 68 Z" fill="#FFFFFF" stroke="#D9DAE6" stroke-width="1.2" stroke-linejoin="round"></path>` +
-  `<circle cx="80" cy="60.5" r="5.6" fill="#E5484D"></circle>` +
-  `<text x="64" y="64.4" font-size="7.4" font-weight="900" text-anchor="middle" fill="#C8102E" font-family="'M PLUS Rounded 1c', sans-serif">必</text>` +
-  `<text x="96" y="64.4" font-size="7.4" font-weight="900" text-anchor="middle" fill="#C8102E" font-family="'M PLUS Rounded 1c', sans-serif">勝</text>` +
-  `<ellipse cx="121" cy="64.5" rx="3.6" ry="4.2" fill="#FFFFFF" stroke="#D9DAE6" stroke-width="1"></ellipse>` +
+  `<path d="M43 57 Q80 49 117 57 L123 68 Q80 61 37 68 Z" fill="${band}" stroke="${edge}" stroke-width="1.2" stroke-linejoin="round"></path>` +
+  `<circle cx="80" cy="60.5" r="5.6" fill="${dot}"></circle>` +
+  `<text x="64" y="64.4" font-size="7.4" font-weight="900" text-anchor="middle" fill="${text}" font-family="'M PLUS Rounded 1c', sans-serif">必</text>` +
+  `<text x="96" y="64.4" font-size="7.4" font-weight="900" text-anchor="middle" fill="${text}" font-family="'M PLUS Rounded 1c', sans-serif">勝</text>` +
+  `<ellipse cx="121" cy="64.5" rx="3.6" ry="4.2" fill="${band}" stroke="${edge}" stroke-width="1"></ellipse>` +
   `</g>`;
-/** 学年の小物の絵（高1・学年なしは空）。look：{ uni, variant }（装備つきの絵とかぶらない位置にする） */
+// 色違い（がっつり）で体の色が変わったときに、学年の小物が体にとけこまないようにする
+//  科学大の色違いは白い体 → 赤い鉢巻、慶應の色違いは漆黒の体 → 明るい青の学年章
+const GRADE_ON_SHINY = { kagaku: { band: RED_BAND }, keio: { badge: '#5B82D6' } };
+/**
+ * 学年の小物の絵（高1・学年なしは空）。look：{ uni, variant, shiny }
+ * （装備つきの絵とかぶらない位置・色違いの体でも見える色にする）
+ */
 export function gradeLayer(grade, look = {}) {
-  if (grade === '高校2年生') return gradeBadge(BADGE_AT[`${look.uni}-${look.variant}`]);
-  if (grade === '高校3年生') return HACHIMAKI;
+  const onShiny = (look.shiny && GRADE_ON_SHINY[look.uni]) || {};
+  if (grade === '高校2年生') return gradeBadge(BADGE_AT[`${look.uni}-${look.variant}`], onShiny.badge);
+  if (grade === '高校3年生') return hachimaki(onShiny.band || WHITE_BAND);
   return '';
 }
 
