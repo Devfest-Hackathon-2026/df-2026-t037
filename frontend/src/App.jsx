@@ -387,7 +387,7 @@ export default function App() {
           <span className="tama-explore-entry-sub">学びたいこと・解きたい課題から、9大学79学部を見てみよう</span>
         </button>
 
-        <ReportView logs={logs} profile={profile} />
+        <ReportView logs={logs} profile={profile} uid={user.uid} />
       </main>
     </div>
   );
@@ -741,7 +741,7 @@ function ResultCard({ result, universityId, faculty }) {
 }
 
 // ===== レポートタブ =====
-function ReportView({ logs, profile }) {
+function ReportView({ logs, profile, uid }) {
   const [period, setPeriod] = useState("week");
   const periodDays = period === "week" ? 7 : 30;
 
@@ -879,7 +879,7 @@ function ReportView({ logs, profile }) {
 
         {/* 勉強時間の変遷：日・週・月を切り替える1つの棒グラフ（上の7日／30日とは別に切り替える） */}
         <h3 className="report-sub"><span>勉強時間の変遷</span></h3>
-        <StudyTime logs={logs} />
+        <StudyTime uid={uid} />
       </section>
 
       <section className="card">

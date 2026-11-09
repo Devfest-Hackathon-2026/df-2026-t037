@@ -1,7 +1,10 @@
 // 勉強時間の変遷（スマホのスクリーンタイムのように「日・週・月」を切り替える1つの棒グラフ）
-// 日：1時間ごと（記録した時刻から勉強した分だけさかのぼって割りふる）／週：7日／月：30日
-// 教科の色で積み上げ・点線は平均。‹ › で前の日・週へ。棒を押すと内訳が出る
-import { useMemo, useState } from "react";
+// 日：1時間ごと（記録した時刻から勉強した分だけさかのぼって割りふる）／週：7日／月：カレンダーの1か月
+// 教科の色で積み上げ・点線は平均。‹ › で前の日・週・月へ。週・月は前の期間と1日平均を比べた増減を出す
+// 表示している期間（と比べる前の期間）の記録だけを、このグラフが自分で読み込む
+import { useEffect, useMemo, useState } from "react";
+import { collection, onSnapshot, orderBy, query, where, Timestamp } from "firebase/firestore";
+import { db } from "../firebase";
 import { CATEGORIES, categoryOfLog } from "../game/subjects";
 import { colorOfSubject } from "../game/subjectColors";
 
@@ -16,8 +19,8 @@ const MODES = [
   { id: "week", label: "週" },
   { id: "month", label: "月" },
 ];
-// 読み込んでいる記録は直近30日分なので、さかのぼれるのはそこまで
-const MAX_BACK = { day: 29, week: 3, month: 0 };
+// さかのぼれる上限（日：1年・週：1年・月：2年）
+const MAX_BACK = { day: 365, week: 52, month: 24 };
 
 const fmt = (min) => {
   const m = Math.max(0, Math.round(min));
@@ -52,47 +55,88 @@ function fill(bars, logs) {
   }
 }
 
-export default function StudyTime({ logs }) {
+/** 表示する棒の区切りと、比べる前の期間（日は前の期間なし） */
+function periodOf(mode, back) {
+  const today = startOfDay(new Date());
+  if (mode === "day") {
+    const day = new Date(today.getTime() - back * DAY_MS);
+    const bars = Array.from({ length: 24 }, (_, h) => emptyBar(h, day.getTime() + h * HOUR_MS, day.getTime() + (h + 1) * HOUR_MS));
+    const title = back === 0 ? "今日" : back === 1 ? "きのう" : `${day.getMonth() + 1}月${day.getDate()}日（${WEEK[day.getDay()]}）`;
+    return { bars, prev: null, title, days: 1 };
+  }
+  if (mode === "week") {
+    const last = today.getTime() - back * 7 * DAY_MS;
+    const bars = Array.from({ length: 7 }, (_, i) => {
+      const st = last - (6 - i) * DAY_MS;
+      return emptyBar(i, st, st + DAY_MS);
+    });
+    const prev = emptyBar("prev", bars[0].start - 7 * DAY_MS, bars[0].start);
+    const title = back === 0 ? "直近7日" : `${md(new Date(bars[0].start))}〜${md(new Date(bars[6].start))}`;
+    return { bars, prev, title, days: 7, prevDays: 7 };
+  }
+  // 月：カレンダーの1か月。今月はきょうまでの日数で平均する
+  const first = new Date(today.getFullYear(), today.getMonth() - back, 1);
+  const n = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
+  const bars = Array.from({ length: n }, (_, i) => {
+    const st = new Date(first.getFullYear(), first.getMonth(), i + 1).getTime();
+    return emptyBar(i, st, st + DAY_MS);
+  });
+  const prevFirst = new Date(first.getFullYear(), first.getMonth() - 1, 1);
+  const prevDays = new Date(prevFirst.getFullYear(), prevFirst.getMonth() + 1, 0).getDate();
+  const prev = emptyBar("prev", prevFirst.getTime(), first.getTime());
+  const days = back === 0 ? today.getDate() : n;
+  const title = `${first.getFullYear()}年${first.getMonth() + 1}月${back === 0 ? "（今月）" : ""}`;
+  return { bars, prev, title, days, prevDays };
+}
+
+export default function StudyTime({ uid }) {
   const [mode, setMode] = useState("week");
   const [back, setBack] = useState(0);
   const [picked, setPicked] = useState(null);
+  const [loaded, setLoaded] = useState({ key: "", logs: [] });
 
+  const period = useMemo(() => periodOf(mode, back), [mode, back]);
+  const rangeStart = (period.prev || period.bars[0]).start;
+  const rangeEnd = period.bars[period.bars.length - 1].end;
+  const rangeKey = `${uid}:${rangeStart}:${rangeEnd}`;
+
+  // 表示する期間と前の期間の記録を読み込む（長い勉強が前の日にまたがる分も入るよう、6時間前から）
+  useEffect(() => {
+    if (!uid) return undefined;
+    const q = query(
+      collection(db, "users", uid, "study_logs"),
+      where("createdAt", ">=", Timestamp.fromDate(new Date(rangeStart))),
+      where("createdAt", "<", Timestamp.fromDate(new Date(rangeEnd + 6 * HOUR_MS))),
+      orderBy("createdAt", "asc")
+    );
+    return onSnapshot(
+      q,
+      (snap) =>
+        setLoaded({
+          key: rangeKey,
+          logs: snap.docs.map((d) => {
+            const x = d.data();
+            return { ...x, dateObj: x.createdAt?.toDate ? x.createdAt.toDate() : null };
+          }),
+        }),
+      (err) => console.error("[study time]", err)
+    );
+  }, [uid, rangeStart, rangeEnd, rangeKey]);
+
+  const ready = loaded.key === rangeKey;
   const data = useMemo(() => {
-    const today = startOfDay(new Date());
-    let bars;
-    let prev = null;
-    let title;
-    if (mode === "day") {
-      const day = new Date(today.getTime() - back * DAY_MS);
-      bars = Array.from({ length: 24 }, (_, h) => {
-        const s = day.getTime() + h * HOUR_MS;
-        return emptyBar(h, s, s + HOUR_MS);
-      });
-      title = back === 0 ? "今日" : back === 1 ? "きのう" : `${md(day)}（${WEEK[day.getDay()]}）`;
-    } else {
-      const n = mode === "week" ? 7 : 30;
-      const last = today.getTime() - back * 7 * DAY_MS;
-      bars = Array.from({ length: n }, (_, i) => {
-        const s = last - (n - 1 - i) * DAY_MS;
-        return emptyBar(i, s, s + DAY_MS);
-      });
-      if (mode === "week") prev = emptyBar("prev", bars[0].start - 7 * DAY_MS, bars[0].start);
-      title = back === 0 ? (mode === "week" ? "直近7日" : "直近30日") : `${md(new Date(bars[0].start))}〜${md(new Date(bars[n - 1].start))}`;
-    }
-    fill(prev ? [...bars, prev] : bars, logs);
-    const total = bars.reduce((s, b) => s + b.total, 0);
-    // 平均：日は「勉強した時間帯の平均」ではなく1日の合計を出す。週・月は1日平均
-    const avg = mode === "day" ? null : total / bars.length;
-    // 前の週の分が30日の記録の外になるときは比べない
-    const prevInRange = prev && prev.start >= today.getTime() - 29 * DAY_MS;
-    const change = prevInRange && prev.total > 0 ? Math.round(((total - prev.total) / prev.total) * 100) : null;
+    const bars = period.bars.map((b) => emptyBar(b.key, b.start, b.end));
+    const prev = period.prev ? emptyBar("prev", period.prev.start, period.prev.end) : null;
+    if (ready) fill(prev ? [...bars, prev] : bars, loaded.logs);
+    const total = bars.reduce((sum, b) => sum + b.total, 0);
+    const avg = mode === "day" ? null : total / period.days;
+    const prevAvg = prev ? prev.total / period.prevDays : 0;
+    const change = prev && prevAvg > 0 ? Math.round(((avg - prevAvg) / prevAvg) * 100) : null;
     const max = Math.max(mode === "day" ? 30 : 60, ...bars.map((b) => b.total), avg || 0);
-    const unit = mode === "day"
-      ? (max <= 30 ? 15 : 30)
-      : [30, 60, 120, 180, 240, 360, 480].find((u) => max / u <= 4) || 600;
+    const unit = mode === "day" ? (max <= 30 ? 15 : 30) : [30, 60, 120, 180, 240, 360, 480].find((u) => max / u <= 4) || 600;
     const top = Math.ceil(max / unit) * unit;
-    return { bars, total, avg, change, top, unit, title, prevInRange };
-  }, [logs, mode, back]);
+    return { bars, total, avg, change, top, unit, title: period.title, hasPrev: Boolean(prev) };
+  }, [period, loaded, ready, mode]);
 
   const switchMode = (m) => {
     setMode(m);
@@ -116,7 +160,7 @@ export default function StudyTime({ logs }) {
     if (mode === "day") return i % 6 === 0 ? `${i}時` : "";
     const d = new Date(b.start);
     if (mode === "week") return WEEK[d.getDay()];
-    return (data.bars.length - 1 - i) % 7 === 0 ? md(d) : "";
+    return i % 7 === 0 ? `${d.getDate()}日` : "";
   };
 
   return (
@@ -137,12 +181,16 @@ export default function StudyTime({ logs }) {
 
       <div className="stime-head">
         <div>
-          <p className="stime-kicker"><span>{sel ? selLabel : mode === "day" ? "この日の合計" : "1日の平均"}</span></p>
+          <p className="stime-kicker"><span>{sel ? selLabel : mode === "day" ? "この日の合計" : mode === "month" && back === 0 ? "1日の平均（今月はきょうまで）" : "1日の平均"}</span></p>
           <p className="stime-big"><span>{fmt(sel ? sel.total : mode === "day" ? data.total : data.avg)}</span></p>
         </div>
-        {!sel && mode === "week" && data.change !== null && (
-          <p className={`stime-change ${data.change >= 0 ? "up" : "down"}`}>
-            <span>{`${data.change >= 0 ? "▲" : "▼"} 前の週より${Math.abs(data.change)}%${data.change >= 0 ? "増" : "減"}`}</span>
+        {!sel && data.hasPrev && ready && (
+          <p className={`stime-change ${data.change == null ? "" : data.change >= 0 ? "up" : "down"}`}>
+            <span>
+              {data.change == null
+                ? `前の${mode === "week" ? "週" : "月"}は記録なし`
+                : `${data.change >= 0 ? "▲" : "▼"} 前の${mode === "week" ? "週" : "月"}より${Math.abs(data.change)}%${data.change >= 0 ? "増" : "減"}`}
+            </span>
           </p>
         )}
       </div>
@@ -193,7 +241,7 @@ export default function StudyTime({ logs }) {
         </ul>
       ) : (
         <p className="stime-foot">
-          <span>{mode === "day" ? "記録した時刻から、勉強した分だけさかのぼって表示｜棒を押すと内訳" : `合計 ${fmt(data.total)}｜棒を押すとその日の内訳`}</span>
+          <span>{mode === "day" ? "記録した時刻から、勉強した分だけさかのぼって表示｜棒を押すと内訳" : `合計 ${fmt(data.total)}｜前の期間とは1日平均で比べています｜棒を押すとその日の内訳`}</span>
         </p>
       )}
     </div>
