@@ -53,7 +53,26 @@ def _norm(v: list[float]) -> float:
     return math.sqrt(sum(x * x for x in v)) or 1.0
 
 
-_DOC_NORMS = {fid: _norm(v) for fid, v in VECTORS.items()}
+# 中心化：全学部のベクトルの平均を引いてから比べる。
+# 紹介文が広く書かれた学部（例：国際教養学部）は、どんな文にも「少し近い」ので上位に出やすい。
+# 平均を引くと、全学部に共通する成分が消え、その学部ならではの近さで順位が付く
+_DIM = len(next(iter(VECTORS.values()))) if VECTORS else 0
+_MEAN = [sum(v[i] for v in VECTORS.values()) / len(VECTORS) for i in range(_DIM)] if VECTORS else []
+_CENTERED = {fid: [a - m for a, m in zip(v, _MEAN)] for fid, v in VECTORS.items()}
+_CENTERED_NORMS = {fid: _norm(v) for fid, v in _CENTERED.items()}
+
+
+def _center(v: list[float]) -> list[float]:
+    return [a - m for a, m in zip(v, _MEAN)] if len(v) == len(_MEAN) else list(v)
+
+
+def similarity(query_vec: list[float], fid: str) -> float:
+    """質問のベクトルと学部 fid の近さ（中心化したコサイン類似度）。rank と根拠の選び方で同じ尺度を使う"""
+    q = _center(query_vec)
+    d = _CENTERED.get(fid)
+    if not d or len(q) != len(d):
+        return 0.0
+    return sum(a * b for a, b in zip(q, d)) / (_norm(q) * _CENTERED_NORMS[fid])
 
 
 def embed_query(text: str, project_id: str, token: str) -> list[float]:
@@ -71,10 +90,11 @@ def embed_query(text: str, project_id: str, token: str) -> list[float]:
 
 def rank(query_vec: list[float]) -> list[tuple[str, float]]:
     """(学部ID, 近さ0〜1) を近い順に。同じ大学は最大 PER_UNIVERSITY_MAX 件"""
-    qn = _norm(query_vec)
+    q = _center(query_vec)
+    qn = _norm(q)
     scored = []
-    for fid, v in VECTORS.items():
-        sim = sum(a * b for a, b in zip(query_vec, v)) / (qn * _DOC_NORMS[fid])
+    for fid, v in _CENTERED.items():
+        sim = sum(a * b for a, b in zip(q, v)) / (qn * _CENTERED_NORMS[fid])
         scored.append((fid, sim))
     scored.sort(key=lambda x: x[1], reverse=True)
     picked, per_uni = [], {}

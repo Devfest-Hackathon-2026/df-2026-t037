@@ -197,10 +197,10 @@ def interest_vector(logs: list[dict]) -> list[float]:
 
 def evidence_for(fid: str, logs: list[dict], k: int = 2) -> list[dict]:
     """その学部の紹介文にいちばん近い、本人の振り返り（根拠として画面に出す）"""
-    fvec = explore.VECTORS.get(fid)
-    if not fvec:
+    if fid not in explore.VECTORS:
         return []
-    scored = sorted(logs, key=lambda l: _cos(l["vec"], fvec), reverse=True)[:k]
+    # 学部の並べ方（explore.rank）と同じ「中心化した近さ」で、その学部にいちばん近い振り返りを選ぶ
+    scored = sorted(logs, key=lambda l: explore.similarity(l["vec"], fid), reverse=True)[:k]
     return [{
         "date": _ymd_jst(l.get("createdAt")),
         "subject": l.get("subject"),
