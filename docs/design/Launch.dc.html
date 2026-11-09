@@ -75,7 +75,7 @@ a{color:#D0607A}a:hover{color:#A0405A}
 
 <div style="background: #FFFFFF; border-radius: 18px; padding: 10px 14px; display: flex; flex-direction: column; gap: 5px">
 <p style="margin: 0; font-size: 13px; font-weight: 900">この7日（600分）と工学院の配点</p>
-<sc-for list="{{bars}}" as="b" hint-placeholder-count="5">
+<sc-for list="{{bars}}" as="b" hint-placeholder-count="6">
 <div style="display: grid; grid-template-columns: 40px 1fr 92px; align-items: center; gap: 8px; font-size: 12px">
 <span style="font-weight: 800; color: {{b.c}}">{{b.n}}</span>
 <div style="position: relative; height: 10px; background: #F1E6DA; border-radius: 5px">
@@ -94,7 +94,7 @@ a{color:#D0607A}a:hover{color:#A0405A}
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
 class Component extends DCLogic {
 renderVals() {
-const d = [['数学', '#2563C9', 50, 40, '×1.4'], ['理科', '#2E9E6A', 20, 40, '×1.4'], ['英語', '#E0558E', 20, 20, '×1.2'], ['国地', '#D64545', 10, 0, '×1.0'], ['記実', '#8A63CF', 0, 0, '×1.0']];
+const d = [['数学', '#2563C9', 50, 40, '×1.40'], ['理科', '#2E9E6A', 20, 40, '×1.40'], ['英語', '#E0558E', 20, 20, '×1.20'], ['国語', '#D64545', 5, 0, '×1.00'], ['地歴', '#D9822B', 5, 0, '×1.00'], ['小論', '#8A63CF', 0, 0, '×1.00']];
 return { bars: d.map(([n, c, me, goal, x]) => ({ n, c, me: me + '%', goal: goal + '%', t: me + '%/' + goal + '% ' + x })) };
 }
 }

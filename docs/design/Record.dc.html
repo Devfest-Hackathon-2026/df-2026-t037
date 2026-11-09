@@ -22,7 +22,7 @@ a{color:#1A4A99}a:hover{color:#0F2E66}
 
 <div style="display: flex; flex-direction: column; gap: 8px">
 <p style="margin: 0; font-size: 13px; font-weight: 800">教科（1つ選ぶ）</p>
-<sc-for list="{{groups}}" as="g" hint-placeholder-count="5">
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="6">
 <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap">
 <span style="width: 40px; font-size: 11px; font-weight: 700; color: {{g.c}}">{{g.n}}</span>
 <sc-for list="{{g.items}}" as="s" hint-placeholder-count="3">
@@ -74,10 +74,11 @@ class Component extends DCLogic {
 renderVals() {
 const g = [
 ['数学', '#2563C9', ['数学', '情報']],
-['理科', '#2E9E6A', ['物理', '化学', '生物']],
+['理科', '#2E9E6A', ['物理', '化学', '生物', '地学']],
 ['英語', '#E0558E', ['英語']],
-['国地', '#D64545', ['現代文', '古典', '日本史', '世界史']],
-['記実', '#8A63CF', ['小論文', '実技']]
+['国語', '#D64545', ['現代文', '古典']],
+['地歴', '#D9822B', ['日本史', '世界史', '地理', '公民']],
+['小論', '#8A63CF', ['小論文・総合問題']]
 ];
 const on = '物理';
 return { groups: g.map(([n, c, items]) => ({ n, c, items: items.map(x => ({ n: x, bg: x === on ? c : '#FFFFFF', fg: x === on ? '#FFFFFF' : '#1F2328', bd: x === on ? '2px solid ' + c : '2px solid #DAD6CC' })) })) };

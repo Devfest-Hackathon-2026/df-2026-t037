@@ -14,7 +14,7 @@ body{margin:0}
 a{color:#C8402E}a:hover{color:#992E20}
 </style>
 </helmet>
-<div style="width: 1600px; height: 1680px; box-sizing: border-box; padding: 36px 52px; background: #FFF8E8; font-family: 'M PLUS Rounded 1c', sans-serif; color: #3A3530; display: flex; flex-direction: column; gap: 14px">
+<div style="width: 1600px; height: 1460px; box-sizing: border-box; padding: 36px 52px; background: #FFF8E8; font-family: 'M PLUS Rounded 1c', sans-serif; color: #3A3530; display: flex; flex-direction: column; gap: 14px">
 <div style="display: flex; justify-content: space-between; align-items: flex-end">
 <div>
 <p style="margin: 0 0 4px; font-size: 15px; font-weight: 800; color: #C8402E">進路たまごっち（仮）｜遊び方と数値ルール</p>
@@ -26,7 +26,7 @@ a{color:#C8402E}a:hover{color:#992E20}
 <div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px">
 <div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 1　学年を選ぶ</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">高1〜高3。学年で1日の目安と、シーズンの長さが決まる</p></div>
 <div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 2　シーズン＝1学年</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">受験しない学年は3月31日まで、受験学年は受験日まで。何年あっても速く育ちすぎない</p></div>
-<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 3　勉強してEXP</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">分数×（1＋配点比率）×連続ボーナス×ふりかえりのランク（S1.3〜C1.0）</p></div>
+<div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 3　勉強してEXP</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">分数×（1＋その教科の配点比率）×連続ボーナス×ふりかえりのランク（S1.3〜C1.0）。教科は数学・理科・英語・国語・地歴公民・小論文の6つ</p></div>
 <div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 4　2回進化＋なかよし</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">目安を毎日続けると、シーズンの10%・45%・85%で節目に届く</p></div>
 <div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 14px"><p style="margin: 0; font-size: 12px; font-weight: 900; color: #C8402E">STEP 5　進級・卒業</p><p style="margin: 3px 0 0; font-size: 12px; line-height: 1.6">3月31日に図鑑へ。4月に次のたまごがかえる（右のボード）</p></div>
 </div>
@@ -69,7 +69,7 @@ a{color:#C8402E}a:hover{color:#992E20}
 </ul>
 </div>
 <div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 12px 18px; display: flex; flex-direction: column">
-<p style="margin: 0 0 6px; font-size: 14px; font-weight: 900">続け方による差（科学大 工学院・学部補正×0.974・ランクC＝×1.0で計算）</p>
+<p style="margin: 0 0 6px; font-size: 14px; font-weight: 900">続け方による差（科学大 工学院・学部補正×1.010・ランクC＝×1.0で計算）</p>
 <div style="display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; font-size: 11px; font-weight: 800; color: #6B6358; border-bottom: 1.5px solid #3A3530; padding: 4px 0"><span>学年・勉強のしかた</span><span style="text-align: center">1回目</span><span style="text-align: center">最終進化</span><span style="text-align: center">親密度10</span></div>
 <sc-for list="{{sim}}" as="s" hint-placeholder-count="8">
 <div style="display: grid; grid-template-columns: 1.8fr 1fr 1fr 1fr; font-size: 12px; border-bottom: 1px solid #E8DFCC; padding: 5px 0"><span style="font-weight: 800">{{s.n}}</span><span style="text-align: center">{{s.a}}</span><span style="text-align: center">{{s.b}}</span><span style="text-align: center; font-weight: 900; color: {{s.c}}">{{s.d}}</span></div>
@@ -89,21 +89,21 @@ a{color:#C8402E}a:hover{color:#992E20}
 
 <div style="background: #FFFFFF; border: 1.5px solid #3A3530; border-radius: 16px; padding: 10px 18px; display: flex; flex-direction: column">
 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px">
-<p style="margin: 0; font-size: 14px; font-weight: 900">学部ごとの差（9大学46学部・高3シーズン・ふつう）</p>
-<p style="margin: 0; font-size: 11px; color: #6B6358">学部補正＝科目数（4科目で1.00、1科目ごとに±5%）×記述・小論文（比率×15%）×難易度補正｜幅0.85〜1.18</p>
+<p style="margin: 0; font-size: 14px; font-weight: 900">学部ごとの差（9大学・全学部79コース・高3シーズン・ふつう）</p>
+<p style="margin: 0; font-size: 11px; color: #6B6358">学部補正＝科目数（4科目で1.00、1科目ごとに±5%）×小論文・総合問題（比率×15%）×難易度補正｜幅0.85〜1.18</p>
 </div>
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 22px; font-size: 10.5px; font-weight: 800; color: #6B6358; border-bottom: 1.5px solid #3A3530; padding: 3px 0">
-<span>大学・学部｜学部補正（科目×記述×難易度）・平均倍率｜最終進化の目安｜必要EXP（1回目／最終進化／親密度10）</span><span>同左</span><span>同左</span></div>
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 22px; grid-auto-flow: column; grid-template-rows: repeat(16, auto)">
-<sc-for list="{{rows}}" as="r" hint-placeholder-count="46">
-<div style="display: grid; grid-template-columns: 52px 1fr; font-size: 11px; border-bottom: 1px solid #E8DFCC; padding: 3px 0; gap: 4px; line-height: 1.45"><span style="font-weight: 900">{{r.u}}</span><span><strong>{{r.f}}</strong>　<span style="color: #6B6358">×{{r.k}}（{{r.calc}}）・倍率{{r.a}}・約{{r.h}}</span><br><span style="color: #3A3530">{{r.e}}</span></span></div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 18px; font-size: 10px; font-weight: 800; color: #6B6358; border-bottom: 1.5px solid #3A3530; padding: 3px 0">
+<span>大学・学部｜学部補正・平均倍率｜最終進化のEXP（時間）</span><span>同左</span><span>同左</span><span>同左</span></div>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 18px; grid-auto-flow: column; grid-template-rows: repeat(20, auto)">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="79">
+<div style="display: grid; grid-template-columns: 44px 1fr auto; font-size: 10.5px; border-bottom: 1px solid #E8DFCC; padding: 2.5px 0; gap: 4px; align-items: baseline"><span style="font-weight: 900">{{r.u}}</span><span style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap"><strong>{{r.f}}</strong> <span style="color: #6B6358">×{{r.k}}・{{r.a}}</span></span><span style="font-weight: 800">{{r.e2}}（{{r.h}}）</span></div>
 </sc-for>
 </div>
-<p style="margin: 4px 0 0; font-size: 10px; color: #6B6358; line-height: 1.6">難易度補正：東大＝科類の合格最低点÷6科類の平均（2026年度・550点満点）。ほかの8大学＝1＋0.02×（ボーダー偏差値−大学内の平均）＋0.005×（共テ得点率−大学内の平均・国公立のみ）を0.94〜1.08におさめる（2027年度・河合塾Kei-Net）。配点は2027年度の2次・個別。千葉工 情報変革・創造工、早稲田 商の配点と、慶應 経済の2027年度の科目変更は要確認。EXPは100単位で四捨五入。全学部の見た目は「学部ごとの見た目」ボード</p>
+<p style="margin: 4px 0 0; font-size: 10px; color: #6B6358; line-height: 1.6">難易度補正：東大＝科類の合格最低点÷6科類の平均（2026年度・550点満点）。ほかの8大学＝1＋0.02×（ボーダー偏差値−大学内の中央値）＋0.005×（共テ得点率−大学内の中央値・国公立のみ）を0.90〜1.12におさめる（2027年度・河合塾Kei-Net）。配点は2027年度の2次・個別。面接は点数に入れない。EXPは100単位で四捨五入。学部ごとの配点と見た目は「学部ごとの見た目」ボード</p>
 </div>
 </div>
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1680}}'>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1460}}'>
 class Component extends DCLogic {
 renderVals() {
 const DAY = 864e5, START = new Date(2027, 3, 1), EXAM = new Date(2028, 1, 25), EXAM_H = new Date(2028, 1, 21);
@@ -115,7 +115,7 @@ const r10 = v => Math.round(v / 10) * 10, r100 = v => Math.round(v / 100) * 100;
 const grades = G.map(([n, h, ex]) => { const p = plan(h, ex, EXAM); return { n, h: (ex ? '8時間（毎日）' : h + '時間（休み' + (h * 1.5) + '）'), w: (h * 12) + 'px', c: ex ? '#C8402E' : '#E0A21A', L: p.L + '日', h1: r10(p.H[0]) + '時間', h2: r10(p.H[1]) + '時間', h3: r10(p.H[2]) + '時間', bg: ex ? '#FFF6F2' : 'transparent' }; });
 const tierOf = s => s >= 30 ? 1.2 : s >= 14 ? 1.15 : s >= 7 ? 1.1 : s >= 3 ? 1.05 : 1;
 const tiers = [['1〜2日', '×1.00', '#F6F1E6'], ['3日〜', '×1.05', '#FFF6DA'], ['7日〜', '×1.10', '#FFEEC2'], ['14日〜', '×1.15', '#FFE4A8'], ['30日〜', '×1.20', '#FFD88A']].map(([d, x, bg]) => ({ d, x, bg }));
-const sim = (h, ex, r, off, pace) => { const p = plan(h, ex, EXAM), need = p.H.map(x => x * 60 * 1.36 * 0.974 * 1.15 * pace); let e = 0, st = 0, used = -1; const res = []; for (let i = 0; i < p.L; i++) { const dt = new Date(START.getTime() + i * DAY), wk = Math.floor(i / 7); if (!off.includes(i % 7)) { st++; e += std(h, ex, dt) * r * 60 * 1.36 * tierOf(st); } else if (used !== wk) used = wk; else st = Math.floor(st / 2); for (let j = 0; j < 3; j++) if (res[j] === undefined && e >= need[j]) res[j] = i + 1; } return res; };
+const sim = (h, ex, r, off, pace) => { const p = plan(h, ex, EXAM), need = p.H.map(x => x * 60 * 1.36 * 1.01 * 1.15 * pace); let e = 0, st = 0, used = -1; const res = []; for (let i = 0; i < p.L; i++) { const dt = new Date(START.getTime() + i * DAY), wk = Math.floor(i / 7); if (!off.includes(i % 7)) { st++; e += std(h, ex, dt) * r * 60 * 1.36 * tierOf(st); } else if (used !== wk) used = wk; else st = Math.floor(st / 2); for (let j = 0; j < 3; j++) if (res[j] === undefined && e >= need[j]) res[j] = i + 1; } return res; };
 const fm = v => v === undefined ? '届かない' : v + '日目';
 const S = [['高3・毎日8時間', 8, 1, 1, [], 1], ['高3・週6日（おやすみ券）', 8, 1, 1, [6], 1], ['高3・毎日6時間', 8, 1, 0.75, [], 1], ['高3・毎日6時間＋ゆったり', 8, 1, 0.75, [], 0.8], ['高3・週5日＋ゆったり', 8, 1, 1, [5, 6], 0.8], ['高1・毎日2.5時間', 2.5, 0, 1, [], 1], ['高1・毎日4時間', 2.5, 0, 1.6, [], 1], ['高1・週5日', 2.5, 0, 1, [5, 6], 1]].map(([n, h, ex, r, off, pace]) => { const s = sim(h, ex, r, off, pace); return { n, a: fm(s[0]), b: fm(s[1]), d: fm(s[2]), c: s[2] === undefined ? '#C8402E' : '#3A3530' }; });
 const p3 = plan(8, 1, EXAM);
@@ -123,53 +123,90 @@ const tMin = { b1: 325.01, b2: 330.47, b3: 316.32, r1: 303.39, r2: 305.0, r3: 34
 const mean = Object.values(tMin).reduce((a, b) => a + b, 0) / 6;
 const B = [18, 0, 27, 55, 0], R = [27, 27, 27, 18, 0];
 const raw = [
-['東大', '文科一類', 5, B, tMin.b1 / mean], ['東大', '文科二類', 5, B, tMin.b2 / mean], ['東大', '文科三類', 5, B, tMin.b3 / mean],
-['東大', '理科一類', 5, R, tMin.r1 / mean], ['東大', '理科二類', 5, R, tMin.r2 / mean], ['東大', '理科三類', 5, R, tMin.r3 / mean],
-['科学大', '工学院', 4, [40, 40, 20, 0, 0], 0.974],
-['科学大', '情報理工学院', 4, [40, 40, 20, 0, 0], 0.979],
-['科学大', '医学部 医学科', 4, [33, 33, 34, 0, 0], 1.08],
-['科学大', '理学院', 4, [40, 40, 20, 0, 0], 0.969],
-['科学大', '生命理工学院', 4, [40, 40, 20, 0, 0], 0.964],
-['千葉工大', '先進工学部', 3, [33, 33, 34, 0, 0], 0.983],
-['千葉工大', '工学部', 3, [33, 33, 34, 0, 0], 0.987],
-['千葉工大', '未来変革科学部', 3, [33, 0, 33, 34, 0], 0.949],
-['千葉工大', '情報変革科学部', 3, [33, 33, 34, 0, 0], 1.065],
-['千葉工大', '創造工学部', 3, [33, 33, 34, 0, 0], 1.015],
-['慶應', '法学部', 3, [0, 0, 45, 33, 22], 0.994],
-['慶應', '経済学部（A方式）', 2, [50, 0, 50, 0, 0], 1.019],
-['慶應', '理工学部', 4, [30, 40, 30, 0, 0], 0.979],
-['慶應', '総合政策・環境情報', 2, [50, 0, 0, 0, 50], 1.069],
-['慶應', '商学部（A方式）', 3, [25, 0, 50, 25, 0], 0.969],
-['慶應', '文学部', 3, [0, 0, 43, 29, 28], 0.969],
-['一橋', '社会学部', 4, [16, 0, 34, 50, 0], 1.036],
-['一橋', '経済学部', 4, [33, 0, 33, 34, 0], 0.976],
-['一橋', '商学部', 4, [33, 0, 34, 33, 0], 0.976],
-['一橋', '法学部', 4, [24, 0, 37, 39, 0], 0.976],
-['一橋', 'ソーシャル・データサイエンス学部', 4, [44, 0, 31, 13, 12], 1.036],
-['東外大', '言語文化学部', 2, [0, 0, 67, 33, 0], 1.001],
-['東外大', '国際社会学部', 2, [0, 0, 67, 33, 0], 0.999],
-['東外大', '国際日本学部', 2, [0, 0, 67, 33, 0], 1.0],
-['早稲田', '政治経済学部', 5, [12, 0, 13, 25, 50], 1.045],
-['早稲田', '法学部', 3, [0, 0, 40, 60, 0], 0.995],
-['早稲田', '基幹理工学部', 4, [33, 33, 34, 0, 0], 0.97],
-['早稲田', '商学部（地歴・公民型）', 3, [0, 0, 40, 60, 0], 0.995],
-['早稲田', '文学部', 3, [0, 0, 38, 62, 0], 0.995],
-['京大', '法学部', 4, [25, 0, 33, 42, 0], 1.015],
-['京大', '工学部', 5, [31, 31, 25, 13, 0], 0.959],
-['京大', '文学部', 4, [20, 0, 30, 50, 0], 1.015],
-['京大', '医学部 医学科', 5, [25, 30, 30, 15, 0], 1.08],
-['京大', '理学部', 5, [31, 31, 23, 15, 0], 0.97],
-['京大', '経済学部（文系）', 4, [27, 0, 27, 46, 0], 1.015],
-['京大', '農学部', 5, [29, 29, 28, 14, 0], 0.94],
-['阪大', '工学部', 4, [36, 36, 28, 0, 0], 0.94],
-['阪大', '基礎工学部', 4, [36, 36, 28, 0, 0], 0.951],
-['阪大', '法学部', 3, [33, 0, 33, 34, 0], 1.054],
-['阪大', '文学部', 3, [0, 0, 38, 62, 0], 1.057]
+['東大', '文科一類', 5, [18, 0, 27, 27, 28, 0], 1.012],
+['東大', '文科二類', 5, [18, 0, 27, 27, 28, 0], 1.029],
+['東大', '文科三類', 5, [18, 0, 27, 27, 28, 0], 0.985],
+['東大', '理科一類', 5, [27, 27, 28, 18, 0, 0], 0.945],
+['東大', '理科二類', 5, [27, 27, 28, 18, 0, 0], 0.95],
+['東大', '理科三類', 5, [27, 27, 28, 18, 0, 0], 1.078],
+['科学大', '理学院', 4, [40, 40, 20, 0, 0, 0], 1.005],
+['科学大', '工学院', 4, [40, 40, 20, 0, 0, 0], 1.01],
+['科学大', '物質理工学院', 4, [40, 40, 20, 0, 0, 0], 1.0],
+['科学大', '情報理工学院', 4, [40, 40, 20, 0, 0, 0], 1.015],
+['科学大', '生命理工学院', 4, [40, 40, 20, 0, 0, 0], 1.0],
+['科学大', '環境・社会理工学院', 4, [40, 40, 20, 0, 0, 0], 1.005],
+['科学大', '医学部 医学科', 4, [33, 34, 33, 0, 0, 0], 1.12],
+['科学大', '医学部 保健衛生学科 看護学専攻', 2, [0, 0, 40, 0, 0, 60], 0.9],
+['科学大', '医学部 保健衛生学科 検査技術学専攻', 3, [33, 34, 33, 0, 0, 0], 0.9],
+['科学大', '歯学部 歯学科', 3, [33, 34, 33, 0, 0, 0], 0.9],
+['科学大', '歯学部 口腔保健学科', 2, [0, 0, 40, 0, 0, 60], 0.9],
+['千葉工大', '工学部', 3, [33, 34, 33, 0, 0, 0], 0.994],
+['千葉工大', '宇宙・半導体工学部', 3, [33, 34, 33, 0, 0, 0], 1.006],
+['千葉工大', '創造工学部', 3, [33, 34, 33, 0, 0, 0], 1.022],
+['千葉工大', '先進工学部', 3, [33, 34, 33, 0, 0, 0], 0.99],
+['千葉工大', '情報変革科学部', 3, [33, 34, 33, 0, 0, 0], 1.072],
+['千葉工大', '未来変革科学部', 3, [33, 0, 33, 34, 0, 0], 0.956],
+['慶應', '文学部', 3, [0, 0, 43, 0, 29, 28], 0.983],
+['慶應', '経済学部（A方式）', 2, [50, 0, 50, 0, 0, 0], 1.032],
+['慶應', '法学部', 3, [0, 0, 45, 0, 33, 22], 1.008],
+['慶應', '商学部（A方式）', 3, [25, 0, 50, 0, 25, 0], 0.983],
+['慶應', '医学部', 4, [30, 40, 30, 0, 0, 0], 1.12],
+['慶應', '理工学部', 4, [30, 40, 30, 0, 0, 0], 0.993],
+['慶應', '総合政策学部', 2, [25, 0, 25, 0, 0, 50], 1.083],
+['慶應', '環境情報学部', 2, [25, 0, 25, 0, 0, 50], 1.083],
+['慶應', '看護医療学部', 2, [20, 20, 60, 0, 0, 0], 0.9],
+['慶應', '薬学部', 3, [29, 43, 28, 0, 0, 0], 0.932],
+['一橋', '商学部', 4, [33, 0, 34, 16, 17, 0], 1.0],
+['一橋', '経済学部', 4, [33, 0, 33, 14, 20, 0], 1.0],
+['一橋', '法学部', 4, [24, 0, 37, 16, 23, 0], 1.0],
+['一橋', '社会学部', 4, [16, 0, 34, 22, 28, 0], 1.06],
+['一橋', 'ソーシャル・データサイエンス学部', 4, [44, 0, 31, 13, 0, 12], 1.06],
+['東外大', '言語文化学部', 2, [0, 0, 67, 0, 33, 0], 1.002],
+['東外大', '国際社会学部', 2, [0, 0, 67, 0, 33, 0], 1.0],
+['東外大', '国際日本学部', 2, [0, 0, 67, 0, 33, 0], 1.002],
+['早稲田', '政治経済学部', 5, [12, 0, 13, 13, 12, 50], 1.05],
+['早稲田', '法学部', 3, [0, 0, 40, 33, 27, 0], 1.0],
+['早稲田', '教育学部（A方式）', 3, [0, 0, 33, 33, 34, 0], 0.956],
+['早稲田', '商学部（地歴・公民型）', 3, [0, 0, 40, 30, 30, 0], 1.0],
+['早稲田', '社会科学部', 4, [0, 0, 42, 17, 16, 25], 1.05],
+['早稲田', '国際教養学部', 3, [0, 0, 50, 25, 25, 0], 1.05],
+['早稲田', '文化構想学部', 3, [0, 0, 38, 37, 25, 0], 1.0],
+['早稲田', '文学部', 3, [0, 0, 38, 37, 25, 0], 1.0],
+['早稲田', '基幹理工学部', 4, [33, 34, 33, 0, 0, 0], 0.975],
+['早稲田', '創造理工学部', 4, [33, 34, 33, 0, 0, 0], 0.95],
+['早稲田', '先進理工学部', 4, [33, 34, 33, 0, 0, 0], 0.984],
+['早稲田', '人間科学部（国英型）', 3, [0, 0, 33, 40, 27, 0], 0.95],
+['早稲田', 'スポーツ科学部', 3, [0, 0, 33, 33, 0, 34], 0.9],
+['京大', '総合人間学部（文系）', 4, [31, 0, 31, 23, 15, 0], 1.08],
+['京大', '総合人間学部（理系）', 5, [29, 29, 21, 21, 0, 0], 1.02],
+['京大', '文学部', 4, [20, 0, 30, 30, 20, 0], 1.05],
+['京大', '教育学部（文系）', 4, [23, 0, 31, 31, 15, 0], 1.0],
+['京大', '教育学部（理系）', 4, [31, 15, 31, 23, 0, 0], 0.95],
+['京大', '法学部', 4, [25, 0, 33, 25, 17, 0], 1.05],
+['京大', '経済学部（文系）', 4, [27, 0, 27, 27, 19, 0], 1.05],
+['京大', '理学部', 5, [31, 31, 23, 15, 0, 0], 1.005],
+['京大', '医学部 医学科', 5, [25, 30, 30, 15, 0, 0], 1.12],
+['京大', '薬学部', 5, [29, 29, 28, 14, 0, 0], 0.995],
+['京大', '工学部', 5, [31, 31, 25, 13, 0, 0], 0.993],
+['京大', '農学部', 5, [29, 29, 28, 14, 0, 0], 0.971],
+['阪大', '文学部', 3, [0, 0, 38, 37, 25, 0], 1.1],
+['阪大', '人間科学部', 3, [33, 0, 33, 34, 0, 0], 1.06],
+['阪大', '外国語学部', 3, [0, 0, 60, 20, 20, 0], 0.946],
+['阪大', '法学部', 3, [33, 0, 33, 34, 0, 0], 1.098],
+['阪大', '経済学部', 3, [33, 0, 33, 34, 0, 0], 1.1],
+['阪大', '理学部', 4, [36, 36, 28, 0, 0, 0], 0.998],
+['阪大', '医学部 医学科', 4, [33, 34, 33, 0, 0, 0], 1.12],
+['阪大', '医学部 保健学科 看護学専攻', 3, [25, 25, 50, 0, 0, 0], 0.9],
+['阪大', '医学部 保健学科 放射線技術科学・検査技術科学専攻', 4, [33, 34, 33, 0, 0, 0], 0.9],
+['阪大', '歯学部', 4, [33, 34, 33, 0, 0, 0], 0.965],
+['阪大', '薬学部', 5, [36, 36, 21, 0, 0, 7], 1.04],
+['阪大', '工学部', 4, [36, 36, 28, 0, 0, 0], 0.981],
+['阪大', '基礎工学部', 4, [36, 36, 28, 0, 0, 0], 0.995]
 ];
 return { grades, tiers, sim: S, rows: raw.map(([u, f, s, p, ku]) => {
-const ks = 1 + 0.05 * (s - 4), ke = 1 + 0.15 * p[4] / 100, k = ks * ke * ku;
+const ks = 1 + 0.05 * (s - 4), ke = 1 + 0.15 * p[5] / 100, k = ks * ke * ku;
 const avg = 1 + p.reduce((a, v) => a + (v / 100) ** 2, 0);
-return { u, f, calc: ks.toFixed(2) + '×' + ke.toFixed(2) + '×' + ku.toFixed(3), k: k.toFixed(3), a: avg.toFixed(2), h: r10(p3.H[1] * k * 1.15 / 1.15) + '時間', e: p3.H.map(h => r100(h * 60 * avg * k * 1.15).toLocaleString()).join(' / ') };
+return { u, f, calc: ks.toFixed(2) + '×' + ke.toFixed(2) + '×' + ku.toFixed(3), k: k.toFixed(3), a: avg.toFixed(2), h: r10(p3.H[1] * k) + '時間', e: p3.H.map(h => r100(h * 60 * avg * k * 1.15).toLocaleString()).join(' / '), e2: r100(p3.H[1] * 60 * avg * k * 1.15).toLocaleString() };
 }) };
 }
 }

@@ -1,63 +1,129 @@
 [
  {
-  "id": "kagaku-eng",
-  "uni": "kagaku",
-  "name": "工学院",
+  "id": "todai-b1",
+  "uni": "todai",
+  "name": "文科一類",
   "weights": {
-   "math": 40,
-   "sci": 40,
-   "eng": 20,
-   "jpsoc": 0,
+   "math": 18,
+   "sci": 0,
+   "eng": 27,
+   "jp": 27,
+   "soc": 28,
    "essay": 0
   },
-  "subjects": 4,
-  "uniFactor": 0.974,
+  "subjects": 5,
+  "uniFactor": 1.012,
   "ribbon": {
-   "color": "#F2A65A",
-   "dark": "#C0702A",
-   "pin": "spanner"
+   "color": "#2F4A7A",
+   "dark": "#1E3360",
+   "pin": "tenbin"
   },
-  "haiten": "英150 数300 理300"
+  "haiten": "英120 数80 国120 地歴120（2科目）"
  },
  {
-  "id": "kagaku-cs",
-  "uni": "kagaku",
-  "name": "情報理工学院",
+  "id": "todai-b2",
+  "uni": "todai",
+  "name": "文科二類",
   "weights": {
-   "math": 40,
-   "sci": 40,
-   "eng": 20,
-   "jpsoc": 0,
+   "math": 18,
+   "sci": 0,
+   "eng": 27,
+   "jp": 27,
+   "soc": 28,
    "essay": 0
   },
-  "subjects": 4,
-  "uniFactor": 0.979,
+  "subjects": 5,
+  "uniFactor": 1.029,
   "ribbon": {
-   "color": "#7C8CF0",
-   "dark": "#4A58C0",
-   "pin": "chip"
+   "color": "#3FAE7A",
+   "dark": "#24804F",
+   "pin": "graph"
   },
-  "haiten": "英150 数300 理300"
+  "haiten": "英120 数80 国120 地歴120（2科目）"
  },
  {
-  "id": "kagaku-med",
-  "uni": "kagaku",
-  "name": "医学部 医学科",
+  "id": "todai-b3",
+  "uni": "todai",
+  "name": "文科三類",
   "weights": {
-   "math": 33,
-   "sci": 33,
-   "eng": 34,
-   "jpsoc": 0,
+   "math": 18,
+   "sci": 0,
+   "eng": 27,
+   "jp": 27,
+   "soc": 28,
    "essay": 0
   },
-  "subjects": 4,
-  "uniFactor": 1.08,
+  "subjects": 5,
+  "uniFactor": 0.985,
+  "ribbon": {
+   "color": "#F29AB4",
+   "dark": "#C8507A",
+   "pin": "shiori"
+  },
+  "haiten": "英120 数80 国120 地歴120（2科目）"
+ },
+ {
+  "id": "todai-r1",
+  "uni": "todai",
+  "name": "理科一類",
+  "weights": {
+   "math": 27,
+   "sci": 27,
+   "eng": 28,
+   "jp": 18,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 5,
+  "uniFactor": 0.945,
+  "ribbon": {
+   "color": "#5DB2EA",
+   "dark": "#2E7CB8",
+   "pin": "jougi"
+  },
+  "haiten": "英120 数120 国80 理120（2科目）"
+ },
+ {
+  "id": "todai-r2",
+  "uni": "todai",
+  "name": "理科二類",
+  "weights": {
+   "math": 27,
+   "sci": 27,
+   "eng": 28,
+   "jp": 18,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 5,
+  "uniFactor": 0.95,
+  "ribbon": {
+   "color": "#A8CC3A",
+   "dark": "#5E7E14",
+   "pin": "flask"
+  },
+  "haiten": "英120 数120 国80 理120（2科目）"
+ },
+ {
+  "id": "todai-r3",
+  "uni": "todai",
+  "name": "理科三類",
+  "weights": {
+   "math": 27,
+   "sci": 27,
+   "eng": 28,
+   "jp": 18,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 5,
+  "uniFactor": 1.078,
   "ribbon": {
    "color": "#F28C6B",
    "dark": "#C25A3A",
    "pin": "choushin"
   },
-  "haiten": "英120 数120 理120＋面接"
+  "haiten": "英120 数120 国80 理120（2科目）＋面接"
  },
  {
   "id": "kagaku-sci",
@@ -67,17 +133,81 @@
    "math": 40,
    "sci": 40,
    "eng": 20,
-   "jpsoc": 0,
+   "jp": 0,
+   "soc": 0,
    "essay": 0
   },
   "subjects": 4,
-  "uniFactor": 0.969,
+  "uniFactor": 1.005,
   "ribbon": {
    "color": "#3FAE7A",
    "dark": "#24804F",
    "pin": "atom"
   },
-  "haiten": "英150 数300 理300"
+  "haiten": "英150 数300 理300（物・化）"
+ },
+ {
+  "id": "kagaku-eng",
+  "uni": "kagaku",
+  "name": "工学院",
+  "weights": {
+   "math": 40,
+   "sci": 40,
+   "eng": 20,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.01,
+  "ribbon": {
+   "color": "#F2A65A",
+   "dark": "#C0702A",
+   "pin": "spanner"
+  },
+  "haiten": "英150 数300 理300（物・化）"
+ },
+ {
+  "id": "kagaku-mat",
+  "uni": "kagaku",
+  "name": "物質理工学院",
+  "weights": {
+   "math": 40,
+   "sci": 40,
+   "eng": 20,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.0,
+  "ribbon": {
+   "color": "#2AB0B8",
+   "dark": "#167A80",
+   "pin": "flask"
+  },
+  "haiten": "英150 数300 理300（物・化）"
+ },
+ {
+  "id": "kagaku-cs",
+  "uni": "kagaku",
+  "name": "情報理工学院",
+  "weights": {
+   "math": 40,
+   "sci": 40,
+   "eng": 20,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.015,
+  "ribbon": {
+   "color": "#7C8CF0",
+   "dark": "#4A58C0",
+   "pin": "chip"
+  },
+  "haiten": "英150 数300 理300（物・化）"
  },
  {
   "id": "kagaku-life",
@@ -87,37 +217,144 @@
    "math": 40,
    "sci": 40,
    "eng": 20,
-   "jpsoc": 0,
+   "jp": 0,
+   "soc": 0,
    "essay": 0
   },
   "subjects": 4,
-  "uniFactor": 0.964,
+  "uniFactor": 1.0,
   "ribbon": {
    "color": "#F29AB4",
    "dark": "#C8507A",
    "pin": "dna"
   },
-  "haiten": "英150 数300 理300"
+  "haiten": "英150 数300 理300（物・化）"
  },
  {
-  "id": "chiba-adv",
-  "uni": "chiba",
-  "name": "先進工学部",
+  "id": "kagaku-env",
+  "uni": "kagaku",
+  "name": "環境・社会理工学院",
+  "weights": {
+   "math": 40,
+   "sci": 40,
+   "eng": 20,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.005,
+  "ribbon": {
+   "color": "#A8CC3A",
+   "dark": "#5E7E14",
+   "pin": "house"
+  },
+  "haiten": "英150 数300 理300（物・化）"
+ },
+ {
+  "id": "kagaku-med",
+  "uni": "kagaku",
+  "name": "医学部 医学科",
   "weights": {
    "math": 33,
-   "sci": 33,
-   "eng": 34,
-   "jpsoc": 0,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.12,
+  "ribbon": {
+   "color": "#F28C6B",
+   "dark": "#C25A3A",
+   "pin": "choushin"
+  },
+  "haiten": "英120 数120 理120（2科目）＋面接"
+ },
+ {
+  "id": "kagaku-nurse",
+  "uni": "kagaku",
+  "name": "医学部 保健衛生学科 看護学専攻",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 40,
+   "jp": 0,
+   "soc": 0,
+   "essay": 60
+  },
+  "subjects": 2,
+  "uniFactor": 0.9,
+  "ribbon": {
+   "color": "#E05A5A",
+   "dark": "#A83030",
+   "pin": "heartplus"
+  },
+  "haiten": "英120 小論文180＋面接"
+ },
+ {
+  "id": "kagaku-lab",
+  "uni": "kagaku",
+  "name": "医学部 保健衛生学科 検査技術学専攻",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
    "essay": 0
   },
   "subjects": 3,
-  "uniFactor": 0.983,
+  "uniFactor": 0.9,
+  "ribbon": {
+   "color": "#9AA4B2",
+   "dark": "#5E6874",
+   "pin": "flask"
+  },
+  "haiten": "英120 数120 理120（1科目）＋面接"
+ },
+ {
+  "id": "kagaku-dent",
+  "uni": "kagaku",
+  "name": "歯学部 歯学科",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 0.9,
+  "ribbon": {
+   "color": "#B07A48",
+   "dark": "#7A4E26",
+   "pin": "tooth"
+  },
+  "haiten": "英120 数120 理120（1科目）＋面接"
+ },
+ {
+  "id": "kagaku-oral",
+  "uni": "kagaku",
+  "name": "歯学部 口腔保健学科",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 40,
+   "jp": 0,
+   "soc": 0,
+   "essay": 60
+  },
+  "subjects": 2,
+  "uniFactor": 0.9,
   "ribbon": {
    "color": "#5DB2EA",
    "dark": "#2E7CB8",
-   "pin": "gear"
+   "pin": "tooth"
   },
-  "haiten": "英100 数100 理100"
+  "haiten": "英120 小論文180＋面接（口腔保健衛生学）"
  },
  {
   "id": "chiba-eng",
@@ -125,19 +362,104 @@
   "name": "工学部",
   "weights": {
    "math": 33,
-   "sci": 33,
-   "eng": 34,
-   "jpsoc": 0,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
    "essay": 0
   },
   "subjects": 3,
-  "uniFactor": 0.987,
+  "uniFactor": 0.994,
   "ribbon": {
    "color": "#F2A65A",
    "dark": "#C0702A",
    "pin": "spanner"
   },
-  "haiten": "英100 数100 理100"
+  "haiten": "英100 数100 理100（A日程）"
+ },
+ {
+  "id": "chiba-space",
+  "uni": "chiba",
+  "name": "宇宙・半導体工学部",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 1.006,
+  "ribbon": {
+   "color": "#2F4A7A",
+   "dark": "#1E3360",
+   "pin": "atom"
+  },
+  "haiten": "英100 数100 理100（A日程・要確認）"
+ },
+ {
+  "id": "chiba-create",
+  "uni": "chiba",
+  "name": "創造工学部",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 1.022,
+  "ribbon": {
+   "color": "#F2C230",
+   "dark": "#B88A10",
+   "pin": "house"
+  },
+  "haiten": "英100 数100 理100（A日程・要確認）"
+ },
+ {
+  "id": "chiba-adv",
+  "uni": "chiba",
+  "name": "先進工学部",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 0.99,
+  "ribbon": {
+   "color": "#5DB2EA",
+   "dark": "#2E7CB8",
+   "pin": "gear"
+  },
+  "haiten": "英100 数100 理100（A日程）"
+ },
+ {
+  "id": "chiba-info",
+  "uni": "chiba",
+  "name": "情報変革科学部",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 1.072,
+  "ribbon": {
+   "color": "#7C8CF0",
+   "dark": "#4A58C0",
+   "pin": "chip"
+  },
+  "haiten": "英100 数100 理100（A日程・要確認）"
  },
  {
   "id": "chiba-mirai",
@@ -147,157 +469,18 @@
    "math": 33,
    "sci": 0,
    "eng": 33,
-   "jpsoc": 34,
+   "jp": 34,
+   "soc": 0,
    "essay": 0
   },
   "subjects": 3,
-  "uniFactor": 0.949,
+  "uniFactor": 0.956,
   "ribbon": {
    "color": "#B07CE0",
    "dark": "#7A48B0",
    "pin": "arrow"
   },
-  "haiten": "英100 数100 国100"
- },
- {
-  "id": "chiba-info",
-  "uni": "chiba",
-  "name": "情報変革科学部",
-  "weights": {
-   "math": 33,
-   "sci": 33,
-   "eng": 34,
-   "jpsoc": 0,
-   "essay": 0
-  },
-  "subjects": 3,
-  "uniFactor": 1.065,
-  "ribbon": {
-   "color": "#7C8CF0",
-   "dark": "#4A58C0",
-   "pin": "chip"
-  },
-  "haiten": "英100 数100 理100（要確認）"
- },
- {
-  "id": "chiba-create",
-  "uni": "chiba",
-  "name": "創造工学部",
-  "weights": {
-   "math": 33,
-   "sci": 33,
-   "eng": 34,
-   "jpsoc": 0,
-   "essay": 0
-  },
-  "subjects": 3,
-  "uniFactor": 1.015,
-  "ribbon": {
-   "color": "#F2C230",
-   "dark": "#B88A10",
-   "pin": "house"
-  },
-  "haiten": "英100 数100 理100（要確認）"
- },
- {
-  "id": "keio-law",
-  "uni": "keio",
-  "name": "法学部",
-  "weights": {
-   "math": 0,
-   "sci": 0,
-   "eng": 45,
-   "jpsoc": 33,
-   "essay": 22
-  },
-  "subjects": 3,
-  "uniFactor": 0.994,
-  "ribbon": {
-   "color": "#F2C230",
-   "dark": "#B88A10",
-   "pin": "tenbin"
-  },
-  "haiten": "英200 地歴150 論述100"
- },
- {
-  "id": "keio-econ",
-  "uni": "keio",
-  "name": "経済学部（A方式）",
-  "weights": {
-   "math": 50,
-   "sci": 0,
-   "eng": 50,
-   "jpsoc": 0,
-   "essay": 0
-  },
-  "subjects": 2,
-  "uniFactor": 1.019,
-  "ribbon": {
-   "color": "#3FAE7A",
-   "dark": "#24804F",
-   "pin": "graph"
-  },
-  "haiten": "英200 数200"
- },
- {
-  "id": "keio-sci",
-  "uni": "keio",
-  "name": "理工学部",
-  "weights": {
-   "math": 30,
-   "sci": 40,
-   "eng": 30,
-   "jpsoc": 0,
-   "essay": 0
-  },
-  "subjects": 4,
-  "uniFactor": 0.979,
-  "ribbon": {
-   "color": "#5DB2EA",
-   "dark": "#2E7CB8",
-   "pin": "jougi"
-  },
-  "haiten": "英150 数150 理200"
- },
- {
-  "id": "keio-sfc",
-  "uni": "keio",
-  "name": "総合政策・環境情報",
-  "weights": {
-   "math": 50,
-   "sci": 0,
-   "eng": 0,
-   "jpsoc": 0,
-   "essay": 50
-  },
-  "subjects": 2,
-  "uniFactor": 1.069,
-  "ribbon": {
-   "color": "#F29AB4",
-   "dark": "#C8507A",
-   "pin": "bulb"
-  },
-  "haiten": "数または英200 小論文200"
- },
- {
-  "id": "keio-com",
-  "uni": "keio",
-  "name": "商学部（A方式）",
-  "weights": {
-   "math": 25,
-   "sci": 0,
-   "eng": 50,
-   "jpsoc": 25,
-   "essay": 0
-  },
-  "subjects": 3,
-  "uniFactor": 0.969,
-  "ribbon": {
-   "color": "#F2A65A",
-   "dark": "#C0702A",
-   "pin": "coin"
-  },
-  "haiten": "英200 数100 地歴100"
+  "haiten": "英100 数100 国100（A日程タイプI）"
  },
  {
   "id": "keio-lit",
@@ -307,11 +490,12 @@
    "math": 0,
    "sci": 0,
    "eng": 43,
-   "jpsoc": 29,
+   "jp": 0,
+   "soc": 29,
    "essay": 28
   },
   "subjects": 3,
-  "uniFactor": 0.969,
+  "uniFactor": 0.983,
   "ribbon": {
    "color": "#B07CE0",
    "dark": "#7A48B0",
@@ -320,44 +504,193 @@
   "haiten": "英150 地歴100 小論文100"
  },
  {
-  "id": "hitotsu-soc",
-  "uni": "hitotsu",
-  "name": "社会学部",
+  "id": "keio-econ",
+  "uni": "keio",
+  "name": "経済学部（A方式）",
   "weights": {
-   "math": 16,
+   "math": 50,
    "sci": 0,
-   "eng": 34,
-   "jpsoc": 50,
+   "eng": 50,
+   "jp": 0,
+   "soc": 0,
    "essay": 0
   },
-  "subjects": 4,
-  "uniFactor": 1.036,
-  "ribbon": {
-   "color": "#F29AB4",
-   "dark": "#C8507A",
-   "pin": "people"
-  },
-  "haiten": "英280 数130 国180 地歴230"
- },
- {
-  "id": "hitotsu-econ",
-  "uni": "hitotsu",
-  "name": "経済学部",
-  "weights": {
-   "math": 33,
-   "sci": 0,
-   "eng": 33,
-   "jpsoc": 34,
-   "essay": 0
-  },
-  "subjects": 4,
-  "uniFactor": 0.976,
+  "subjects": 2,
+  "uniFactor": 1.032,
   "ribbon": {
    "color": "#3FAE7A",
    "dark": "#24804F",
    "pin": "graph"
   },
-  "haiten": "英260 数260 国110 地歴160"
+  "haiten": "英200 数200"
+ },
+ {
+  "id": "keio-law",
+  "uni": "keio",
+  "name": "法学部",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 45,
+   "jp": 0,
+   "soc": 33,
+   "essay": 22
+  },
+  "subjects": 3,
+  "uniFactor": 1.008,
+  "ribbon": {
+   "color": "#F2C230",
+   "dark": "#B88A10",
+   "pin": "tenbin"
+  },
+  "haiten": "英200 地歴150 論述100"
+ },
+ {
+  "id": "keio-com",
+  "uni": "keio",
+  "name": "商学部（A方式）",
+  "weights": {
+   "math": 25,
+   "sci": 0,
+   "eng": 50,
+   "jp": 0,
+   "soc": 25,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 0.983,
+  "ribbon": {
+   "color": "#F2A65A",
+   "dark": "#C0702A",
+   "pin": "coin"
+  },
+  "haiten": "英200 数100 地歴100"
+ },
+ {
+  "id": "keio-med",
+  "uni": "keio",
+  "name": "医学部",
+  "weights": {
+   "math": 30,
+   "sci": 40,
+   "eng": 30,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.12,
+  "ribbon": {
+   "color": "#F28C6B",
+   "dark": "#C25A3A",
+   "pin": "choushin"
+  },
+  "haiten": "英150 数150 理200（2科目）＋小論文・面接"
+ },
+ {
+  "id": "keio-sci",
+  "uni": "keio",
+  "name": "理工学部",
+  "weights": {
+   "math": 30,
+   "sci": 40,
+   "eng": 30,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 0.993,
+  "ribbon": {
+   "color": "#5DB2EA",
+   "dark": "#2E7CB8",
+   "pin": "jougi"
+  },
+  "haiten": "英150 数150 理200（物・化）"
+ },
+ {
+  "id": "keio-sps",
+  "uni": "keio",
+  "name": "総合政策学部",
+  "weights": {
+   "math": 25,
+   "sci": 0,
+   "eng": 25,
+   "jp": 0,
+   "soc": 0,
+   "essay": 50
+  },
+  "subjects": 2,
+  "uniFactor": 1.083,
+  "ribbon": {
+   "color": "#F29AB4",
+   "dark": "#C8507A",
+   "pin": "bulb"
+  },
+  "haiten": "英または数200 小論文200"
+ },
+ {
+  "id": "keio-env",
+  "uni": "keio",
+  "name": "環境情報学部",
+  "weights": {
+   "math": 25,
+   "sci": 0,
+   "eng": 25,
+   "jp": 0,
+   "soc": 0,
+   "essay": 50
+  },
+  "subjects": 2,
+  "uniFactor": 1.083,
+  "ribbon": {
+   "color": "#A8CC3A",
+   "dark": "#5E7E14",
+   "pin": "chip"
+  },
+  "haiten": "英または数200 小論文200"
+ },
+ {
+  "id": "keio-nurse",
+  "uni": "keio",
+  "name": "看護医療学部",
+  "weights": {
+   "math": 20,
+   "sci": 20,
+   "eng": 60,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 2,
+  "uniFactor": 0.9,
+  "ribbon": {
+   "color": "#E05A5A",
+   "dark": "#A83030",
+   "pin": "heartplus"
+  },
+  "haiten": "英300 数または理200＋小論文・面接"
+ },
+ {
+  "id": "keio-pharm",
+  "uni": "keio",
+  "name": "薬学部",
+  "weights": {
+   "math": 29,
+   "sci": 43,
+   "eng": 28,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 0.932,
+  "ribbon": {
+   "color": "#2AB0B8",
+   "dark": "#167A80",
+   "pin": "capsule"
+  },
+  "haiten": "英100 数100 理150（化学）"
  },
  {
   "id": "hitotsu-com",
@@ -367,17 +700,39 @@
    "math": 33,
    "sci": 0,
    "eng": 34,
-   "jpsoc": 33,
+   "jp": 16,
+   "soc": 17,
    "essay": 0
   },
   "subjects": 4,
-  "uniFactor": 0.976,
+  "uniFactor": 1.0,
   "ribbon": {
    "color": "#F2A65A",
    "dark": "#C0702A",
    "pin": "coin"
   },
   "haiten": "英235 数230 国110 地歴125"
+ },
+ {
+  "id": "hitotsu-econ",
+  "uni": "hitotsu",
+  "name": "経済学部",
+  "weights": {
+   "math": 33,
+   "sci": 0,
+   "eng": 33,
+   "jp": 14,
+   "soc": 20,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.0,
+  "ribbon": {
+   "color": "#3FAE7A",
+   "dark": "#24804F",
+   "pin": "graph"
+  },
+  "haiten": "英260 数260 国110 地歴160"
  },
  {
   "id": "hitotsu-law",
@@ -387,17 +742,39 @@
    "math": 24,
    "sci": 0,
    "eng": 37,
-   "jpsoc": 39,
+   "jp": 16,
+   "soc": 23,
    "essay": 0
   },
   "subjects": 4,
-  "uniFactor": 0.976,
+  "uniFactor": 1.0,
   "ribbon": {
    "color": "#2F4A7A",
    "dark": "#1E3360",
    "pin": "tenbin"
   },
   "haiten": "英280 数180 国120 地歴170"
+ },
+ {
+  "id": "hitotsu-soc",
+  "uni": "hitotsu",
+  "name": "社会学部",
+  "weights": {
+   "math": 16,
+   "sci": 0,
+   "eng": 34,
+   "jp": 22,
+   "soc": 28,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.06,
+  "ribbon": {
+   "color": "#F29AB4",
+   "dark": "#C8507A",
+   "pin": "people"
+  },
+  "haiten": "英280 数130 国180 地歴230"
  },
  {
   "id": "hitotsu-sds",
@@ -407,11 +784,12 @@
    "math": 44,
    "sci": 0,
    "eng": 31,
-   "jpsoc": 13,
+   "jp": 13,
+   "soc": 0,
    "essay": 12
   },
   "subjects": 4,
-  "uniFactor": 1.036,
+  "uniFactor": 1.06,
   "ribbon": {
    "color": "#7C8CF0",
    "dark": "#4A58C0",
@@ -427,11 +805,12 @@
    "math": 0,
    "sci": 0,
    "eng": 67,
-   "jpsoc": 33,
+   "jp": 0,
+   "soc": 33,
    "essay": 0
   },
   "subjects": 2,
-  "uniFactor": 1.001,
+  "uniFactor": 1.002,
   "ribbon": {
    "color": "#5DB2EA",
    "dark": "#2E7CB8",
@@ -447,11 +826,12 @@
    "math": 0,
    "sci": 0,
    "eng": 67,
-   "jpsoc": 33,
+   "jp": 0,
+   "soc": 33,
    "essay": 0
   },
   "subjects": 2,
-  "uniFactor": 0.999,
+  "uniFactor": 1.0,
   "ribbon": {
    "color": "#F2A65A",
    "dark": "#C0702A",
@@ -467,11 +847,12 @@
    "math": 0,
    "sci": 0,
    "eng": 67,
-   "jpsoc": 33,
+   "jp": 0,
+   "soc": 33,
    "essay": 0
   },
   "subjects": 2,
-  "uniFactor": 1.0,
+  "uniFactor": 1.002,
   "ribbon": {
    "color": "#F29AB4",
    "dark": "#C8507A",
@@ -487,17 +868,18 @@
    "math": 12,
    "sci": 0,
    "eng": 13,
-   "jpsoc": 25,
+   "jp": 13,
+   "soc": 12,
    "essay": 50
   },
   "subjects": 5,
-  "uniFactor": 1.045,
+  "uniFactor": 1.05,
   "ribbon": {
    "color": "#2F4A7A",
    "dark": "#1E3360",
    "pin": "graph"
   },
-  "haiten": "共テ＋総合問題"
+  "haiten": "共テ（英・国・数・選択）＋総合問題"
  },
  {
   "id": "waseda-law",
@@ -507,37 +889,39 @@
    "math": 0,
    "sci": 0,
    "eng": 40,
-   "jpsoc": 60,
+   "jp": 33,
+   "soc": 27,
    "essay": 0
   },
   "subjects": 3,
-  "uniFactor": 0.995,
+  "uniFactor": 1.0,
   "ribbon": {
    "color": "#F2C230",
    "dark": "#B88A10",
    "pin": "tenbin"
   },
-  "haiten": "英60 国50 地歴または数40"
+  "haiten": "英60 国50 地歴40"
  },
  {
-  "id": "waseda-fse",
+  "id": "waseda-edu",
   "uni": "waseda",
-  "name": "基幹理工学部",
+  "name": "教育学部（A方式）",
   "weights": {
-   "math": 33,
-   "sci": 33,
-   "eng": 34,
-   "jpsoc": 0,
+   "math": 0,
+   "sci": 0,
+   "eng": 33,
+   "jp": 33,
+   "soc": 34,
    "essay": 0
   },
-  "subjects": 4,
-  "uniFactor": 0.97,
+  "subjects": 3,
+  "uniFactor": 0.956,
   "ribbon": {
-   "color": "#5DB2EA",
-   "dark": "#2E7CB8",
-   "pin": "jougi"
+   "color": "#3FAE7A",
+   "dark": "#24804F",
+   "pin": "pencil"
   },
-  "haiten": "英120 数120 理120"
+  "haiten": "英50 国50 地歴50"
  },
  {
   "id": "waseda-com",
@@ -547,17 +931,81 @@
    "math": 0,
    "sci": 0,
    "eng": 40,
-   "jpsoc": 60,
+   "jp": 30,
+   "soc": 30,
    "essay": 0
   },
   "subjects": 3,
-  "uniFactor": 0.995,
+  "uniFactor": 1.0,
   "ribbon": {
    "color": "#F2A65A",
    "dark": "#C0702A",
    "pin": "coin"
   },
   "haiten": "英80 国60 地歴60（要確認）"
+ },
+ {
+  "id": "waseda-ss",
+  "uni": "waseda",
+  "name": "社会科学部",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 42,
+   "jp": 17,
+   "soc": 16,
+   "essay": 25
+  },
+  "subjects": 4,
+  "uniFactor": 1.05,
+  "ribbon": {
+   "color": "#F29AB4",
+   "dark": "#C8507A",
+   "pin": "people"
+  },
+  "haiten": "共テ（英・国・選択）＋英60 総合問題60"
+ },
+ {
+  "id": "waseda-sils",
+  "uni": "waseda",
+  "name": "国際教養学部",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 50,
+   "jp": 25,
+   "soc": 25,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 1.05,
+  "ribbon": {
+   "color": "#2AB0B8",
+   "dark": "#167A80",
+   "pin": "globe"
+  },
+  "haiten": "英100（読む・書く・4技能）＋共テ（国・選択）"
+ },
+ {
+  "id": "waseda-cms",
+  "uni": "waseda",
+  "name": "文化構想学部",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 38,
+   "jp": 37,
+   "soc": 25,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 1.0,
+  "ribbon": {
+   "color": "#A8CC3A",
+   "dark": "#5E7E14",
+   "pin": "bubble"
+  },
+  "haiten": "英75 国75 地歴50"
  },
  {
   "id": "waseda-lit",
@@ -567,11 +1015,12 @@
    "math": 0,
    "sci": 0,
    "eng": 38,
-   "jpsoc": 62,
+   "jp": 37,
+   "soc": 25,
    "essay": 0
   },
   "subjects": 3,
-  "uniFactor": 0.995,
+  "uniFactor": 1.0,
   "ribbon": {
    "color": "#B07CE0",
    "dark": "#7A48B0",
@@ -580,44 +1029,151 @@
   "haiten": "英75 国75 地歴50"
  },
  {
-  "id": "kyoto-law",
-  "uni": "kyoto",
-  "name": "法学部",
+  "id": "waseda-fse",
+  "uni": "waseda",
+  "name": "基幹理工学部",
   "weights": {
-   "math": 25,
-   "sci": 0,
+   "math": 33,
+   "sci": 34,
    "eng": 33,
-   "jpsoc": 42,
+   "jp": 0,
+   "soc": 0,
    "essay": 0
   },
   "subjects": 4,
-  "uniFactor": 1.015,
+  "uniFactor": 0.975,
   "ribbon": {
-   "color": "#2F4A7A",
-   "dark": "#1E3360",
-   "pin": "tenbin"
+   "color": "#5DB2EA",
+   "dark": "#2E7CB8",
+   "pin": "jougi"
   },
-  "haiten": "英200 数150 国150 地歴100"
+  "haiten": "英120 数120 理120（物・化）"
  },
  {
-  "id": "kyoto-eng",
+  "id": "waseda-cse",
+  "uni": "waseda",
+  "name": "創造理工学部",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 0.95,
+  "ribbon": {
+   "color": "#E05A5A",
+   "dark": "#A83030",
+   "pin": "house"
+  },
+  "haiten": "英120 数120 理120（物・化）"
+ },
+ {
+  "id": "waseda-ase",
+  "uni": "waseda",
+  "name": "先進理工学部",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 0.984,
+  "ribbon": {
+   "color": "#7C8CF0",
+   "dark": "#4A58C0",
+   "pin": "atom"
+  },
+  "haiten": "英120 数120 理120（2科目）"
+ },
+ {
+  "id": "waseda-hum",
+  "uni": "waseda",
+  "name": "人間科学部（国英型）",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 33,
+   "jp": 40,
+   "soc": 27,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 0.95,
+  "ribbon": {
+   "color": "#B07A48",
+   "dark": "#7A4E26",
+   "pin": "people"
+  },
+  "haiten": "英50 国60 選択40（共テ併用）"
+ },
+ {
+  "id": "waseda-sps",
+  "uni": "waseda",
+  "name": "スポーツ科学部",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 33,
+   "jp": 33,
+   "soc": 0,
+   "essay": 34
+  },
+  "subjects": 3,
+  "uniFactor": 0.9,
+  "ribbon": {
+   "color": "#F28C6B",
+   "dark": "#C25A3A",
+   "pin": "ball"
+  },
+  "haiten": "共テ（英100 国または数100）＋総合問題100"
+ },
+ {
+  "id": "kyoto-ihs-a",
   "uni": "kyoto",
-  "name": "工学部",
+  "name": "総合人間学部（文系）",
   "weights": {
    "math": 31,
-   "sci": 31,
-   "eng": 25,
-   "jpsoc": 13,
+   "sci": 0,
+   "eng": 31,
+   "jp": 23,
+   "soc": 15,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.08,
+  "ribbon": {
+   "color": "#2AB0B8",
+   "dark": "#167A80",
+   "pin": "bulb"
+  },
+  "haiten": "英200 数200 国150 地歴100"
+ },
+ {
+  "id": "kyoto-ihs-s",
+  "uni": "kyoto",
+  "name": "総合人間学部（理系）",
+  "weights": {
+   "math": 29,
+   "sci": 29,
+   "eng": 21,
+   "jp": 21,
+   "soc": 0,
    "essay": 0
   },
   "subjects": 5,
-  "uniFactor": 0.959,
+  "uniFactor": 1.02,
   "ribbon": {
-   "color": "#F2A65A",
-   "dark": "#C0702A",
-   "pin": "spanner"
+   "color": "#2AB0B8",
+   "dark": "#167A80",
+   "pin": "bulb"
   },
-  "haiten": "英200 数250 国100 理250"
+  "haiten": "英150 数200 国150 理200（2科目）"
  },
  {
   "id": "kyoto-lit",
@@ -627,11 +1183,12 @@
    "math": 20,
    "sci": 0,
    "eng": 30,
-   "jpsoc": 50,
+   "jp": 30,
+   "soc": 20,
    "essay": 0
   },
   "subjects": 4,
-  "uniFactor": 1.015,
+  "uniFactor": 1.05,
   "ribbon": {
    "color": "#B07CE0",
    "dark": "#7A48B0",
@@ -640,44 +1197,67 @@
   "haiten": "英150 数100 国150 地歴100"
  },
  {
-  "id": "kyoto-med",
+  "id": "kyoto-edu-a",
   "uni": "kyoto",
-  "name": "医学部 医学科",
+  "name": "教育学部（文系）",
   "weights": {
-   "math": 25,
-   "sci": 30,
-   "eng": 30,
-   "jpsoc": 15,
+   "math": 23,
+   "sci": 0,
+   "eng": 31,
+   "jp": 31,
+   "soc": 15,
    "essay": 0
   },
-  "subjects": 5,
-  "uniFactor": 1.08,
+  "subjects": 4,
+  "uniFactor": 1.0,
   "ribbon": {
-   "color": "#F28C6B",
-   "dark": "#C25A3A",
-   "pin": "choushin"
+   "color": "#A8CC3A",
+   "dark": "#5E7E14",
+   "pin": "pencil"
   },
-  "haiten": "英300 数250 国150 理300＋面接"
+  "haiten": "英200 数150 国200 地歴100"
  },
  {
-  "id": "kyoto-sci",
+  "id": "kyoto-edu-s",
   "uni": "kyoto",
-  "name": "理学部",
+  "name": "教育学部（理系）",
   "weights": {
    "math": 31,
-   "sci": 31,
-   "eng": 23,
-   "jpsoc": 15,
+   "sci": 15,
+   "eng": 31,
+   "jp": 23,
+   "soc": 0,
    "essay": 0
   },
-  "subjects": 5,
-  "uniFactor": 0.97,
+  "subjects": 4,
+  "uniFactor": 0.95,
   "ribbon": {
-   "color": "#5DB2EA",
-   "dark": "#2E7CB8",
-   "pin": "atom"
+   "color": "#A8CC3A",
+   "dark": "#5E7E14",
+   "pin": "pencil"
   },
-  "haiten": "英225 数300 国150 理300"
+  "haiten": "英200 数200 国150 理100（1科目）"
+ },
+ {
+  "id": "kyoto-law",
+  "uni": "kyoto",
+  "name": "法学部",
+  "weights": {
+   "math": 25,
+   "sci": 0,
+   "eng": 33,
+   "jp": 25,
+   "soc": 17,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.05,
+  "ribbon": {
+   "color": "#2F4A7A",
+   "dark": "#1E3360",
+   "pin": "tenbin"
+  },
+  "haiten": "英200 数150 国150 地歴100"
  },
  {
   "id": "kyoto-econ",
@@ -687,17 +1267,102 @@
    "math": 27,
    "sci": 0,
    "eng": 27,
-   "jpsoc": 46,
+   "jp": 27,
+   "soc": 19,
    "essay": 0
   },
   "subjects": 4,
-  "uniFactor": 1.015,
+  "uniFactor": 1.05,
   "ribbon": {
    "color": "#3FAE7A",
    "dark": "#24804F",
    "pin": "graph"
   },
   "haiten": "英150 数150 国150 地歴100"
+ },
+ {
+  "id": "kyoto-sci",
+  "uni": "kyoto",
+  "name": "理学部",
+  "weights": {
+   "math": 31,
+   "sci": 31,
+   "eng": 23,
+   "jp": 15,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 5,
+  "uniFactor": 1.005,
+  "ribbon": {
+   "color": "#5DB2EA",
+   "dark": "#2E7CB8",
+   "pin": "atom"
+  },
+  "haiten": "英225 数300 国150 理300（2科目）"
+ },
+ {
+  "id": "kyoto-med",
+  "uni": "kyoto",
+  "name": "医学部 医学科",
+  "weights": {
+   "math": 25,
+   "sci": 30,
+   "eng": 30,
+   "jp": 15,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 5,
+  "uniFactor": 1.12,
+  "ribbon": {
+   "color": "#F28C6B",
+   "dark": "#C25A3A",
+   "pin": "choushin"
+  },
+  "haiten": "英300 数250 国150 理300（2科目）＋面接"
+ },
+ {
+  "id": "kyoto-pharm",
+  "uni": "kyoto",
+  "name": "薬学部",
+  "weights": {
+   "math": 29,
+   "sci": 29,
+   "eng": 28,
+   "jp": 14,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 5,
+  "uniFactor": 0.995,
+  "ribbon": {
+   "color": "#F29AB4",
+   "dark": "#C8507A",
+   "pin": "capsule"
+  },
+  "haiten": "英200 数200 国100 理200（2科目）"
+ },
+ {
+  "id": "kyoto-eng",
+  "uni": "kyoto",
+  "name": "工学部",
+  "weights": {
+   "math": 31,
+   "sci": 31,
+   "eng": 25,
+   "jp": 13,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 5,
+  "uniFactor": 0.993,
+  "ribbon": {
+   "color": "#F2A65A",
+   "dark": "#C0702A",
+   "pin": "spanner"
+  },
+  "haiten": "英200 数250 国100 理250（2科目）"
  },
  {
   "id": "kyoto-agr",
@@ -707,77 +1372,18 @@
    "math": 29,
    "sci": 29,
    "eng": 28,
-   "jpsoc": 14,
+   "jp": 14,
+   "soc": 0,
    "essay": 0
   },
   "subjects": 5,
-  "uniFactor": 0.94,
+  "uniFactor": 0.971,
   "ribbon": {
    "color": "#F2C230",
    "dark": "#B88A10",
    "pin": "leaf"
   },
-  "haiten": "英200 数200 国100 理200"
- },
- {
-  "id": "osaka-eng",
-  "uni": "osaka",
-  "name": "工学部",
-  "weights": {
-   "math": 36,
-   "sci": 36,
-   "eng": 28,
-   "jpsoc": 0,
-   "essay": 0
-  },
-  "subjects": 4,
-  "uniFactor": 0.94,
-  "ribbon": {
-   "color": "#5DB2EA",
-   "dark": "#2E7CB8",
-   "pin": "spanner"
-  },
-  "haiten": "英200 数250 理250"
- },
- {
-  "id": "osaka-es",
-  "uni": "osaka",
-  "name": "基礎工学部",
-  "weights": {
-   "math": 36,
-   "sci": 36,
-   "eng": 28,
-   "jpsoc": 0,
-   "essay": 0
-  },
-  "subjects": 4,
-  "uniFactor": 0.951,
-  "ribbon": {
-   "color": "#B07CE0",
-   "dark": "#7A48B0",
-   "pin": "atom"
-  },
-  "haiten": "英200 数250 理250"
- },
- {
-  "id": "osaka-law",
-  "uni": "osaka",
-  "name": "法学部",
-  "weights": {
-   "math": 33,
-   "sci": 0,
-   "eng": 33,
-   "jpsoc": 34,
-   "essay": 0
-  },
-  "subjects": 3,
-  "uniFactor": 1.054,
-  "ribbon": {
-   "color": "#2F4A7A",
-   "dark": "#1E3360",
-   "pin": "tenbin"
-  },
-  "haiten": "英200 数200 国200"
+  "haiten": "英200 数200 国100 理200（2科目）"
  },
  {
   "id": "osaka-lit",
@@ -787,16 +1393,269 @@
    "math": 0,
    "sci": 0,
    "eng": 38,
-   "jpsoc": 62,
+   "jp": 37,
+   "soc": 25,
    "essay": 0
   },
   "subjects": 3,
-  "uniFactor": 1.057,
+  "uniFactor": 1.1,
   "ribbon": {
    "color": "#F29AB4",
    "dark": "#C8507A",
    "pin": "shiori"
   },
   "haiten": "英150 国150 数または地歴100"
+ },
+ {
+  "id": "osaka-hs",
+  "uni": "osaka",
+  "name": "人間科学部",
+  "weights": {
+   "math": 33,
+   "sci": 0,
+   "eng": 33,
+   "jp": 34,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 1.06,
+  "ribbon": {
+   "color": "#B07A48",
+   "dark": "#7A4E26",
+   "pin": "people"
+  },
+  "haiten": "英200 数200 国200"
+ },
+ {
+  "id": "osaka-fl",
+  "uni": "osaka",
+  "name": "外国語学部",
+  "weights": {
+   "math": 0,
+   "sci": 0,
+   "eng": 60,
+   "jp": 20,
+   "soc": 20,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 0.946,
+  "ribbon": {
+   "color": "#2AB0B8",
+   "dark": "#167A80",
+   "pin": "bubble"
+  },
+  "haiten": "英300 国100 数または地歴100"
+ },
+ {
+  "id": "osaka-law",
+  "uni": "osaka",
+  "name": "法学部",
+  "weights": {
+   "math": 33,
+   "sci": 0,
+   "eng": 33,
+   "jp": 34,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 1.098,
+  "ribbon": {
+   "color": "#2F4A7A",
+   "dark": "#1E3360",
+   "pin": "tenbin"
+  },
+  "haiten": "英200 数200 国200"
+ },
+ {
+  "id": "osaka-econ",
+  "uni": "osaka",
+  "name": "経済学部",
+  "weights": {
+   "math": 33,
+   "sci": 0,
+   "eng": 33,
+   "jp": 34,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 1.1,
+  "ribbon": {
+   "color": "#3FAE7A",
+   "dark": "#24804F",
+   "pin": "graph"
+  },
+  "haiten": "英・数・国（3つの配点の合計で判定・要確認）"
+ },
+ {
+  "id": "osaka-sci",
+  "uni": "osaka",
+  "name": "理学部",
+  "weights": {
+   "math": 36,
+   "sci": 36,
+   "eng": 28,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 0.998,
+  "ribbon": {
+   "color": "#A8CC3A",
+   "dark": "#5E7E14",
+   "pin": "atom"
+  },
+  "haiten": "英200 数250 理250（2科目）"
+ },
+ {
+  "id": "osaka-med",
+  "uni": "osaka",
+  "name": "医学部 医学科",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 1.12,
+  "ribbon": {
+   "color": "#F28C6B",
+   "dark": "#C25A3A",
+   "pin": "choushin"
+  },
+  "haiten": "英500 数500 理500（2科目）＋面接"
+ },
+ {
+  "id": "osaka-nurse",
+  "uni": "osaka",
+  "name": "医学部 保健学科 看護学専攻",
+  "weights": {
+   "math": 25,
+   "sci": 25,
+   "eng": 50,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 3,
+  "uniFactor": 0.9,
+  "ribbon": {
+   "color": "#E05A5A",
+   "dark": "#A83030",
+   "pin": "heartplus"
+  },
+  "haiten": "英200 数100 理100"
+ },
+ {
+  "id": "osaka-rad",
+  "uni": "osaka",
+  "name": "医学部 保健学科 放射線技術科学・検査技術科学専攻",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 0.9,
+  "ribbon": {
+   "color": "#E05A5A",
+   "dark": "#A83030",
+   "pin": "flask"
+  },
+  "haiten": "英225 数225 理225（2科目）"
+ },
+ {
+  "id": "osaka-dent",
+  "uni": "osaka",
+  "name": "歯学部",
+  "weights": {
+   "math": 33,
+   "sci": 34,
+   "eng": 33,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 0.965,
+  "ribbon": {
+   "color": "#9AA4B2",
+   "dark": "#5E6874",
+   "pin": "tooth"
+  },
+  "haiten": "英300 数300 理300（2科目）＋面接300"
+ },
+ {
+  "id": "osaka-pharm",
+  "uni": "osaka",
+  "name": "薬学部",
+  "weights": {
+   "math": 36,
+   "sci": 36,
+   "eng": 21,
+   "jp": 0,
+   "soc": 0,
+   "essay": 7
+  },
+  "subjects": 5,
+  "uniFactor": 1.04,
+  "ribbon": {
+   "color": "#F2C230",
+   "dark": "#B88A10",
+   "pin": "capsule"
+  },
+  "haiten": "英150 数250 理250（2科目）小論文50＋面接"
+ },
+ {
+  "id": "osaka-eng",
+  "uni": "osaka",
+  "name": "工学部",
+  "weights": {
+   "math": 36,
+   "sci": 36,
+   "eng": 28,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 0.981,
+  "ribbon": {
+   "color": "#5DB2EA",
+   "dark": "#2E7CB8",
+   "pin": "spanner"
+  },
+  "haiten": "英200 数250 理250（2科目）"
+ },
+ {
+  "id": "osaka-es",
+  "uni": "osaka",
+  "name": "基礎工学部",
+  "weights": {
+   "math": 36,
+   "sci": 36,
+   "eng": 28,
+   "jp": 0,
+   "soc": 0,
+   "essay": 0
+  },
+  "subjects": 4,
+  "uniFactor": 0.995,
+  "ribbon": {
+   "color": "#B07CE0",
+   "dark": "#7A48B0",
+   "pin": "atom"
+  },
+  "haiten": "英200 数250 理250（2科目）"
  }
 ]
