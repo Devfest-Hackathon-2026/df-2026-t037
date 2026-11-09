@@ -52,8 +52,9 @@ export default function Timer({ uid, profile, subjects, onRecorded, onClose, onS
   const faculty = getFaculty(profile?.targetFacultyId);
   const uni = faculty && getUniversity(faculty.universityId);
   const stage = [1, 2, 3].includes(profile?.stage) ? profile.stage : 1;
-  const items = buildItems({ universityId: uni?.id, growthExp: profile?.growthExp, bond: profile?.bond });
-  const equip = stage === 3 && wearsUniEquip(sanitizeEquipped(profile?.equipped, items), items);
+  const items = buildItems({ universityId: uni?.id, growthExp: profile?.growthExp, bond: profile?.bond, legends: profile?.legends });
+  const worn = sanitizeEquipped(profile?.equipped, items);
+  const equip = stage === 3 && wearsUniEquip(worn, items);
 
   const [local, setLocal] = useState(() => {
     const saved = loadTimerLocal(uid);
@@ -122,7 +123,7 @@ export default function Timer({ uid, profile, subjects, onRecorded, onClose, onS
     </button>
   );
 
-  const buddy = (size) => uni && <Character uni={uni.id} stage={stage} variant={equip ? "equip" : "normal"} size={size} faculty={faculty} />;
+  const buddy = (size) => uni && <Character uni={uni.id} stage={stage} variant={equip ? "equip" : "normal"} size={size} faculty={faculty} wear={worn} />;
   const subjectTag = (
     <span className="tama-subj-dot" style={{ background: colorOfSubject(local.subject, SUBJECT_CATEGORY[local.subject]) }} />
   );

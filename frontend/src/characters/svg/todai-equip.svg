@@ -1,4 +1,4 @@
-<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="ギンまる。赤門の形のかばんと銀杏バッジを装備">
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="ギンまる。赤門の形のかばんと、左胸に銀杏バッジを装備">
 <defs><radialGradient id="q1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="q1l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient></defs>
 <ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#3A4A6A" opacity=".14"></ellipse>
 <g class="squish">
@@ -14,6 +14,6 @@
 <circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
 <ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
 <path d="M75 106 Q77.5 109 80 106 Q82.5 109 85 106" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
-<g class="twinkle"><circle cx="104" cy="124" r="10" fill="#FFFFFF"></circle><path d="M104 129 L97 120 Q100.5 116.5 104 118.5 Q107.5 116.5 111 120 Z" fill="#F2C230"></path></g>
+<g class="ginkgo-badge" transform="translate(60 126)"><circle r="8.6" fill="#FFFFFF" stroke="#D9A21A" stroke-width="1.6"></circle><path d="M0 4.2 L-6.4 -2.2 A7.4 7.4 0 0 1 -0.7 -5.8 L0 -2.8 L0.7 -5.8 A7.4 7.4 0 0 1 6.4 -2.2 Z" fill="#F2C230" stroke="#C48A0A" stroke-width=".7" stroke-linejoin="round"></path><path d="M0 4.2 L-3.6 -4.2 M0 4.2 L3.6 -4.2" stroke="#D9A21A" stroke-width=".6" fill="none"></path><path d="M0 4.6 L0 7" stroke="#A8740C" stroke-width="1.2" stroke-linecap="round"></path></g>
 </g>
 </svg>

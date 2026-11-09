@@ -18,6 +18,7 @@ import Kisekae from "./screens/Kisekae";
 import { RankBreakdown, RankHints } from "./screens/RankHelp";
 import { streakBonus } from "./game/rules";
 import Explore from "./screens/Explore";
+import Mocks from "./screens/Mocks";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
 import { getFaculty, getUniversity } from "./game/universities";
@@ -271,6 +272,10 @@ export default function App() {
     return <Explore profile={profile} onBack={() => setScreen("home")} />;
   }
 
+  if (screen === "mocks") {
+    return <Mocks uid={user.uid} profile={profile} onBack={() => setScreen("home")} />;
+  }
+
   if (screen === "kisekae") {
     return <Kisekae uid={user.uid} profile={profile} onBack={() => setScreen("home")} />;
   }
@@ -279,10 +284,11 @@ export default function App() {
     return (
       <RecordScreen
         characterName={characterName}
-        universityId={faculty?.universityId}
-        faculty={faculty}
-        lastResult={lastResult}
-        onResult={setLastResult}
+        onResult={(result) => {
+          // 記録したら「記録しました」の画面へ（タイマーからの記録と同じ画面。下に「ホームに戻る」）
+          setLastResult(result);
+          setScreen("result");
+        }}
         onBack={() => {
           setLastResult(null);
           setScreen("home");
@@ -310,6 +316,19 @@ export default function App() {
             <h1><span>記録しました</span></h1>
           </div>
           <ResultCard result={lastResult} universityId={faculty?.universityId} faculty={faculty} />
+          <div className="tama result-actions">
+            <button
+              type="button"
+              className="tama-btn main"
+              onClick={() => {
+                setLastResult(null);
+                setScreen("home");
+              }}
+            >
+              <span aria-hidden="true">🏠</span>
+              <span>ホームに戻る</span>
+            </button>
+          </div>
         </main>
       </div>
     );
@@ -338,6 +357,7 @@ export default function App() {
               onSettings={openSettings}
               onKisekae={() => setScreen("kisekae")}
               onExplore={() => setScreen("explore")}
+              onMocks={() => setScreen("mocks")}
             />
           }
         />
@@ -442,7 +462,7 @@ function Header({ grade }) {
 }
 
 // ===== 記録（あとから）：docs/design/Henkou.dc.html ② =====
-function RecordScreen({ characterName, universityId, faculty, lastResult, onResult, onBack }) {
+function RecordScreen({ characterName, onResult, onBack }) {
   const [subject, setSubject] = useState("物理");
   const [minutes, setMinutes] = useState("");
   const [reflection, setReflection] = useState("");
@@ -577,7 +597,6 @@ function RecordScreen({ characterName, universityId, faculty, lastResult, onResu
           </button>
         </form>
 
-        {lastResult && <ResultCard result={lastResult} universityId={universityId} faculty={faculty} />}
       </main>
     </div>
   );
@@ -597,6 +616,8 @@ function ResultCard({ result, universityId, faculty }) {
   const growth = toNumber(result?.growth_exp);
   const evolved = result?.evolved === true;
   const multiplier = toNumber(result?.multiplier) || 1;
+  // 時間に対して量が明らかに多すぎる記録（ズルの疑い）：Cランク・育成EXP×0.5・言語化ボーナスなし
+  const penalty = !pending && result?.penalty && typeof result.penalty === "object" ? result.penalty : null;
   // 育成EXPの式（デザイン④）：物理60分 × 1.4（理科）× 1.05（連続）× 1.3（S）＝ 115EXP
   const formula = (() => {
     if (pending || growth <= 0 || !faculty || !result?.subject || !result?.minutes) return null;
@@ -605,7 +626,7 @@ function ResultCard({ result, universityId, faculty }) {
     const catLabel = CATEGORIES.find((c) => c.id === cat)?.label;
     const streak = toNumber(result?.streak);
     return {
-      text: `${result.subject}${result.minutes}分 × ${(1 + w / 100).toFixed(1)}${catLabel ? `（${catLabel}）` : ""} × ${streakBonus(streak).toFixed(2)}（連続）× ${multiplier.toFixed(1)}（${rank}）＝ `,
+      text: `${result.subject}${result.minutes}分 × ${(1 + w / 100).toFixed(1)}${catLabel ? `（${catLabel}）` : ""} × ${streakBonus(streak).toFixed(2)}（連続）× ${multiplier.toFixed(1)}（${penalty ? "量の確認" : rank}）＝ `,
       growth,
     };
   })();
@@ -631,9 +652,15 @@ function ResultCard({ result, universityId, faculty }) {
         <div className={`rank-badge lg ${meta.className}`}>{pending ? "?" : rank}</div>
         <div>
           <div className="result-label">
-            {pending || typeof result?.total !== "number" ? "ふりかえりの採点" : `ふりかえりの採点 ${result.total}／6点`}
+            {pending || typeof result?.total !== "number"
+              ? "ふりかえりの採点"
+              : penalty
+                ? `採点 ${result.total}／6点 → 時間と量が合わずC`
+                : `ふりかえりの採点 ${result.total}／6点`}
           </div>
-          <div className="result-title">{pending ? meta.title : `${rank}ランク ×${multiplier.toFixed(1)}`}</div>
+          <div className="result-title">
+            {pending ? meta.title : `${rank}ランク ×${multiplier.toFixed(1)}`}
+          </div>
         </div>
         <div className="exp-gain">
           <span className="exp-gain-num">{`+${base + bonus}`}</span>
@@ -645,6 +672,16 @@ function ResultCard({ result, universityId, faculty }) {
       </div>
 
       {formula && <p className="result-formula"><span>{formula.text}</span><strong>{`${formula.growth}EXP`}</strong></p>}
+
+      {penalty && (
+        <div className="penalty-note" role="status">
+          <p className="penalty-title"><span>⚠ 勉強時間に対して、書かれた量が多すぎるようです</span></p>
+          <p><span>{`「${toText(penalty.quote)}」— ${toText(penalty.reason)}`}</span></p>
+          <p className="penalty-sub">
+            <span>{`${toNumber(result?.minutes) ? `${toNumber(result.minutes)}分では` : "この時間では"}こなせない量と判定したので、ランクはC・育成EXPは半分・言語化ボーナスはなしにしました。実際にやった範囲を正直に書けば、ふつうに採点されます。`}</span>
+          </p>
+        </div>
+      )}
 
       {!pending && result?.scores && <RankBreakdown scores={result.scores} hint={toText(result?.hint)} />}
 
@@ -799,8 +836,8 @@ function ReportView({ logs, profile }) {
               <Doughnut data={chartData} options={chartOptions} />
               <div className="doughnut-center">
                 <div>
-                  <strong>{formatMinutes(report.totalMinutes)}</strong>
                   <span>合計</span>
+                  <strong>{formatMinutes(report.totalMinutes)}</strong>
                 </div>
               </div>
             </div>
@@ -860,6 +897,7 @@ function ReportView({ logs, profile }) {
                       {`+${toNumber(l.base_exp) + toNumber(l.bonus_exp)} EXP`}
                     </span>
                     {l.rankPending && <span className="rank-badge rank-c">判定待ち</span>}
+                    {l.penalty && <span className="rank-badge rank-c" title="勉強時間に対して書かれた量が多すぎたため、ランクCになった記録">量の確認</span>}
                     {rank && (
                       <span className={`rank-badge ${RANK_META[rank].className}`}>{rank}</span>
                     )}

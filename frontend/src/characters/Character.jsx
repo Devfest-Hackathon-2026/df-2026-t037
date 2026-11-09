@@ -2,6 +2,7 @@
 // 例：<Character uni="todai" stage={3} />  <Character uni="keio" stage={3} variant="equip" size={200} faculty={faculty} />
 // uni は universities.js の id（todai / kagaku / chiba / keio / hitotsu / tufs / waseda / kyoto / osaka）
 import './characters.css';
+import { withWear } from './wear';
 
 const files = import.meta.glob('./svg/*.svg', { query: '?raw', import: 'default', eager: true });
 const pinFiles = import.meta.glob('./pins/*.svg', { query: '?raw', import: 'default', eager: true });
@@ -44,11 +45,13 @@ function withFacultyMarks(svg, uni, ribbon) {
   return end < 0 ? svg : svg.slice(0, end) + marks + svg.slice(end);
 }
 
-export function Character({ uni, stage, variant = 'normal', size = 160, still = false, faculty = null }) {
+/** wear：着替えの装備（{ head, neck, chest, hand, back, effect }）。レジェンド・ミシック・メダル・エフェクトを絵に重ねる */
+export function Character({ uni, stage, variant = 'normal', size = 160, still = false, faculty = null, wear = null }) {
   const name = variant === 'equip' && stage === 3 ? `${uni}-equip` : `${uni}-${stage}`;
   const base = svgOf(name);
   if (!base) return null;
-  const svg = stage === 3 ? withFacultyMarks(base, uni, faculty?.ribbon) : base;
+  const worn = wear ? withWear(base, wear) : base;
+  const svg = stage === 3 ? withFacultyMarks(worn, uni, faculty?.ribbon) : worn;
   return (
     <div
       className={still ? 'tama-char tama-still' : 'tama-char'}

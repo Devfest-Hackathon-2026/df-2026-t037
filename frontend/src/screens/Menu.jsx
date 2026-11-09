@@ -2,11 +2,13 @@
 // 勉強タイマー中は着替えを鍵マークつきで薄く表示し、押せないようにする（Timer.dc.html）
 import { useEffect, useRef, useState } from "react";
 import { isChimeOn, setChimeOn } from "../lib/chime";
+import HelpSheet from "./Help";
 import "./tama.css";
 
-export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, dark = false }) {
+export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, onMocks, dark = false }) {
   const [open, setOpen] = useState(false);
   const [chime, setChime] = useState(() => isChimeOn());
+  const [helpOpen, setHelpOpen] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -51,6 +53,12 @@ export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, d
               <span className="tama-menu-sub">9大学79学部</span>
             </button>
           )}
+          {onMocks && (
+            <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onMocks)}>
+              <span>模試の記録</span>
+              <span className="tama-menu-sub">冠模試の判定</span>
+            </button>
+          )}
           <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onSettings)}>
             <span>設定</span>
             <span className="tama-menu-sub">学年・志望校・ペース</span>
@@ -67,6 +75,10 @@ export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, d
           >
             <span>終わりの音</span>
             <span className={`tama-switch ${chime ? "on" : ""}`} aria-hidden="true"><span /></span>
+          </button>
+          <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(() => setHelpOpen(true))}>
+            <span>ヘルプ</span>
+            <span className="tama-menu-sub">育て方・親密度・着替え</span>
           </button>
           <div className="tama-menu-sep" />
           {timerRunning ? (
@@ -87,6 +99,7 @@ export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, d
           )}
         </div>
       )}
+      {helpOpen && <HelpSheet onClose={() => setHelpOpen(false)} />}
     </div>
   );
 }

@@ -107,10 +107,15 @@ def update_streak(user: dict, today: date, minutes: int, grade: str) -> dict:
     }
 
 
-def growth_for_log(minutes: int, subject: str, faculty_id: str, streak: int, rank: str | None) -> int:
-    """育成EXP＝分数×（1＋志望学部の配点比率）×連続ボーナス×言語化ランク倍率"""
+# 時間に対して量が明らかに多すぎる記録（review_rank の penalty）は、ランク倍率のかわりにこれをかける
+PENALTY_MULTIPLIER = 0.5
+
+
+def growth_for_log(minutes: int, subject: str, faculty_id: str, streak: int, rank: str | None, penalty: bool = False) -> int:
+    """育成EXP＝分数×（1＋志望学部の配点比率）×連続ボーナス×言語化ランク倍率（ズルの疑いがあれば×0.5）"""
     raw = growth_exp_raw(minutes, SUBJECT_CATEGORY.get(subject), faculty_id, streak)
-    return round_half_up(raw * RANK_MULTIPLIER.get(rank or "", 1.0))
+    mult = PENALTY_MULTIPLIER if penalty else RANK_MULTIPLIER.get(rank or "", 1.0)
+    return round_half_up(raw * mult)
 
 
 def has_plan(user: dict) -> bool:
@@ -278,7 +283,7 @@ def season_rollover(user: dict, today: date) -> dict | None:
 # 採点（review_rank.judge）に失敗したら、仮に×1.0（Cランクのボーナス）で記録だけ保存し、rankPending を付ける。
 # あとで判定が出たら、その差分だけ totalExp と育成EXPを足す
 
-def judgement_updates(log: dict, user: dict, rank: str, rank_exp: dict) -> dict:
+def judgement_updates(log: dict, user: dict, rank: str, rank_exp: dict, penalty: bool = False) -> dict:
     """保存ずみの記録に、あとから出たランクを当てはめたときの差分を返す。
 
     返す形：{"bonus_exp": 新しいボーナス, "bonusDiff": totalExp に足す数,
@@ -287,7 +292,8 @@ def judgement_updates(log: dict, user: dict, rank: str, rank_exp: dict) -> dict:
     - 育成EXPは、記録したときの分数・教科・連続日数・志望学部で計算し直す
     - 学年を変えたあと（seasonId がちがう）・シーズンが終わったあとは、育成EXPは足さない（totalExp は足す）
     """
-    bonus_new = rank_exp.get(rank, rank_exp["C"])
+    # ズルの疑い（penalty）があるときは、言語化ボーナスは0
+    bonus_new = 0 if penalty else rank_exp.get(rank, rank_exp["C"])
     out = {
         "bonus_exp": bonus_new,
         "bonusDiff": bonus_new - int(log.get("bonus_exp") or 0),
@@ -300,7 +306,7 @@ def judgement_updates(log: dict, user: dict, rank: str, rank_exp: dict) -> dict:
     faculty_id = log.get("facultyId") or user.get("targetFacultyId")
     if resolve_faculty_id(faculty_id) is None:
         return out
-    new_gain = growth_for_log(int(log.get("minutes") or 0), log.get("subject"), faculty_id, int(log.get("streak") or 0), rank)
+    new_gain = growth_for_log(int(log.get("minutes") or 0), log.get("subject"), faculty_id, int(log.get("streak") or 0), rank, penalty)
     diff = new_gain - int(log.get("growth_exp") or 0)
     out["growth_exp"] = new_gain
     out["growthDiff"] = diff
@@ -309,4 +315,44 @@ def judgement_updates(log: dict, user: dict, rank: str, rank_exp: dict) -> dict:
         new_exp = max(0, int(user.get("growthExp") or 0) + diff)
         stage, bond = stage_and_bond(new_exp, user["plan"])
         out["userUpdates"] = {"growthExp": new_exp, "stage": stage, "bond": bond}
+    return out
+
+
+# ---- 冠模試の記録（模試の判定からレジェンド装備・ミシックを決める） ----
+JUDGE_ORDER = {"E": 0, "D": 1, "C": 2, "B": 3, "A": 4}
+STAR_DEVIATION = 70.0
+
+
+def mock_unlocks(mocks: list[dict]) -> dict:
+    """冠模試の記録から、入手できたレジェンド装備・ミシックを決める（毎回すべての記録から計算し直す）。
+    - a-crown（A判定の王冠）：どれかの冠模試でA判定
+    - star70（偏差値70の星章）：どれかの冠模試で総合偏差値70以上
+    - comeback-wings（逆転の翼）：同じ模試シリーズで、それまでのいちばん低い判定より2段階以上上がった
+    - phoenix（不死鳥の炎・ミシック）：同じ模試シリーズで、E判定のあとにA判定
+    同じシリーズの順番は（年度, 回）で並べる
+    """
+    out = {"a-crown": False, "star70": False, "comeback-wings": False, "phoenix": False}
+    by_series: dict[str, list[dict]] = {}
+    for m in mocks:
+        j = JUDGE_ORDER.get(m.get("judge"))
+        if j is None:
+            continue
+        if j == 4:
+            out["a-crown"] = True
+        dev = m.get("deviation")
+        if isinstance(dev, (int, float)) and dev >= STAR_DEVIATION:
+            out["star70"] = True
+        by_series.setdefault(str(m.get("seriesId")), []).append(m)
+    for rows in by_series.values():
+        rows.sort(key=lambda m: (int(m.get("fiscalYear") or 0), int(m.get("round") or 0)))
+        lowest = None
+        saw_e = False
+        for m in rows:
+            j = JUDGE_ORDER[m["judge"]]
+            if lowest is not None and j - lowest >= 2:
+                out["comeback-wings"] = True
+            if saw_e and j == 4:
+                out["phoenix"] = True
+            lowest = j if lowest is None else min(lowest, j)
+            saw_e = saw_e or j == 0
     return out

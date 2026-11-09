@@ -1,7 +1,7 @@
 // 着替えのアイテム一覧（デザイン元：docs/design/Kisekae.dc.html）
 // 今のデータ（growthExp・bond・志望大学）から入手済みかを判定できるものだけを並べる。
 // 季節の着せかえ・教科マスター・図鑑の子が条件のものは、記録の仕組みができてから足す
-import { ENDLESS, LEGEND } from './rules';
+import { ENDLESS, LEGEND, MYTHIC } from './rules';
 import { UNIVERSITIES } from './universities';
 
 /** 場所（頭・首・胸・手・背中）＋エフェクト。rules.js の SLOTS と同じ並び */
@@ -40,9 +40,11 @@ const MEDALS = [
 
 /**
  * 今の状態での着替えアイテム一覧。
- * 返す形：{ id, name, slot, owned, note, kind: 'normal' | 'legend', uniEquip?: 'lv3' | 'lv5' }
+ * 返す形：{ id, name, slot, owned, note, kind: 'normal' | 'legend' | 'mythic', uniEquip?: 'lv3' | 'lv5' }
+ * legends は users/{uid}.legends（冠模試の記録からサーバーが決める。例：{ 'a-crown': true }）
  */
-export function buildItems({ universityId, growthExp, bond }) {
+export function buildItems({ universityId, growthExp, bond, legends }) {
+  const won = legends && typeof legends === 'object' ? legends : {};
   const items = [];
   const exp = Math.max(0, Number(growthExp) || 0);
   const b = Math.max(0, Number(bond) || 0);
@@ -80,9 +82,13 @@ export function buildItems({ universityId, growthExp, bond }) {
     { id: 'rainbow-aura', name: '虹のオーラ', slot: 'effect', owned: exp >= ENDLESS.medalExp * 4, note: '育成EXP 20万', kind: 'normal' },
   );
 
-  // レジェンド：模試の成績などが条件。今は確認の仕組みがないので、すべてロック
+  // レジェンド：冠模試の記録（≡メニュー「模試の記録」）からサーバーが決める。流れ星・太陽のオーラはまだ確認の仕組みがない
   for (const l of LEGEND) {
-    items.push({ id: l.id, name: l.name, slot: l.slot, owned: false, note: l.condition, kind: 'legend' });
+    items.push({ id: l.id, name: l.name, slot: l.slot, owned: won[l.id] === true, note: l.condition, kind: 'legend' });
+  }
+  // ミシック（最上級のエフェクト）：今は不死鳥の炎（冠模試でE→A）だけ入手できる
+  for (const m of MYTHIC) {
+    items.push({ id: m.id, name: m.name, slot: 'effect', owned: won[m.id] === true, note: m.condition, kind: 'mythic' });
   }
 
   return items;
@@ -94,11 +100,11 @@ export function buildItems({ universityId, growthExp, bond }) {
  */
 export function newlyUnlockedItems(universityId, before, after) {
   const had = new Set(
-    buildItems({ universityId, growthExp: before.growthExp, bond: before.bond })
+    buildItems({ universityId, growthExp: before.growthExp, bond: before.bond, legends: before.legends })
       .filter((i) => i.owned)
       .map((i) => i.id)
   );
-  return buildItems({ universityId, growthExp: after.growthExp, bond: after.bond })
+  return buildItems({ universityId, growthExp: after.growthExp, bond: after.bond, legends: after.legends })
     .filter((i) => i.owned && !had.has(i.id))
     .map((i) => i.name);
 }

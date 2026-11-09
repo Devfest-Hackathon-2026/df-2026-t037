@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Character, Egg } from "../characters/Character";
 import { UNIVERSITIES, FACULTIES, getFaculty, getUniversity } from "../game/universities";
-import { averageMultiplier, makePlan, makeSeason, streakThresholdMinutes } from "../game/rules";
+import { GRADE_HOURS, averageMultiplier, makePlan, makeSeason, streakThresholdMinutes } from "../game/rules";
 import {
   APP_GRADES, GRADE_FROM_APP, PACES, daysBetween, defaultExamDate, gradeHoursText,
   jpDate, jpMonthDay, milestoneDates, parseYmd, roughDate, round10, todayStart,
@@ -16,7 +16,8 @@ import "./tama.css";
 export default function SetupFlow({ profile, defaultNickname, closable, onClose }) {
   const today = useMemo(() => todayStart(), []);
   const initialGrade = APP_GRADES.includes(profile?.grade) ? profile.grade : "高校2年生";
-  const [step, setStep] = useState(1);
+  // はじめての人は、最初に「どんなアプリか」の説明（0）から。設定から開いたときは 1 から
+  const [step, setStep] = useState(closable ? 1 : 0);
   const [nickname, setNickname] = useState(profile?.nickname ?? defaultNickname ?? "");
   const [grade, setGrade] = useState(initialGrade);
   const [examDate, setExamDate] = useState(profile?.examDate || defaultExamDate(initialGrade, today));
@@ -67,7 +68,9 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
   const common = { today, grade, examDate, pace };
   return (
     <div className="tama tama-screen">
-      {step === 1 ? (
+      {step === 0 ? (
+        <IntroStep onNext={() => setStep(1)} />
+      ) : step === 1 ? (
         <SetupStep
           {...common}
           nickname={nickname}
@@ -104,6 +107,66 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
         />
       )}
     </div>
+  );
+}
+
+// ===== はじめての説明（初期設定の前に1回だけ） =====
+function IntroStep({ onNext }) {
+  return (
+    <>
+      <div className="tama-head">
+        <div>
+          <p className="tama-kicker"><span>ようこそ</span></p>
+          <h1 className="tama-title"><span>志望校のキャラを育てよう</span></h1>
+        </div>
+        <Egg size={72} />
+      </div>
+      <p className="tama-note">
+        <span>勉強を記録してふりかえりを書くと、AI（Gemini）が考えの深さを採点し、志望校のキャラにEXPが入ります。勉強時間だけでなく、考えたことを言葉にするほど早く育ちます。</span>
+      </p>
+
+      <div className="tama-field">
+        <p className="tama-label"><span>9大学に、それぞれのキャラがいます</span></p>
+        <div className="tama-intro-chars">
+          {UNIVERSITIES.map((u) => (
+            <div key={u.id} className="tama-intro-char">
+              <Character uni={u.id} stage={3} size={70} still />
+              <p><span>{u.character}</span></p>
+              <span>{u.short}</span>
+            </div>
+          ))}
+        </div>
+        <p className="tama-note"><span>たまご → 1回目の進化 → 最終進化（志望学部のリボンとピンがつく）→ 親密度10。親密度が上がると装備がもらえます</span></p>
+      </div>
+
+      <div className="tama-field">
+        <p className="tama-label"><span>1日の勉強の目安</span></p>
+        <div className="tama-intro-grades">
+          {["高1", "高2", "高3"].map((g) => (
+            <div key={g} className="tama-intro-grade">
+              <span>{g}</span>
+              <strong>{`${GRADE_HOURS[g]}時間`}</strong>
+              <span>{g === "高3" ? "毎日" : "長期休みは1.5倍"}</span>
+            </div>
+          ))}
+        </div>
+        <p className="tama-note"><span>目安どおりに続けると、学年の終わり（高3は受験日）までに親密度10まで育つように決まります。目安の1/4以上の日が続くと、連続ボーナスでEXPが最大1.2倍になります</span></p>
+      </div>
+
+      <div className="tama-box">
+        <p className="tama-strong small"><span>EXPがたくさん入るコツ</span></p>
+        <p className="tama-note"><span>・志望学部の配点が大きい教科を勉強する</span></p>
+        <p className="tama-note"><span>・ふりかえりに「どこを・なぜつまずいたか・次に何をするか」を書く（Sランクで×1.3）</span></p>
+        <p className="tama-note"><span>・毎日少しずつ続ける</span></p>
+      </div>
+      <p className="tama-note"><span>くわしいことは、あとから ≡メニューの「ヘルプ」でいつでも見られます</span></p>
+
+      <div className="tama-actions">
+        <button type="button" className="tama-btn block" onClick={onNext}>
+          <span>はじめる：学年と志望校を決める</span>
+        </button>
+      </div>
+    </>
   );
 }
 

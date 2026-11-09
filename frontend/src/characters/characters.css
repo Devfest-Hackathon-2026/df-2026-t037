@@ -52,6 +52,41 @@
 @keyframes flick{0%,100%{transform:scale(1,1)}30%{transform:scale(.85,1.15)}60%{transform:scale(1.1,.9)}}
 @keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-22px);opacity:0}}
 @keyframes ripple2{0%,100%{transform:translateX(0);opacity:.5}50%{transform:translateX(4px);opacity:1}}
-@keyframes pend{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
-@keyframes pend2{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-6deg)}}
+@keyframes pend{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+@keyframes pend2{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-8deg)}}
 @media (prefers-reduced-motion: no-preference){.flick{animation:flick 1.2s ease-in-out infinite}.rise{animation:rise 2.8s ease-out infinite;transform-box:fill-box}.ripple{animation:ripple2 2.4s ease-in-out infinite}.pend{animation:pend 1.9s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0%}.pend2{animation:pend2 1.9s ease-in-out infinite;animation-delay:-.25s;transform-box:fill-box;transform-origin:50% 0%}}
+
+/* 着替えで重ねるアイテム（wear.js） */
+@keyframes wearFall{0%{transform:translate(0,-10px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translate(18px,90px) rotate(240deg);opacity:0}}
+@keyframes wearFloat{0%{transform:translateY(6px);opacity:0}25%{opacity:1}100%{transform:translateY(-16px);opacity:0}}
+@keyframes wearWingL{0%,100%{transform:rotate(0)}50%{transform:rotate(8deg)}}
+@keyframes wearWingR{0%,100%{transform:rotate(0)}50%{transform:rotate(-8deg)}}
+@keyframes wearMeteor{0%,55%{transform:translate(0,0);opacity:0}62%{opacity:1}90%{transform:translate(-26px,22px);opacity:1}100%{transform:translate(-30px,25px);opacity:0}}
+@keyframes wearSun{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: no-preference) {
+  .tama-char .wear-fall { animation:wearFall 4.2s linear infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-float { animation:wearFloat 2.6s ease-out infinite;transform-box:fill-box }
+  .tama-char .wear-wingL { animation:wearWingL 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:100% 80% }
+  .tama-char .wear-wingR { animation:wearWingR 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 80% }
+  .tama-char .wear-meteor { animation:wearMeteor 3.6s ease-in infinite }
+  .tama-char .wear-sun { animation:wearSun 24s linear infinite;transform-box:view-box;transform-origin:80px 92px }
+}
+/* 流れ星・ミシックを派手に */
+@keyframes wearPulse{0%,100%{transform:scale(.94);opacity:.55}50%{transform:scale(1.06);opacity:1}}
+@keyframes wearFlapL{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(14deg) scale(1.06)}}
+@keyframes wearFlapR{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(-14deg) scale(1.06)}}
+@keyframes wearEmber{0%{transform:translateY(0) scale(1);opacity:0}15%{opacity:1}100%{transform:translateY(-70px) scale(.3);opacity:0}}
+@keyframes wearAurora{0%,100%{transform:translateX(-8px) skewX(-6deg);opacity:.45}50%{transform:translateX(8px) skewX(6deg);opacity:.95}}
+@keyframes wearSparkle{0%,100%{transform:scale(.4);opacity:.2}50%{transform:scale(1.4);opacity:1}}
+@keyframes wearBloom{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.15) rotate(12deg)}}
+@media (prefers-reduced-motion: no-preference) {
+  .tama-char .wear-meteor { animation:wearMeteor 3.2s ease-in infinite }
+  .tama-char .wear-pulse { animation:wearPulse 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-flapL { animation:wearFlapL 1.1s ease-in-out infinite;transform-box:fill-box;transform-origin:100% 85% }
+  .tama-char .wear-flapR { animation:wearFlapR 1.1s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 85% }
+  .tama-char .wear-ember { animation:wearEmber 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-aurora { animation:wearAurora 4s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-sparkle { animation:wearSparkle 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-bloom-in { animation:wearBloom 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-fall { animation-duration:3.4s }
+}

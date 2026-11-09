@@ -137,3 +137,22 @@ export function requestDiscover() {
   });
 }
 
+
+// 冠模試の記録（志望大学の冠模試だけ）。レジェンド装備の入手はサーバーが判定する
+const MOCK_400_MESSAGES = {
+  "志望大学の冠模試がありません": "志望大学には冠模試がありません。",
+  "志望大学の冠模試ではありません": "志望大学の冠模試だけ登録できます。",
+  "回が不正です": "その模試にはその回がありません。",
+  "年度が不正です": "今年度か昨年度の模試を選んでください。",
+};
+
+export function requestSaveMock({ seriesId, fiscalYear, round, judge, deviation }) {
+  return postJson("/mock", { seriesId, fiscalYear, round, judge, deviation }, {
+    serverError: "模試の記録を保存できませんでした。時間をおいてもう一度お試しください。",
+    messages400: MOCK_400_MESSAGES,
+  });
+}
+
+export function requestDeleteMock(id) {
+  return postJson("/mock/delete", { id }, { serverError: "模試の記録を消せませんでした。" });
+}

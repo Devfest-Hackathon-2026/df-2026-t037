@@ -18,8 +18,8 @@ export default function Kisekae({ uid, profile, onBack }) {
   const uni = faculty && getUniversity(faculty.universityId);
   const stage = [1, 2, 3].includes(profile?.stage) ? profile.stage : 1;
   const items = useMemo(
-    () => buildItems({ universityId: uni?.id, growthExp: profile?.growthExp, bond: profile?.bond }),
-    [uni?.id, profile?.growthExp, profile?.bond]
+    () => buildItems({ universityId: uni?.id, growthExp: profile?.growthExp, bond: profile?.bond, legends: profile?.legends }),
+    [uni?.id, profile?.growthExp, profile?.bond, profile?.legends]
   );
   const saved = sanitizeEquipped(profile?.equipped, items);
   const savedOutfits = profile?.outfits && typeof profile.outfits === "object" ? profile.outfits : {};
@@ -80,6 +80,7 @@ export default function Kisekae({ uid, profile, onBack }) {
   const normal = shown.filter((i) => i.kind === "normal" && i.slot !== "effect");
   const effects = shown.filter((i) => i.kind === "normal" && i.slot === "effect");
   const legends = shown.filter((i) => i.kind === "legend");
+  const mythics = shown.filter((i) => i.kind === "mythic");
   const wornCount = BODY_SLOTS.filter((s) => equipped[s]).length;
   const wornNames = Object.values(equipped).map((id) => items.find((i) => i.id === id)?.name).filter(Boolean);
   const showEquip = stage === 3 && wearsUniEquip(equipped, items);
@@ -100,7 +101,7 @@ export default function Kisekae({ uid, profile, onBack }) {
       )}
 
       <div className="tama-kise-stage">
-        {uni && <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={150} faculty={faculty} />}
+        {uni && <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={150} faculty={faculty} wear={equipped} />}
         <div className="tama-kise-tools">
           <button type="button" onClick={removeAll} disabled={locked}><span>ぜんぶ外す</span></button>
           <button type="button" onClick={omakase} disabled={locked}><span>おまかせ</span></button>
@@ -157,7 +158,16 @@ export default function Kisekae({ uid, profile, onBack }) {
         <>
           <p className="tama-label legend"><span>レジェンド（とても難しい・模試の成績など）</span></p>
           <div className="tama-kise-grid five">
-            {legends.map((it) => <ItemTile key={it.id} item={it} on={false} locked onClick={() => {}} />)}
+            {legends.map((it) => <ItemTile key={it.id} item={it} on={equipped[it.slot] === it.id} locked={locked} onClick={() => toggle(it)} />)}
+          </div>
+        </>
+      )}
+
+      {mythics.length > 0 && (
+        <>
+          <p className="tama-label legend"><span>ミシック（最上級のエフェクト）</span></p>
+          <div className="tama-kise-grid five">
+            {mythics.map((it) => <ItemTile key={it.id} item={it} on={equipped.effect === it.id} locked={locked} onClick={() => toggle(it)} />)}
           </div>
         </>
       )}
@@ -170,7 +180,7 @@ export default function Kisekae({ uid, profile, onBack }) {
 function ItemTile({ item, on, locked, onClick }) {
   const cls = [
     "tama-item",
-    item.kind === "legend" ? "legend" : "",
+    item.kind === "legend" || item.kind === "mythic" ? "legend" : "",
     item.owned ? "" : "lockedItem",
     on ? "on" : "",
   ].join(" ");
@@ -178,7 +188,7 @@ function ItemTile({ item, on, locked, onClick }) {
   return (
     <button type="button" className={cls} onClick={onClick} disabled={locked && item.owned} aria-label={label} aria-pressed={on}>
       {on && <span className="tama-item-check">✓</span>}
-      {!item.owned && item.kind !== "legend" && <span className="tama-item-lock">ロック</span>}
+      {!item.owned && <span className="tama-item-lock">ロック</span>}
       <span className="tama-item-slot">{SLOT_LABEL[item.slot]}</span>
       <span className="tama-item-name">{item.name}</span>
       <span className="tama-item-note">{item.note}</span>

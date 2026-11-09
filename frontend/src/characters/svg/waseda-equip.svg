@@ -20,6 +20,6 @@
 <path d="M50 118 Q80 130 110 118" fill="none" stroke="#E8C058" stroke-width="2.2"></path><circle cx="50" cy="118" r="4.2" fill="#E8C058"></circle><circle cx="110" cy="118" r="4.2" fill="#E8C058"></circle>
 <line x1="24" y1="142" x2="14" y2="14" stroke="#8A5A36" stroke-width="3.2" stroke-linecap="round"></line>
 <g class="swayV" style="transform-origin: 15px 18px; animation-duration: 1.4s"><path d="M15 16 Q32 10 46 20 Q34 30 17 40 Z" fill="#9A2A40"></path><path d="M16 26 Q30 22 40 25" stroke="#FFFFFF" stroke-width="2.6" fill="none" stroke-linecap="round"></path></g>
-<path d="M124 100 L148 86 L154 110 L128 108 Z" fill="#F4F0EA"></path><path d="M148 86 L154 110" stroke="#9A2A40" stroke-width="3.5" stroke-linecap="round"></path><rect x="120" y="99" width="9" height="10" rx="2.5" fill="#9A2A40"></rect>
+<g class="megaphone"><path d="M124 99 L147 85 L153.5 110.5 L127.5 108.5 Z" fill="#F5B82E" stroke="#6B3E0E" stroke-width="1.6" stroke-linejoin="round"></path><path d="M128 101.5 L145 91" stroke="#FFE7A0" stroke-width="2" stroke-linecap="round"></path><ellipse cx="150.3" cy="97.8" rx="3.4" ry="12.8" transform="rotate(-14 150.3 97.8)" fill="#C9860F" stroke="#6B3E0E" stroke-width="1.6"></ellipse><rect x="119" y="98" width="10" height="11.5" rx="2.6" fill="#2B2632"></rect><path d="M156.5 92 q3 6 0 12" fill="none" stroke="#6B3E0E" stroke-width="1.6" stroke-linecap="round" opacity=".7"></path></g>
 </g>
 </svg>

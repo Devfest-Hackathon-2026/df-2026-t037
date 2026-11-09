@@ -44,8 +44,9 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
   const seasonLeft = seasonEnd ? Math.max(0, daysBetween(today, seasonEnd)) : null;
   const s = streakInfo(streak);
   const name = uni.stageNames[stage - 1] || uni.character;
-  const items = buildItems({ universityId: uni.id, growthExp: exp, bond });
-  const showEquip = stage === 3 && wearsUniEquip(sanitizeEquipped(profile.equipped, items), items);
+  const items = buildItems({ universityId: uni.id, growthExp: exp, bond, legends: profile?.legends });
+  const worn = sanitizeEquipped(profile.equipped, items);
+  const showEquip = stage === 3 && wearsUniEquip(worn, items);
 
   return (
     <section className="tama tama-home">
@@ -104,7 +105,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
           onTalk={() => setChatOpen(true)}
           onGreeting={setGreeting}
         />
-        <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} faculty={faculty} />
+        <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} faculty={faculty} wear={worn} />
       </div>
 
       {chatOpen && (

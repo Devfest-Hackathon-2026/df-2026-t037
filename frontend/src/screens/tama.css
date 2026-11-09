@@ -861,3 +861,54 @@
 .tama-breakdown-hint-text { margin: 0; padding: 10px 14px 12px; font-size: 13px; line-height: 1.7; border-top: 1.5px dashed #F1E6DA; }
 .result-formula { margin: 6px 0 0; font-size: 12px; line-height: 1.6; color: #6B6358; }
 .result-formula strong { font-size: 15px; color: #4A3E3A; }
+
+/* ===== ヘルプ（≡メニュー「ヘルプ」） ===== */
+.tama-help-head { display: flex; justify-content: space-between; align-items: center; }
+.tama-help-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background: #F6EEE6; padding: 4px; border-radius: 14px; }
+.tama-help-tab { height: 34px; border: 0; border-radius: 10px; background: none; font-family: inherit; font-size: 12px; font-weight: 800; color: #8A7A72; }
+.tama-help-tab.on { background: #FFFFFF; color: var(--t-main); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); }
+.tama-help-body { display: flex; flex-direction: column; gap: 10px; }
+.tama-help-box { background: #FDF8F4; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.tama-help-box.is-legend { background: #FFF6DE; }
+.tama-help-box.is-mythic { background: #F3EEFF; }
+.tama-help-h { font-size: 13px; font-weight: 900; }
+.tama-help-text { font-size: 12px; line-height: 1.7; }
+.tama-help-formula { font-size: 12px; font-weight: 800; line-height: 1.6; color: var(--t-main-dark); }
+.tama-help-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; line-height: 1.6; }
+.tama-help-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tama-help-chip { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: #FFFFFF; border: 1.5px solid #F0D0D8; color: var(--t-main-dark); }
+.tama-help-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.tama-help-step { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; text-align: center; }
+.tama-help-num { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--t-main); color: #FFFFFF; font-size: 13px; }
+.tama-help-table { display: flex; flex-direction: column; gap: 8px; }
+.tama-help-row { display: grid; grid-template-columns: 48px 1fr; gap: 8px; align-items: center; font-size: 13px; background: #FDF8F4; border-radius: 12px; padding: 8px 10px; }
+.tama-help-bond { font-weight: 900; color: var(--t-main); }
+
+/* ===== はじめての説明（初期設定の前） ===== */
+.tama-intro-chars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.tama-intro-char { display: flex; flex-direction: column; align-items: center; gap: 0; background: #FFFFFF; border: 1.5px solid #EEE4DA; border-radius: 16px; padding: 4px 2px 8px; }
+.tama-intro-char p { font-size: 11px; font-weight: 900; }
+.tama-intro-char span { font-size: 9.5px; color: var(--t-sub); }
+.tama-intro-grades { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.tama-intro-grade { background: #FFFFFF; border: 1.5px solid #EEE4DA; border-radius: 14px; padding: 8px 4px; text-align: center; }
+.tama-intro-grade strong { display: block; font-size: 20px; font-weight: 900; color: var(--t-main); }
+.tama-intro-grade span { font-size: 11px; color: var(--t-sub); }
+
+/* ===== 冠模試の記録 ===== */
+.tama-mocks { gap: 10px; }
+.tama-white-card.light { background: #FFFFFF; border: 1.5px solid #EEE4DA; border-radius: 18px; padding: 12px; display: flex; flex-direction: column; gap: 8px; color: var(--t-text); }
+.tama-mock-series { display: flex; flex-direction: column; gap: 6px; }
+.tama-mock-series .tama-pill { height: auto; min-height: 44px; padding: 6px 12px; display: flex; justify-content: space-between; align-items: center; text-align: left; gap: 8px; }
+.tama-mock-provider { font-size: 11px; font-weight: 700; opacity: 0.75; white-space: nowrap; }
+.tama-mock-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; }
+.tama-mock-judges { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.tama-mock-judge { height: 48px; border-radius: 14px; border: 2px solid #EEE4DA; background: #FFFFFF; font-family: inherit; font-size: 20px; font-weight: 900; }
+.tama-mock-judge.on { color: #FFFFFF; }
+.tama-mock-notice { font-size: 13px; font-weight: 800; color: #3E8A50; }
+.tama-mock-owned { display: flex; flex-wrap: wrap; gap: 6px; }
+.tama-mock-history { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.tama-mock-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.tama-mock-step { display: inline-flex; align-items: center; gap: 4px; }
+.tama-mock-arrow { color: #B0A296; font-weight: 900; }
+.tama-mock-chip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid #EEE4DA; background: #FDF8F4; border-radius: 999px; padding: 3px 10px 3px 3px; font-family: inherit; font-size: 11px; color: var(--t-text); }
+.tama-mock-badge { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #FFFFFF; font-weight: 900; font-size: 12px; }

@@ -84,6 +84,19 @@ class AdviseRequest(BaseModel):
     fromTimer: bool = False
 
 
+class MockRequest(BaseModel):
+    seriesId: str = Field(min_length=1, max_length=40)
+    fiscalYear: int
+    round: int = Field(ge=1, le=6)
+    judge: Literal["A", "B", "C", "D", "E"]
+    # 総合偏差値（入れなくてもよい）
+    deviation: float | None = Field(default=None, ge=20, le=99)
+
+
+class MockDeleteRequest(BaseModel):
+    id: str = Field(min_length=1, max_length=80)
+
+
 class PlanRequest(BaseModel):
     grade: str
     examDate: date
@@ -267,7 +280,7 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
     advice_prompt = build_prompt(grade, data, fetch_history(uid), memory.similar_prompt_block(similar))
     # どちらかが失敗しても記録は保存する（C-15）。採点に失敗したら仮に×1.0で付け、あとで /rejudge が差分を足す
     with ThreadPoolExecutor(max_workers=2) as pool:
-        judged_f = pool.submit(review_rank.judge, data.reflection, call_gemini)
+        judged_f = pool.submit(review_rank.judge, data.reflection, call_gemini, data.minutes)
         result_f = pool.submit(call_gemini, advice_prompt)
         try:
             judged = judged_f.result()
@@ -282,11 +295,13 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
 
     pending = judged is None
     if pending:
-        judged = {"rank": None, "multiplier": 1.0, "total": None, "scores": {}, "hint": ""}
+        judged = {"rank": None, "multiplier": 1.0, "total": None, "scores": {}, "hint": "", "penalty": None}
     # 判定が出ていないあいだは、ボーナスは C の分（あとで差分を足す）・育成EXPは×1.0
     rank = judged["rank"] if judged["rank"] in RANK_EXP else None
+    penalty = judged.get("penalty")
     base_exp = calc_base_exp(data.minutes)
-    bonus_exp = RANK_EXP[rank or "C"]
+    # 時間に対して量が明らかに多すぎる記録は、言語化ボーナスなし・育成EXPは半分（review_rank の penalty）
+    bonus_exp = 0 if penalty else RANK_EXP[rank or "C"]
 
     log_ref = user_ref.collection("study_logs").document()
     log = {
@@ -301,6 +316,7 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
         "total": judged["total"],
         "scores": judged["scores"],
         "hint": judged["hint"],
+        "penalty": penalty,
         "rankPending": pending,
         "bonus_exp": bonus_exp,
         "advice": result.get("advice", ""),
@@ -325,6 +341,7 @@ def get_advice(data: AdviseRequest, uid: str = Depends(verify_user)):
         "total": judged["total"],
         "scores": judged["scores"],
         "hint": judged["hint"],
+        "penalty": penalty,
         "rankPending": pending,
         "base_exp": base_exp,
         "bonus_exp": bonus_exp,
@@ -365,7 +382,7 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
     if grade and progress.has_plan(user) and not user.get("seasonEnded"):
         plan = user["plan"]
         gained = progress.growth_for_log(
-            data.minutes, data.subject, user["targetFacultyId"], growth["streak"], rank
+            data.minutes, data.subject, user["targetFacultyId"], growth["streak"], rank, bool(log.get("penalty"))
         )
         old_exp = int(user.get("growthExp") or 0)
         old_stage, old_bond = progress.stage_and_bond(old_exp, plan)
@@ -430,7 +447,8 @@ def _commit_judgement(txn, user_ref, log_ref, judged: dict) -> dict | None:
         return None
     user = (user_snap.to_dict() or {}) if user_snap.exists else {}
     rank = judged["rank"] if judged["rank"] in RANK_EXP else "C"
-    diff = progress.judgement_updates(log, user, rank, RANK_EXP)
+    penalty = judged.get("penalty")
+    diff = progress.judgement_updates(log, user, rank, RANK_EXP, bool(penalty))
 
     txn.update(log_ref, {
         "rank": rank,
@@ -439,6 +457,7 @@ def _commit_judgement(txn, user_ref, log_ref, judged: dict) -> dict | None:
         "total": judged["total"],
         "scores": judged["scores"],
         "hint": judged["hint"],
+        "penalty": penalty,
         "bonus_exp": diff["bonus_exp"],
         "growth_exp": diff["growth_exp"],
         "rankPending": False,
@@ -465,7 +484,8 @@ def rejudge_pending(uid: str = Depends(verify_user)):
     judged_logs = []
     for doc in pending:
         try:
-            judged = review_rank.judge((doc.to_dict() or {}).get("reflection", ""), call_gemini)
+            d = doc.to_dict() or {}
+            judged = review_rank.judge(d.get("reflection", ""), call_gemini, int(d.get("minutes") or 0))
         except Exception as e:
             # まだ Gemini が使えなければ、次の起動のときにまた試す
             print(f"[rejudge failed] {e.__class__.__name__}")
@@ -474,6 +494,67 @@ def rejudge_pending(uid: str = Depends(verify_user)):
         if done:
             judged_logs.append(done)
     return {"judged": judged_logs}
+
+
+# ---- 冠模試の記録（志望大学の冠模試だけ）。判定からレジェンド装備（王冠・翼・星章）とミシック（不死鳥）を決める ----
+with open(os.path.join(os.path.dirname(__file__), "kanmoshi.json"), encoding="utf-8") as _f:
+    KANMOSHI = json.load(_f)["universities"]
+
+
+def _target_university(user: dict) -> str | None:
+    fid = progress.resolve_faculty_id(user.get("targetFacultyId"))
+    return FACULTIES[fid]["universityId"] if fid else None
+
+
+@firestore.transactional
+def _commit_mocks(txn, user_ref, set_ref=None, set_data=None, delete_ref=None) -> dict:
+    """模試の記録を1件書く（または消す）→ すべての記録から入手を計算し直し、users/{uid}.legends に書く"""
+    mocks = [d.to_dict() or {} for d in user_ref.collection("mocks").stream(transaction=txn)]
+    if set_ref is not None:
+        mocks = [m for m in mocks if m.get("id") != set_ref.id] + [set_data]
+        txn.set(set_ref, {**set_data, "updatedAt": firestore.SERVER_TIMESTAMP})
+    if delete_ref is not None:
+        mocks = [m for m in mocks if m.get("id") != delete_ref.id]
+        txn.delete(delete_ref)
+    unlocks = progress.mock_unlocks(mocks)
+    snap = user_ref.get(transaction=txn)
+    before = ((snap.to_dict() or {}).get("legends") or {}) if snap.exists else {}
+    txn.set(user_ref, {"legends": unlocks}, merge=True)
+    new = [k for k, v in unlocks.items() if v and not before.get(k)]
+    return {"legends": unlocks, "newlyUnlocked": new}
+
+
+@app.post("/mock")
+def save_mock(data: MockRequest, uid: str = Depends(verify_user)):
+    user_ref = db.collection("users").document(uid)
+    user = _load_user(uid)
+    uni = _target_university(user)
+    series = {s["id"]: s for s in KANMOSHI.get(uni or "", [])}
+    if not series:
+        raise HTTPException(status_code=400, detail="志望大学の冠模試がありません")
+    s = series.get(data.seriesId)
+    if not s:
+        raise HTTPException(status_code=400, detail="志望大学の冠模試ではありません")
+    if data.round > int(s["rounds"]):
+        raise HTTPException(status_code=400, detail="回が不正です")
+    this_year = progress.fiscal_year(progress.today_jst())
+    if data.fiscalYear not in (this_year - 1, this_year):
+        raise HTTPException(status_code=400, detail="年度が不正です")
+    doc_id = f"{data.seriesId}_{data.fiscalYear}_{data.round}"
+    record = {
+        "id": doc_id, "seriesId": data.seriesId, "seriesName": s["name"], "provider": s["provider"],
+        "universityId": uni, "fiscalYear": data.fiscalYear, "round": data.round, "judge": data.judge,
+        "deviation": round(data.deviation, 1) if data.deviation is not None else None,
+    }
+    ref = user_ref.collection("mocks").document(doc_id)
+    return {"record": record, **_commit_mocks(db.transaction(), user_ref, set_ref=ref, set_data=record)}
+
+
+@app.post("/mock/delete")
+def delete_mock(data: MockDeleteRequest, uid: str = Depends(verify_user)):
+    user_ref = db.collection("users").document(uid)
+    ref = user_ref.collection("mocks").document(data.id)
+    return _commit_mocks(db.transaction(), user_ref, delete_ref=ref)
 
 
 @app.post("/plan")
