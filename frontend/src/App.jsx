@@ -847,6 +847,7 @@ function ReportView({ logs, profile, uid }) {
           <strong>{typeof profile?.totalMinutes === "number" ? formatMinutes(profile.totalMinutes) : "次の記録から数えます"}</strong>
         </div>
 
+        <p className="tama-tiny" style={{ margin: "0 0 6px" }}><span>下の4つは、いまの学年シーズンの分です（前の学年の記録は入りません）</span></p>
         <div className="stats">
           <Stat label="合計時間" value={formatMinutes(report.totalMinutes)} />
           <Stat label="記録回数" value={report.seasonCount} unit="回" />

@@ -241,7 +241,7 @@ export default function StudyTime({ uid }) {
         </ul>
       ) : (
         <p className="stime-foot">
-          <span>{mode === "day" ? "記録した時刻から、勉強した分だけさかのぼって表示｜棒を押すと内訳" : `合計 ${fmt(data.total)}｜前の期間とは1日平均で比べています｜棒を押すとその日の内訳`}</span>
+          <span>{mode === "day" ? "記録した時刻から、勉強した分だけさかのぼって表示｜棒を押すと内訳" : `合計 ${fmt(data.total)}（学年をまたいだ全記録）｜前の期間とは1日平均で比べています｜棒を押すとその日の内訳`}</span>
         </p>
       )}
     </div>

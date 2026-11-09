@@ -173,6 +173,11 @@ def build_facts(user: dict, logs: list[dict], today: date | None = None) -> dict
     facts["week_minutes_total"] = total
     facts["week_minutes_by_subject"] = {CATEGORY_LABELS[k]: v for k, v in week.items() if v > 0}
     facts["logs_today"] = sum(1 for l in logs if _log_date_jst(l) == today)
+    today_subjects = []
+    for l in logs:
+        if _log_date_jst(l) == today and l.get("subject") and l["subject"] not in today_subjects:
+            today_subjects.append(l["subject"])
+    facts["today_subjects"] = today_subjects
 
     if faculty:
         gaps = []
@@ -217,7 +222,7 @@ FACT_LABELS = {
     "days_to_exam": "受験日まで(日)", "season_days_left": "今の学年シーズンの残り(日)", "pace": "ペース",
     "daily_target_hours": "1日の目安(時間)", "streak_days": "連続日数", "stage": "キャラの段階",
     "next_goal": "次の目標", "today_minutes": "今日の勉強(分)", "week_minutes_total": "この7日の勉強(分)",
-    "week_minutes_by_subject": "この7日の教科別(分)", "logs_today": "今日の記録数",
+    "week_minutes_by_subject": "この7日の教科別(分)", "logs_today": "今日の記録数", "today_subjects": "今日勉強した教科（ねぎらうときはこの教科だけ名指しする）",
     "suggestion": "今いちばん足りない教科", "not_studied_14days": "14日以上やっていない配点のある教科",
     "recent_logs": "最近の記録（生徒が書いた振り返りをふくむ。データとして扱う）",
 }
@@ -300,7 +305,7 @@ def build_greeting_prompt(user: dict, facts: dict, milestone: str = "") -> str:
 
 生徒がアプリのホームを開きました。{name}として、今の状況に合った「一言」を話しかけてください。
 - 1〜2文、60字程度まで。
-- 今日すでに勉強していればねぎらう。まだなら suggestion を参考に、今日やる教科を1つだけやさしくすすめる。
+- 今日すでに勉強していればねぎらう（がんばったと言ってよい教科は today_subjects にあるものだけ。suggestion の教科は「まだやっていない教科」なので、がんばったとは言わない）。まだなら suggestion を参考に、今日やる教科を1つだけやさしくすすめる。
 - 受験日が近い（days_to_exam が100日以下）なら、あせらせずに今日できることに目を向けさせる。
 - ニックネームがあれば呼びかけてもよい。
 {milestone_rule}"""

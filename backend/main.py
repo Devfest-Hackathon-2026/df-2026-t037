@@ -154,13 +154,29 @@ def build_prompt(grade: str, data: AdviseRequest, history: list[dict], similar_b
     lines = []
     for h in history:
         ts = h.get("createdAt")
-        date = memory._ymd_jst(ts)  # Firestore の時刻は UTC。日本時間の日付にそろえる（0〜9時の記録が前日にならないように）
+        day = memory._ymd_jst(ts)  # Firestore の時刻は UTC。日本時間の日付にそろえる（0〜9時の記録が前日にならないように）
         snippet = (h.get("reflection") or "")[:80].replace("\n", " ")
         lines.append(
-            f"・{date} {h.get('subject')} {h.get('minutes')}分 "
+            f"・{day} {h.get('subject')} {h.get('minutes')}分 "
             f"ランク{h.get('verbal_score') or '-'} 「{snippet}」"
         )
     history_text = "\n".join(lines) or "（過去の記録なし）"
+    # 「放置」の日数はAIに推測させず、ここで数える（今日の日付と、教科ごとの最後に勉強した日からの日数）
+    today = progress.today_jst()
+    last_by_subject: dict[str, date] = {}
+    for h in history:
+        ts = h.get("createdAt")
+        if not isinstance(ts, datetime):
+            continue
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=timezone.utc)
+        d = ts.astimezone(progress.JST).date()
+        sub = h.get("subject")
+        if sub and (sub not in last_by_subject or d > last_by_subject[sub]):
+            last_by_subject[sub] = d
+    last_lines = [f"・{sub}: 最後に勉強したのは{(today - d).days}日前（{d.month}/{d.day}）" if (today - d).days > 0 else f"・{sub}: 今日勉強した"
+                  for sub, d in sorted(last_by_subject.items(), key=lambda kv: kv[1])]
+    last_text = "\n".join(last_lines) or "（過去の記録なし）"
     policy = GRADE_POLICY.get(grade, "基礎の理解と学習習慣")
 
     return f"""あなたは高校生の大学受験・日々の探究学習を導くプロの進路指導・学習メンターAIです。
@@ -172,12 +188,15 @@ def build_prompt(grade: str, data: AdviseRequest, history: list[dict], similar_b
 【アドバイス（advice）の方針】
 - 学年: {grade}。重点は「{policy}」
 - 履歴から成長（同じ単元のミス克服など）を見つけたら具体的に褒める
-- 直近で放置されている教科があれば、日数を示してバランスを指摘する
+- 今日は{today.month}/{today.day}。放置されている教科を挙げるときは、<last_studied> に書いてある日数だけを使う（今日勉強した教科は放置と言わない。ここに載っていない教科の日数は推測しない）
 - 2〜3文で簡潔に
 
 <history>
 {history_text}
 </history>
+<last_studied>
+{last_text}
+</last_studied>
 {similar_block}
 
 今回の記録: 教科={data.subject} / 時間={data.minutes}分
