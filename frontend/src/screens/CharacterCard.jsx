@@ -48,6 +48,8 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
   const streakNeed = Math.round((GRADE_HOURS[grade] || 0) * 60 / 4);
   const studiedToday = profile.lastStudyDate === todayStr ? Number(profile.todayMinutes) || 0 : 0;
   const streakLeft = profile.lastStreakDate === todayStr ? 0 : Math.max(0, streakNeed - studiedToday);
+  // がっつりペースで最終進化した色違いは、名前のうしろに ✦（D-2）
+  const shiny = stage === 3 && profile.shiny === true;
   const name = uni.stageNames[stage - 1] || uni.character;
   const items = buildItems({ universityId: uni.id, growthExp: exp, bond, legends: profile?.legends });
   const worn = sanitizeEquipped(profile.equipped, items);
@@ -60,7 +62,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
           {/* 学年はただの文字（C-1）。変える入口は ≡ メニューの「設定」だけ */}
           <p className="tama-note strong"><span>{`${grade}｜志望：${uni.name} ${faculty.name}`}</span></p>
           <p className="tama-name big">
-            <span>{name}</span>
+            <span>{name}{shiny && <span className="tama-shiny-mark" aria-label="色違い">{"\u00A0✦"}</span>}</span>
             <span className="tama-stage" style={{ color: uni.colors[2] }}>{stageStatus(stage, bond)}</span>
           </p>
         </div>
@@ -116,7 +118,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
           onTalk={() => setChatOpen(true)}
           onGreeting={setGreeting}
         />
-        <Character uni={uni.id} stage={stage} variant={showEquip} size={200} faculty={faculty} wear={worn} grade={profile?.grade} />
+        <Character uni={uni.id} stage={stage} variant={showEquip} size={200} faculty={faculty} wear={worn} grade={profile?.grade} shiny={shiny} />
       </div>
 
       {chatOpen && (

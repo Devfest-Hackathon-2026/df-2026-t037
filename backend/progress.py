@@ -157,12 +157,22 @@ def timer_minutes_limit(started_at: datetime, now: datetime) -> int:
     return max(1, math.ceil(elapsed / 60))
 
 
+def shiny_updates(user: dict, old_stage: int, new_stage: int, pace: str | None = None) -> dict:
+    """がっつりペースのまま最終進化した瞬間だけ色違いにする（D-2）。一度なったらそのシーズンの間は色違いのまま。
+    最終進化したあとでペースを変えても、色違いにはしない（あとから変えて色違いにできないように）"""
+    pace = pace or user.get("pace")
+    if new_stage == 3 and int(old_stage or 1) < 3 and pace == "gattsuri" and not user.get("shiny"):
+        return {"shiny": True}
+    return {}
+
+
 def season_reset_fields(user: dict) -> dict:
     """学年を変えたときに、育成をはじめからにする項目（C-25）。記録（logs）は消さずに seasonId だけ変える"""
     return {
         "growthExp": 0,
         "stage": 1,
         "bond": 0,
+        "shiny": False,
         "streak": 0,
         "todayMinutes": 0,
         "lastStreakDate": None,
@@ -239,6 +249,7 @@ def season_rollover(user: dict, today: date) -> dict | None:
         "growthExp": int(user.get("growthExp") or 0),
         "stage": int(user.get("stage") or 1),
         "bond": int(user.get("bond") or 0),
+        "shiny": bool(user.get("shiny")),
         "seasonStart": plan.get("seasonStart"),
         "seasonEnd": plan.get("seasonEnd"),
         "seasonId": int(user.get("seasonId") or 0),
@@ -375,7 +386,8 @@ def judgement_updates(log: dict, user: dict, rank: str, rank_exp: dict, penalty:
     if diff and same_season and has_plan(user) and not user.get("seasonEnded"):
         new_exp = max(0, int(user.get("growthExp") or 0) + diff)
         stage, bond = stage_and_bond(new_exp, user["plan"])
-        out["userUpdates"] = {"growthExp": new_exp, "stage": stage, "bond": bond}
+        out["userUpdates"] = {"growthExp": new_exp, "stage": stage, "bond": bond,
+                              **shiny_updates(user, int(user.get("stage") or 1), stage)}
     return out
 
 

@@ -47,7 +47,9 @@ function toCard(src, profile, { current = false } = {}) {
     bond: Number(src.bond) || 0,
     worn,
     variant: stage === 3 ? wearsUniEquip(worn, items) : "normal",
-    name: uni.stageNames?.[stage - 1] || uni.character,
+    // がっつりペースで最終進化した色違い（D-2）
+    shiny: stage === 3 && src.shiny === true,
+    name: `${uni.stageNames?.[stage - 1] || uni.character}${stage === 3 && src.shiny === true ? '\u00A0✦' : ''}`,
     stats: src.stats || null,
   };
 }
@@ -172,7 +174,7 @@ function Collection({ cards, current, onOpen }) {
                 return (
                   <button key={g} type="button" role="cell" className="tama-dex-cell is-got" onClick={() => onOpen(c.key)}
                     aria-label={`${u.short} ${GRADE_FROM_APP[g]} ${c.name}（${c.fiscalYear}年度）`}>
-                    <Character uni={u.id} stage={c.stage} variant={c.variant} size={64} still faculty={c.faculty} wear={c.worn} grade={g} />
+                    <Character uni={u.id} stage={c.stage} variant={c.variant} size={64} still faculty={c.faculty} wear={c.worn} grade={g} shiny={c.shiny} />
                     <span className="tama-dex-cell-name">{u.character}</span>
                   </button>
                 );
@@ -181,7 +183,7 @@ function Collection({ cards, current, onOpen }) {
                 return (
                   <button key={g} type="button" role="cell" className="tama-dex-cell is-now" onClick={() => onOpen("current")}
                     aria-label={`${u.short} ${GRADE_FROM_APP[g]} 育成中`}>
-                    <Character uni={u.id} stage={now.stage} variant={now.variant} size={64} still faculty={now.faculty} wear={now.worn} grade={g} />
+                    <Character uni={u.id} stage={now.stage} variant={now.variant} size={64} still faculty={now.faculty} wear={now.worn} grade={g} shiny={now.shiny} />
                     <span className="tama-dex-cell-tag">育成中</span>
                   </button>
                 );
@@ -261,7 +263,7 @@ function MemoryCard({ card, mocks }) {
           <span className="tama-dex-grade">{card.grade || ""}</span>
           {card.current && <span className="tama-dex-now">育成中</span>}
         </div>
-        <Character uni={card.uni.id} stage={card.stage} variant={card.variant} size={150} faculty={card.faculty} wear={card.worn} grade={card.grade} />
+        <Character uni={card.uni.id} stage={card.stage} variant={card.variant} size={150} faculty={card.faculty} wear={card.worn} grade={card.grade} shiny={card.shiny} />
         <p className="tama-dex-card-name"><span>{card.name}</span></p>
         <p className="tama-dex-card-sub"><span>{`${card.uni.name} ${card.faculty.name}`}</span></p>
         {card.stage === 3 && (
@@ -410,7 +412,7 @@ function Trajectory({ cards, current, mocks }) {
                   {c.current && <span className="tama-dex-now">いま</span>}
                 </p>
                 <div className="tama-dex-step-row">
-                  <Character uni={c.uni.id} stage={c.stage} variant={c.variant} size={56} still faculty={c.faculty} wear={c.worn} grade={c.grade} />
+                  <Character uni={c.uni.id} stage={c.stage} variant={c.variant} size={56} still faculty={c.faculty} wear={c.worn} grade={c.grade} shiny={c.shiny} />
                   <div>
                     {changed && (
                       <p className="tama-dex-change"><span>{`志望校を変えた：${prev.uni.short} ${prev.faculty.name} → `}</span></p>
@@ -453,7 +455,7 @@ function cardSvg(card, ym = []) {
   const t = (x, y, size, fill, text, { weight = 800, anchor = "middle" } = {}) =>
     `<text x="${x}" y="${y}" font-size="${size}" font-weight="${weight}" fill="${fill}" text-anchor="${anchor}" font-family="${FONT}">${esc(text)}</text>`;
 
-  const charSvg = characterSvg({ uni: card.uni.id, stage: card.stage, variant: card.variant, faculty: card.faculty, wear: card.worn, grade: card.grade })
+  const charSvg = characterSvg({ uni: card.uni.id, stage: card.stage, variant: card.variant, faculty: card.faculty, wear: card.worn, grade: card.grade, shiny: card.shiny })
     .replace(/^\s*<svg width="100%" height="100%"/, '<svg x="85" y="52" width="190" height="190"');
 
   const stats = [
