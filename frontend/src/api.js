@@ -156,3 +156,19 @@ export function requestSaveMock({ seriesId, fiscalYear, round, judge, deviation 
 export function requestDeleteMock(id) {
   return postJson("/mock/delete", { id }, { serverError: "模試の記録を消せませんでした。" });
 }
+
+const DEMO_STATUS_MESSAGES = {
+  400: "先に初期設定（学年と志望校）をしてください。",
+  403: "デモデータはゲストで試しているときだけ使えます。",
+  409: "すでにデモデータが入っています。",
+};
+
+/** デモデータ（ゲストだけ）：昨日までの約2週間分の記録を入れ、1回目の進化の直前にする */
+export function requestDemoSeed() {
+  return postJson("/demo/seed", {}, { serverError: "デモデータを入れられませんでした。少し待ってからもう一度お試しください。", statusMessages: DEMO_STATUS_MESSAGES });
+}
+
+/** デモデータを消して、入れる前の状態に戻す */
+export function requestDemoClear() {
+  return postJson("/demo/clear", {}, { serverError: "デモデータを消せませんでした。少し待ってからもう一度お試しください。", statusMessages: DEMO_STATUS_MESSAGES });
+}

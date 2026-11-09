@@ -5,7 +5,7 @@ import { isChimeOn, setChimeOn } from "../lib/chime";
 import HelpSheet from "./Help";
 import "./tama.css";
 
-export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, onMocks, onDex, dark = false }) {
+export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, onMocks, onDex, onDemo, onDemoClear, dark = false }) {
   const [open, setOpen] = useState(false);
   const [chime, setChime] = useState(() => isChimeOn());
   const [helpOpen, setHelpOpen] = useState(false);
@@ -59,6 +59,18 @@ export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, o
             <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onMocks)}>
               <span>模試の記録</span>
               <span className="tama-menu-sub">冠模試の判定</span>
+            </button>
+          )}
+          {onDemo && !timerRunning && (
+            <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onDemo)}>
+              <span>デモデータを入れる</span>
+              <span className="tama-menu-sub">2週間使った状態を試す（ゲストだけ）</span>
+            </button>
+          )}
+          {onDemoClear && !timerRunning && (
+            <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onDemoClear)}>
+              <span>デモデータを消す</span>
+              <span className="tama-menu-sub">入れる前の状態に戻す</span>
             </button>
           )}
           <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onSettings)}>

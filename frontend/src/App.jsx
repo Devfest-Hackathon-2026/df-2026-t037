@@ -8,11 +8,12 @@ import {
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { auth, db, loginAsGuest, loginWithGoogle } from "./firebase";
-import { requestAdvice, requestRejudge, requestSeasonCheck } from "./api";
+import { requestAdvice, requestDemoClear, requestDemoSeed, requestRejudge, requestSeasonCheck } from "./api";
 import { seasonCheckDue } from "./game/display";
 import SetupFlow from "./screens/SetupFlow";
 import CharacterCard from "./screens/CharacterCard";
 import Menu from "./screens/Menu";
+import ConfirmDialog from "./screens/ConfirmDialog";
 import Timer from "./screens/Timer";
 import Kisekae from "./screens/Kisekae";
 import { RankBreakdown, RankHints } from "./screens/RankHelp";
@@ -114,6 +115,10 @@ export default function App() {
   // 「判定はあとで」の記録の採点し直し（C-15）も、1回のログインにつき1回だけ
   const rejudgedFor = useRef(null);
   const [seasonNotice, setSeasonNotice] = useState(null);
+  // デモデータ（ゲストだけ）：確認中の種類（"seed" / "clear"）・処理中・結果のお知らせ
+  const [demoAsk, setDemoAsk] = useState(null);
+  const [demoBusy, setDemoBusy] = useState(false);
+  const [demoError, setDemoError] = useState("");
 
   // 認証とプロフィールの監視
   useEffect(() => {
@@ -360,6 +365,49 @@ export default function App() {
       <Header grade={profile?.grade} />
 
       <main className="container main">
+        {demoBusy && (
+          <div className="tama tama-notice" role="status">
+            <span>デモデータを準備しています…（20秒ほどかかります）</span>
+          </div>
+        )}
+        {demoError && (
+          <div className="tama tama-notice" role="alert">
+            <span>{demoError}</span>
+            <button type="button" className="tama-notice-close" aria-label="お知らせを閉じる" onClick={() => setDemoError("")}>
+              <span>×</span>
+            </button>
+          </div>
+        )}
+        {profile?.demoBackup && !demoBusy && (
+          <div className="tama tama-notice" role="status">
+            <span>デモデータが入っています（昨日までの2週間分の記録はデモ用です。≡メニューから消せます）</span>
+          </div>
+        )}
+        {demoAsk && (
+          <ConfirmDialog
+            message={
+              demoAsk === "seed"
+                ? "昨日までの約2週間分の学習記録（デモ用）を入れて、1回目の進化の直前にします。今日30分以上記録すると進化します。入れますか？"
+                : "デモ用の記録を消して、入れる前の状態に戻しますか？（自分で記録したものは残ります）"
+            }
+            confirmLabel={demoAsk === "seed" ? "入れる" : "消す"}
+            onCancel={() => setDemoAsk(null)}
+            onConfirm={async () => {
+              const kind = demoAsk;
+              setDemoAsk(null);
+              setDemoError("");
+              setDemoBusy(true);
+              try {
+                await (kind === "seed" ? requestDemoSeed() : requestDemoClear());
+                // 記録・プロフィール・グラフをまとめて読み直す
+                window.location.reload();
+              } catch (err) {
+                setDemoError(err.message || "うまくいきませんでした。");
+                setDemoBusy(false);
+              }
+            }}
+          />
+        )}
         {seasonNotice && (
           <div className="tama tama-notice" role="status">
             <span>{seasonNotice}</span>
@@ -380,6 +428,8 @@ export default function App() {
               onExplore={() => setScreen("explore")}
               onMocks={() => setScreen("mocks")}
               onDex={() => setScreen("dex")}
+              onDemo={user.isAnonymous && !profile?.demoBackup && !demoBusy ? () => setDemoAsk("seed") : undefined}
+              onDemoClear={user.isAnonymous && profile?.demoBackup && !demoBusy ? () => setDemoAsk("clear") : undefined}
             />
           }
         />
@@ -929,6 +979,7 @@ function ReportView({ logs, profile, uid }) {
                     <span className="log-exp">
                       {`+${toNumber(l.growth_exp)} EXP`}
                     </span>
+                    {l.demoSeed && <span className="rank-badge rank-c" title="デモデータとして入れた記録">デモ</span>}
                     {l.rankPending && <span className="rank-badge rank-c">判定待ち</span>}
                     {l.penalty && <span className="rank-badge rank-c" title="勉強時間に対して書かれた量が多すぎたため、ランクCになった記録">量の確認</span>}
                     {rank && (

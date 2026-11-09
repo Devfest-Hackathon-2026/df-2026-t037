@@ -17,6 +17,7 @@ from typing import Literal
 from pydantic import BaseModel, Field
 
 import chat
+import demo_seed
 import review_rank
 from concurrent.futures import ThreadPoolExecutor
 import explore
@@ -73,6 +74,19 @@ def verify_user(authorization: str | None = Header(default=None)) -> str:
         decoded = fb_auth.verify_id_token(authorization.removeprefix("Bearer "))
     except Exception:
         raise HTTPException(status_code=401, detail="認証トークンが無効です")
+    return decoded["uid"]
+
+
+def verify_guest(authorization: str | None = Header(default=None)) -> str:
+    """ゲスト（匿名ログイン）だけを通す。デモデータは本物の利用者のアカウントには入れない"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="ログインが必要です")
+    try:
+        decoded = fb_auth.verify_id_token(authorization.removeprefix("Bearer "))
+    except Exception:
+        raise HTTPException(status_code=401, detail="認証トークンが無効です")
+    if (decoded.get("firebase") or {}).get("sign_in_provider") != "anonymous":
+        raise HTTPException(status_code=403, detail="デモデータはゲストだけが使えます")
     return decoded["uid"]
 
 
@@ -892,3 +906,40 @@ def discover_from_reflections(uid: str = Depends(verify_user)):
     themes = [str(t).strip()[:20] for t in (result.get("themes") or []) if str(t).strip()][:3]
     return {"results": results, "themes": themes, "usedLogs": len(logs), "needLogs": memory.DISCOVER_MIN_LOGS}
 
+
+# ---- デモデータ（ゲストだけ）。審査・デモ動画で、2週間使った状態をすぐ見られるようにする ----
+DEMO_EMBED_BUDGET_SEC = 20  # 「記録から見つける」用のベクトルを作る時間の上限（画面の45秒の打ち切りに収める）
+
+
+@app.post("/demo/seed")
+def demo_seed_logs(uid: str = Depends(verify_guest)):
+    """昨日までの約2週間分の記録を入れ、1回目の進化の直前にする。記録のベクトルも先に作っておく"""
+    user = _load_user(uid)
+    if not progress.has_plan(user) or not progress.game_grade(user.get("grade")):
+        raise HTTPException(status_code=400, detail="先に初期設定をしてください")
+    if user.get("demoBackup"):
+        raise HTTPException(status_code=409, detail="すでにデモデータが入っています")
+    result = demo_seed.seed(db, uid, user, near_first=True)
+
+    # 「記録から見つける」がすぐ速く動くよう、ベクトルを作っておく（同じ文は1回だけ。失敗しても記録は残す）
+    started = datetime.now(timezone.utc)
+    cache: dict[str, list[float]] = {}
+    try:
+        token = get_access_token()
+        for log_id, log in result["logs"]:
+            if (datetime.now(timezone.utc) - started).total_seconds() > DEMO_EMBED_BUDGET_SEC:
+                break
+            text = log["reflection"]
+            if text not in cache:
+                cache[text] = memory.embed(text, PROJECT_ID, token)
+            memory.save_vector(db, uid, log_id, cache[text], log)
+    except Exception as e:
+        print(f"[demo vectors skipped] {e.__class__.__name__}")
+    return {k: v for k, v in result.items() if k != "logs"}
+
+
+@app.post("/demo/clear")
+def demo_clear_logs(uid: str = Depends(verify_guest)):
+    """デモの記録を消し、入れる前の EXP・連続日数に戻す"""
+    user = _load_user(uid)
+    return {"removed": demo_seed.clear(db, uid, user)}
