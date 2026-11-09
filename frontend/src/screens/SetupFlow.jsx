@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Character, Egg } from "../characters/Character";
 import { UNIVERSITIES, FACULTIES, getFaculty, getUniversity } from "../game/universities";
-import { GRADE_HOURS, averageMultiplier, makePlan, makeSeason, streakThresholdMinutes } from "../game/rules";
+import { CONTINUITY, GRADE_HOURS, averageMultiplier, makePlan, makeSeason, streakThresholdMinutes } from "../game/rules";
 import {
   APP_GRADES, GRADE_FROM_APP, PACES, daysBetween, defaultExamDate, gradeHoursText,
   jpDate, jpMonthDay, milestoneDates, parseYmd, roughDate, round10, todayStart,
@@ -199,7 +199,8 @@ function SetupStep({
   const examValid = exam && exam > today;
   const season = examValid ? makeSeason(g, today, exam) : null;
   const paceMeta = PACES.find((p) => p.id === pace) || PACES[1];
-  const threshold = Math.round(streakThresholdMinutes(g) / 10) * 10;
+  // ヘルプ・ホームと同じ数（高1 約38分・高2 約53分・高3 120分）を出す
+  const threshold = streakThresholdMinutes(g);
 
   return (
     <>
@@ -323,7 +324,10 @@ function SelectStep({
     if (!faculty || !examDay || examDay <= today) return null;
     const plan = makePlan({ grade: g, start: today, examDate: examDay, faculty, pace });
     const dates = milestoneDates(g, today, examDay);
-    return { plan, dates };
+    // ホームの「あと約◯時間」と同じ計算（必要EXP ÷ 毎日続けたときの1時間あたりのEXP）にそろえる
+    const perHour = 60 * averageMultiplier(faculty.weights) * CONTINUITY;
+    const needHours = (exp) => round10(exp / perHour);
+    return { plan, dates, needHours };
   }, [g, examDate, faculty, pace, today]);
 
   const weighted = CATEGORIES.filter((c) => (faculty?.weights[c.id] ?? 0) > 0).map((c) => c.label);
@@ -408,11 +412,11 @@ function SelectStep({
             <span>{`${g}シーズン（〜${jpMonthDay(preview.dates.season.end)}・${preview.dates.season.days}日）の予定`}</span>
           </p>
           <p><span>{gradeHoursText(g)}</span></p>
-          <p><span>{`1回目の進化：約${round10(preview.plan.hours.first)}時間（${roughDate(preview.dates.first)}）`}</span></p>
-          <p><span>{`最終進化：約${round10(preview.plan.hours.final)}時間（${roughDate(preview.dates.final)}）`}</span></p>
+          <p><span>{`1回目の進化：約${preview.needHours(preview.plan.exp.first)}時間（${roughDate(preview.dates.first)}）`}</span></p>
+          <p><span>{`最終進化：約${preview.needHours(preview.plan.exp.final)}時間（${roughDate(preview.dates.final)}）`}</span></p>
           <p>
             <span>
-              {`親密度10：約${round10(preview.plan.hours.bond10)}時間（${roughDate(preview.dates.bond10)}）`}
+              {`親密度10：約${preview.needHours(preview.plan.exp.bond10)}時間（${roughDate(preview.dates.bond10)}）`}
               {g === "高3" ? "" : " → 4月に図鑑へ"}
             </span>
           </p>

@@ -92,7 +92,7 @@ function daysAgo(date) {
 }
 
 function lastStudiedLabel(days) {
-  if (days === null) return "30日以上記録なし";
+  if (days === null) return "この30日は記録なし";
   if (days === 0) return "今日学習";
   return `${days}日前に学習`;
 }
@@ -258,7 +258,10 @@ export default function App() {
 
   const timerRunning = Boolean(profile?.timerStartedAt);
   const faculty = getFaculty(profile?.targetFacultyId);
-  const characterName = getUniversity(faculty?.universityId)?.character || "キャラ";
+  // 記録画面のボタンは、ホームに出ている今の段階の名前（たまごのうちは「◯◯まめ」）にそろえる
+  const uniForName = getUniversity(faculty?.universityId);
+  const stageIndex = Math.min(Math.max(Number(profile?.stage) || 1, 1), 3) - 1;
+  const characterName = uniForName?.stageNames?.[stageIndex] || uniForName?.character || "キャラ";
 
   // 学年を変える入口は ≡ メニューの「設定」だけ（C-1）。育成がはじめからになる確認は、学年を変えて保存するときだけ出す（SetupFlow）
   const openSettings = () => setSetupEditing(true);

@@ -27,6 +27,8 @@ function loadGreeting(greetingKey) {
   return greetingCache.get(key);
 }
 
+const GREETING_RETRY_MS = 65_000;
+
 export function GreetingBubble({ enabled = true, greetingKey, color, onTalk, onGreeting }) {
   const [text, setText] = useState("");
   const [failed, setFailed] = useState(false);
@@ -35,16 +37,26 @@ export function GreetingBubble({ enabled = true, greetingKey, color, onTalk, onG
     // 学習ログの読み込みが終わるまでは取りに行かない（記録数が変わって2回取りに行くのを防ぐ）
     if (!enabled) return undefined;
     let alive = true;
+    let retryTimer = null;
     setFailed(false);
-    loadGreeting(greetingKey)
-      .then((g) => {
-        if (!alive) return;
-        setText(g);
-        onGreeting?.(g);
-      })
-      .catch(() => alive && setFailed(true));
+    const load = (retried) =>
+      loadGreeting(greetingKey)
+        .then((g) => {
+          if (!alive) return;
+          setText(g);
+          onGreeting?.(g);
+        })
+        .catch(() => {
+          if (!alive) return;
+          setFailed(true);
+          // AIの応答が遅くて失敗したときは、1回だけ時間をおいて取り直す
+          //（サーバーは失敗した一言の「作っている途中」の印を60秒残すので、それより後に）
+          if (!retried) retryTimer = setTimeout(() => load(true), GREETING_RETRY_MS);
+        });
+    load(false);
     return () => {
       alive = false;
+      if (retryTimer) clearTimeout(retryTimer);
     };
     // onGreeting は親の関数なので依存に入れない（入れると毎回取り直してしまう）
     // eslint-disable-next-line react-hooks/exhaustive-deps

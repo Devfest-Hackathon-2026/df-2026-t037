@@ -182,6 +182,7 @@ export default function Mocks({ uid, profile, onBack }) {
       <div className="tama-white-card light">
         <p className="tama-label"><span>これまでの記録</span></p>
         {grouped.length === 0 && <p className="tama-note"><span>まだ記録がありません</span></p>}
+        {grouped.length > 0 && <p className="tama-tiny"><span>まちがえて登録した判定は、押すと消せます</span></p>}
         {grouped.map(([sid, rows]) => (
           <div key={sid} className="tama-mock-history">
             <p className="tama-strong small"><span>{`${rows[0].seriesName}（${rows[0].provider}）`}</span></p>

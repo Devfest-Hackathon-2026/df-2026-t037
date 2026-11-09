@@ -110,9 +110,10 @@ export function bondOf(exp, plan) {
 }
 /** 親密度で解放されるもの */
 export const BOND_UNLOCKS = { 3: '大学の装備1', 5: '大学の装備2', 7: 'かっこいい姿', 10: '大のなかよし' };
-/** 画面の「あと約◯時間（1日◯時間なら約◯日）」 */
+/** 画面の「あと約◯時間（1日◯時間なら約◯日）」。
+ *  毎日続けたとき（＝初期設定の予定と同じ前提）の連続ボーナス CONTINUITY を下限にして、初期設定の「約◯時間」とそろえる */
 export function timeToGo(expLeft, faculty, streak, grade, today = new Date()) {
-    const perHour = 60 * averageMultiplier(faculty.weights) * streakBonus(streak);
+    const perHour = 60 * averageMultiplier(faculty.weights) * Math.max(streakBonus(streak), CONTINUITY);
     const hours = Math.max(0, expLeft) / perHour;
     const daily = standardHours(grade, today);
     return { hours: Math.round(hours), days: Math.ceil(hours / daily) };
@@ -130,8 +131,8 @@ export const LEGEND = [
     { id: 'a-crown', name: 'A判定の王冠', slot: 'head', condition: '志望校の模試でA判定' },
     { id: 'comeback-wings', name: '逆転の翼', slot: 'back', condition: '同じ模試シリーズで判定を2段階以上アップ' },
     { id: 'star70', name: '偏差値70の星章', slot: 'chest', condition: '模試の総合偏差値70以上' },
-    { id: 'meteor', name: '流れ星', slot: 'effect', condition: '模試の1教科で全国上位1%' },
-    { id: 'sun-aura', name: '太陽のオーラ', slot: 'effect', condition: '365日連続で記録（おやすみ券は使ってよい）' },
+    { id: 'meteor', name: '流れ星', slot: 'effect', condition: '模試の1教科で全国上位1%（確かめる方法は準備中）' },
+    { id: 'sun-aura', name: '太陽のオーラ', slot: 'effect', condition: '365日連続で記録（おやすみ券は使ってよい・確かめる方法は準備中）' },
 ];
 /** ミシック（最上級エフェクト） */
 export const MYTHIC = [
