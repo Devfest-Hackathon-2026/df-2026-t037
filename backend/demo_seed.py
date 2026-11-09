@@ -17,6 +17,7 @@ from datetime import datetime, time, timedelta
 from firebase_admin import firestore
 
 import progress
+from game_rules import GRADE_HOURS
 from review_rank import rank_of
 
 RANK_EXP = {"S": 50, "A": 30, "B": 15, "C": 5}  # main.py と同じ
@@ -95,6 +96,8 @@ def seed(db, uid: str, user: dict, near_first: bool = False) -> dict:
     fid = user["targetFacultyId"]
     season = int(user.get("seasonId") or 0)
     rng = random.Random(7)
+    # 1日の勉強時間を学年の目安に合わせる（DAY_PATTERNS は高2・1日3.5時間の想定。高3は約2.3倍、高1は約0.7倍）
+    scale = GRADE_HOURS[grade] / GRADE_HOURS["高2"]
 
     backup = {k: user.get(k) for k in BACKUP_FIELDS}
     # 連続日数は、デモ記録の最初の日から数え直す
@@ -112,7 +115,7 @@ def seed(db, uid: str, user: dict, near_first: bool = False) -> dict:
             continue
         day = today - timedelta(days=ago)
         for i, (subject, minutes) in enumerate(DAY_PATTERNS[ago % len(DAY_PATTERNS)]):
-            minutes += rng.choice((-10, 0, 0, 10))
+            minutes = max(10, int(round(minutes * scale / 5)) * 5) + rng.choice((-10, 0, 0, 10))
             text, axes, advice = SAMPLES[subject][used[subject] % len(SAMPLES[subject])]
             used[subject] += 1
             total = sum(axes)
