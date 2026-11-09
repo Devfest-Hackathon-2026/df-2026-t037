@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Character } from "../characters/Character";
 import { requestChat, requestGreeting } from "../api";
+import { auth } from "../firebase";
 import "./tama.css";
 
 const MESSAGE_MAX = 300;
@@ -13,6 +14,19 @@ const HISTORY_MAX = 8;
  * ホームのキャラの上に出す「一言」。greetingKey（今日の記録数・進化段階）が変わったときだけ取り直す。
  * サーバー側でも同じ状況なら保存した一言を返すので、開くたびにAIを呼ぶことはない
  */
+// 同じ greetingKey の一言はこのタブの中で使い回す（ホームに戻るたびに待たない・同時に2回取りに行かない）
+const greetingCache = new Map();
+function loadGreeting(greetingKey) {
+  // ログアウトして別の人が入ったときに前の人の一言を出さないよう、uid も鍵に入れる
+  const key = `${auth.currentUser?.uid || ""}:${greetingKey}`;
+  if (!greetingCache.has(key)) {
+    const p = requestGreeting().then((r) => (typeof r?.greeting === "string" ? r.greeting : ""));
+    p.catch(() => greetingCache.delete(key));
+    greetingCache.set(key, p);
+  }
+  return greetingCache.get(key);
+}
+
 export function GreetingBubble({ enabled = true, greetingKey, color, onTalk, onGreeting }) {
   const [text, setText] = useState("");
   const [failed, setFailed] = useState(false);
@@ -22,10 +36,9 @@ export function GreetingBubble({ enabled = true, greetingKey, color, onTalk, onG
     if (!enabled) return undefined;
     let alive = true;
     setFailed(false);
-    requestGreeting()
-      .then((r) => {
+    loadGreeting(greetingKey)
+      .then((g) => {
         if (!alive) return;
-        const g = typeof r?.greeting === "string" ? r.greeting : "";
         setText(g);
         onGreeting?.(g);
       })

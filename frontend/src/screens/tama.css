@@ -1017,3 +1017,4 @@
 .tama-week-me { font-weight: 900; color: var(--t-sub); }
 .tama-week-goal { color: var(--t-sub); }
 .tama-week-cols strong { color: var(--t-text); font-weight: 900; }
+.tama-tiny.strong { color: var(--t-main-dark); font-weight: 800; }
