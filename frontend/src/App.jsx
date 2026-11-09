@@ -8,14 +8,15 @@ import {
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { auth, db, loginAsGuest, loginWithGoogle } from "./firebase";
-import { requestAdvice, requestSeasonCheck } from "./api";
+import { requestAdvice, requestRejudge, requestSeasonCheck } from "./api";
 import { seasonCheckDue } from "./game/display";
 import SetupFlow from "./screens/SetupFlow";
 import CharacterCard from "./screens/CharacterCard";
 import Menu from "./screens/Menu";
 import Timer from "./screens/Timer";
 import Kisekae from "./screens/Kisekae";
-import { RankHints } from "./screens/RankHelp";
+import { RankBreakdown, RankHints } from "./screens/RankHelp";
+import { streakBonus } from "./game/rules";
 import Explore from "./screens/Explore";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
@@ -107,6 +108,8 @@ export default function App() {
   const [lastResult, setLastResult] = useState(null);
   // 進級の確認（C-9）は1回のログインにつき1回だけ。結果はホームのお知らせに出す
   const seasonCheckedFor = useRef(null);
+  // 「判定はあとで」の記録の採点し直し（C-15）も、1回のログインにつき1回だけ
+  const rejudgedFor = useRef(null);
   const [seasonNotice, setSeasonNotice] = useState(null);
 
   // 認証とプロフィールの監視
@@ -164,6 +167,15 @@ export default function App() {
         seasonCheckedFor.current = null;
       });
   }, [user, profileReady, profile]);
+
+  // 採点に失敗して「判定はあとで」になっている記録があれば、起動のときに採点し直してもらう（C-15）
+  useEffect(() => {
+    if (!user || !logsReady || !logs.some((l) => l.rankPending)) return;
+    if (rejudgedFor.current === user.uid) return;
+    rejudgedFor.current = user.uid;
+    // 結果は Firestore の記録とプロフィールが変わることで画面に出る。失敗しても次の起動でまた試す
+    requestRejudge().catch((err) => console.error("[rejudge error]", err));
+  }, [user, logsReady, logs]);
 
   // 直近30日の学習ログ
   useEffect(() => {
@@ -268,6 +280,7 @@ export default function App() {
       <RecordScreen
         characterName={characterName}
         universityId={faculty?.universityId}
+        faculty={faculty}
         lastResult={lastResult}
         onResult={setLastResult}
         onBack={() => {
@@ -296,7 +309,7 @@ export default function App() {
             </button>
             <h1><span>記録しました</span></h1>
           </div>
-          <ResultCard result={lastResult} universityId={faculty?.universityId} />
+          <ResultCard result={lastResult} universityId={faculty?.universityId} faculty={faculty} />
         </main>
       </div>
     );
@@ -429,7 +442,7 @@ function Header({ grade }) {
 }
 
 // ===== 記録（あとから）：docs/design/Henkou.dc.html ② =====
-function RecordScreen({ characterName, universityId, lastResult, onResult, onBack }) {
+function RecordScreen({ characterName, universityId, faculty, lastResult, onResult, onBack }) {
   const [subject, setSubject] = useState("物理");
   const [minutes, setMinutes] = useState("");
   const [reflection, setReflection] = useState("");
@@ -452,7 +465,8 @@ function RecordScreen({ characterName, universityId, lastResult, onResult, onBac
         minutes: Number(minutes),
         reflection,
       });
-      onResult(result);
+      // 教科と分数は、結果カードで育成EXPの式を出すために残す
+      onResult({ ...result, subject, minutes: Number(minutes) });
       setReflection("");
     } catch (err) {
       console.error(err);
@@ -563,23 +577,38 @@ function RecordScreen({ characterName, universityId, lastResult, onResult, onBac
           </button>
         </form>
 
-        {lastResult && <ResultCard result={lastResult} universityId={universityId} />}
+        {lastResult && <ResultCard result={lastResult} universityId={universityId} faculty={faculty} />}
       </main>
     </div>
   );
 }
 
 // ===== AI結果カード =====
-function ResultCard({ result, universityId }) {
+function ResultCard({ result, universityId, faculty }) {
+  // 採点に失敗したときは「判定はあとで」（C-15）。EXPは×1.0で先に付け、判定が出たら差分を足す
+  const pending = result?.rankPending === true;
   const rawRank = toText(result?.verbal_score);
   const rank = RANK_META[rawRank] ? rawRank : "C";
-  const meta = RANK_META[rank];
+  const meta = pending ? { title: "判定はあとで", className: "rank-c" } : RANK_META[rank];
   const base = toNumber(result?.base_exp);
   const bonus = toNumber(result?.bonus_exp);
   const reason = toText(result?.score_reason);
   const advice = toText(result?.advice);
   const growth = toNumber(result?.growth_exp);
   const evolved = result?.evolved === true;
+  const multiplier = toNumber(result?.multiplier) || 1;
+  // 育成EXPの式（デザイン④）：物理60分 × 1.4（理科）× 1.05（連続）× 1.3（S）＝ 115EXP
+  const formula = (() => {
+    if (pending || growth <= 0 || !faculty || !result?.subject || !result?.minutes) return null;
+    const cat = categoryOfLog({ subject: result.subject });
+    const w = cat ? faculty.weights?.[cat] ?? 0 : 0;
+    const catLabel = CATEGORIES.find((c) => c.id === cat)?.label;
+    const streak = toNumber(result?.streak);
+    return {
+      text: `${result.subject}${result.minutes}分 × ${(1 + w / 100).toFixed(1)}${catLabel ? `（${catLabel}）` : ""} × ${streakBonus(streak).toFixed(2)}（連続）× ${multiplier.toFixed(1)}（${rank}）＝ `,
+      growth,
+    };
+  })();
   // 親密度が上がった・新しい着替えが入手できた（サーバーが返す記録前の値と比べる）
   const oldBond = result?.old_bond;
   const newBond = result?.bond;
@@ -599,10 +628,12 @@ function ResultCard({ result, universityId }) {
   return (
     <section className={`card result ${meta.className}`}>
       <div className="result-head">
-        <div className={`rank-badge lg ${meta.className}`}>{rank}</div>
+        <div className={`rank-badge lg ${meta.className}`}>{pending ? "?" : rank}</div>
         <div>
-          <div className="result-label">言語化スコア</div>
-          <div className="result-title">{meta.title}</div>
+          <div className="result-label">
+            {pending || typeof result?.total !== "number" ? "ふりかえりの採点" : `ふりかえりの採点 ${result.total}／6点`}
+          </div>
+          <div className="result-title">{pending ? meta.title : `${rank}ランク ×${multiplier.toFixed(1)}`}</div>
         </div>
         <div className="exp-gain">
           <span className="exp-gain-num">{`+${base + bonus}`}</span>
@@ -612,6 +643,16 @@ function ResultCard({ result, universityId }) {
           </div>
         </div>
       </div>
+
+      {formula && <p className="result-formula"><span>{formula.text}</span><strong>{`${formula.growth}EXP`}</strong></p>}
+
+      {!pending && result?.scores && <RankBreakdown scores={result.scores} hint={toText(result?.hint)} />}
+
+      {pending && (
+        <p className="reason" role="status">
+          <span>AIの採点がまだできていません。あとで自動で判定して、ランクの分のEXPを足します（記録は保存ずみです）</span>
+        </p>
+      )}
 
       {(growth > 0 || evolved) && (
         <p className="growth-gain">
@@ -818,6 +859,7 @@ function ReportView({ logs, profile }) {
                     <span className="log-exp">
                       {`+${toNumber(l.base_exp) + toNumber(l.bonus_exp)} EXP`}
                     </span>
+                    {l.rankPending && <span className="rank-badge rank-c">判定待ち</span>}
                     {rank && (
                       <span className={`rank-badge ${RANK_META[rank].className}`}>{rank}</span>
                     )}

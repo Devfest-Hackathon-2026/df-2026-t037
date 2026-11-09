@@ -205,7 +205,7 @@ def build_facts(user: dict, logs: list[dict], today: date | None = None) -> dict
         d = _log_date_jst(l)
         when = f"{d.month}/{d.day}" if d else "--/--"
         snippet = (l.get("reflection") or "")[:60].replace("\n", " ")
-        recent.append(f"{when} {l.get('subject')} {l.get('minutes')}分 ランク{l.get('verbal_score', '-')}「{snippet}」")
+        recent.append(f"{when} {l.get('subject')} {l.get('minutes')}分 ランク{l.get('verbal_score') or '-'}「{snippet}」")
     # 生徒の振り返りの一部をふくむので、プロンプトの中ではデータとして扱わせる（COMMON_RULES）
     facts["recent_logs"] = recent
     return facts

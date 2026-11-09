@@ -272,3 +272,41 @@ def season_rollover(user: dict, today: date) -> dict | None:
         "plan": new_plan,
     }
     return {"kind": "promoted", "updates": updates, "dex": dex, "dexId": dex_id}
+
+
+# ===== C-15 採点に失敗したときの「判定はあとで」 =====
+# 採点（review_rank.judge）に失敗したら、仮に×1.0（Cランクのボーナス）で記録だけ保存し、rankPending を付ける。
+# あとで判定が出たら、その差分だけ totalExp と育成EXPを足す
+
+def judgement_updates(log: dict, user: dict, rank: str, rank_exp: dict) -> dict:
+    """保存ずみの記録に、あとから出たランクを当てはめたときの差分を返す。
+
+    返す形：{"bonus_exp": 新しいボーナス, "bonusDiff": totalExp に足す数,
+             "growth_exp": 新しい育成EXP（記録に書く）, "growthDiff": 育成EXPの差,
+             "userUpdates": users/{uid} に書く growthExp・stage・bond（足さないときは空）}
+    - 育成EXPは、記録したときの分数・教科・連続日数・志望学部で計算し直す
+    - 学年を変えたあと（seasonId がちがう）・シーズンが終わったあとは、育成EXPは足さない（totalExp は足す）
+    """
+    bonus_new = rank_exp.get(rank, rank_exp["C"])
+    out = {
+        "bonus_exp": bonus_new,
+        "bonusDiff": bonus_new - int(log.get("bonus_exp") or 0),
+        "growth_exp": log.get("growth_exp"),
+        "growthDiff": 0,
+        "userUpdates": {},
+    }
+    if log.get("growth_exp") is None:
+        return out
+    faculty_id = log.get("facultyId") or user.get("targetFacultyId")
+    if resolve_faculty_id(faculty_id) is None:
+        return out
+    new_gain = growth_for_log(int(log.get("minutes") or 0), log.get("subject"), faculty_id, int(log.get("streak") or 0), rank)
+    diff = new_gain - int(log.get("growth_exp") or 0)
+    out["growth_exp"] = new_gain
+    out["growthDiff"] = diff
+    same_season = int(log.get("seasonId") or 0) == int(user.get("seasonId") or 0)
+    if diff and same_season and has_plan(user) and not user.get("seasonEnded"):
+        new_exp = max(0, int(user.get("growthExp") or 0) + diff)
+        stage, bond = stage_and_bond(new_exp, user["plan"])
+        out["userUpdates"] = {"growthExp": new_exp, "stage": stage, "bond": bond}
+    return out

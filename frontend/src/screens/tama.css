@@ -845,3 +845,19 @@
 
 /* C-13 東京科学大学の「学院」の説明（Henkou.dc.html ⑥） */
 .tama-gakuin-note { font-size: 11.5px; line-height: 1.6; background: #FFF4E0; border-radius: 12px; padding: 8px 10px; }
+
+/* ===== C-15 記録のあとの採点（Henkou.dc.html ④） ===== */
+.tama-breakdown { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.tama-breakdown-card { background: #FFFFFF; border: 1.5px solid #F1E6DA; border-radius: 18px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.tama-breakdown-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tama-breakdown-row { display: grid; grid-template-columns: 78px 30px 1fr; gap: 8px; align-items: start; font-size: 12px; }
+.tama-breakdown-axis { font-weight: 900; }
+.tama-breakdown-quote { color: #6B6358; line-height: 1.55; overflow-wrap: anywhere; }
+.tama-dots { display: flex; gap: 3px; padding-top: 3px; }
+.tama-dots > span { width: 11px; height: 11px; border-radius: 6px; background: #F1E6DA; }
+.tama-dots > span.on { background: #D0607A; }
+.tama-breakdown-hint { background: #FFFFFF; border: 1.5px solid #F1E6DA; border-radius: 18px; overflow: hidden; }
+.tama-breakdown-hint .tama-hints-toggle { border-radius: 0; width: 100%; }
+.tama-breakdown-hint-text { margin: 0; padding: 10px 14px 12px; font-size: 13px; line-height: 1.7; border-top: 1.5px dashed #F1E6DA; }
+.result-formula { margin: 6px 0 0; font-size: 12px; line-height: 1.6; color: #6B6358; }
+.result-formula strong { font-size: 15px; color: #4A3E3A; }

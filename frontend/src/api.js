@@ -107,6 +107,11 @@ export function requestGreeting() {
   return postJson("/greeting", {}, { serverError: CHAT_ERROR_MESSAGE });
 }
 
+/** 「判定はあとで」になっていた記録を採点し直す（C-15。起動のときに呼ぶ） */
+export function requestRejudge() {
+  return postJson("/rejudge", {}, { serverError: "ランクの判定ができませんでした。" });
+}
+
 /** 起動のときに呼ぶ：4月1日をこえていたら進級する（C-9。定期実行は作らない） */
 export function requestSeasonCheck() {
   return postJson("/season/check", {}, { serverError: "進級の確認ができませんでした。" });

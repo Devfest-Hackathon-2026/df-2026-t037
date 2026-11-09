@@ -118,3 +118,78 @@ export function RankHelpSheet({ onClose }) {
     </div>
   );
 }
+
+const SCORE_AXES = [
+  { key: "specific", label: "具体性" },
+  { key: "depth", label: "深さ" },
+  { key: "next", label: "次やること" },
+];
+
+/** 0〜2点を ●●／●○／○○ で表示する */
+function Dots({ score }) {
+  const n = Math.max(0, Math.min(2, Number(score) || 0));
+  return (
+    <span className="tama-dots" role="img" aria-label={`${n}点（2点満点）`}>
+      <span className={n >= 1 ? "on" : ""} />
+      <span className={n >= 2 ? "on" : ""} />
+    </span>
+  );
+}
+
+/**
+ * 記録のあと：Gemini の3つの軸の採点と、Sランクのヒント（C-15・C-5。デザイン元：Henkou.dc.html ④）
+ * scores：{ specific: {score, quote}, depth: {...}, next: {...} }、hint：次に書くとよい一文（全部2点ならほめる一言）
+ */
+export function RankBreakdown({ scores, hint }) {
+  const [open, setOpen] = useState(true);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const panelId = useId();
+  const hasScores = scores && SCORE_AXES.some((a) => scores[a.key]);
+
+  return (
+    <div className="tama tama-breakdown">
+      <div className="tama-breakdown-card">
+        <div className="tama-breakdown-head">
+          <p className="tama-strong small"><span>Geminiの採点（各2点）</span></p>
+          <button type="button" className="tama-rank-info" onClick={() => setHelpOpen(true)}>
+            <span>ⓘ ランクって？</span>
+          </button>
+        </div>
+        {hasScores ? (
+          SCORE_AXES.map((a) => {
+            const s = scores[a.key] || {};
+            const quote = typeof s.quote === "string" ? s.quote : "";
+            return (
+              <div key={a.key} className="tama-breakdown-row">
+                <span className="tama-breakdown-axis">{a.label}</span>
+                <Dots score={s.score} />
+                <span className="tama-breakdown-quote">{quote ? `「${quote}」` : "書かれていませんでした"}</span>
+              </div>
+            );
+          })
+        ) : (
+          <p className="tama-note"><span>ふりかえりが空だったので、採点できませんでした</span></p>
+        )}
+      </div>
+
+      {hint && (
+        <div className="tama-breakdown-hint">
+          <button
+            type="button"
+            className="tama-hints-toggle"
+            aria-expanded={open}
+            aria-controls={panelId}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span>💡 Sランクのヒント</span>
+            <span className="tama-hints-arrow">{open ? "▲ 閉じる" : "▼ 開く"}</span>
+          </button>
+          {open && (
+            <p id={panelId} className="tama-breakdown-hint-text"><span>{hint}</span></p>
+          )}
+        </div>
+      )}
+      {helpOpen && <RankHelpSheet onClose={() => setHelpOpen(false)} />}
+    </div>
+  );
+}

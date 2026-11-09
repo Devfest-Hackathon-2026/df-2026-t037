@@ -290,7 +290,8 @@ export default function Timer({ uid, profile, subjects, onRecorded, onClose, onS
         throw new Error("記録はできましたが、タイマーを止められませんでした。もう一度押してください。");
       }
       saveTimerLocal(uid, null);
-      onRecorded(result);
+      // 教科と分数は、結果カードで育成EXPの式を出すために残す
+      onRecorded({ ...result, subject: local.subject, minutes: Number(m) });
     });
 
     return (
