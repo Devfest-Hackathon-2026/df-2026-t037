@@ -46,7 +46,7 @@ function toCard(src, profile, { current = false } = {}) {
     stage,
     bond: Number(src.bond) || 0,
     worn,
-    variant: stage === 3 && wearsUniEquip(worn, items) ? "equip" : "normal",
+    variant: stage === 3 ? wearsUniEquip(worn, items) : "normal",
     name: uni.stageNames?.[stage - 1] || uni.character,
     stats: src.stats || null,
   };

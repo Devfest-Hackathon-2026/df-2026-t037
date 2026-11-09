@@ -46,7 +46,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
   const name = uni.stageNames[stage - 1] || uni.character;
   const items = buildItems({ universityId: uni.id, growthExp: exp, bond, legends: profile?.legends });
   const worn = sanitizeEquipped(profile.equipped, items);
-  const showEquip = stage === 3 && wearsUniEquip(worn, items);
+  const showEquip = stage === 3 ? wearsUniEquip(worn, items) : "normal";
 
   return (
     <section className="tama tama-home">
@@ -108,7 +108,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
           onTalk={() => setChatOpen(true)}
           onGreeting={setGreeting}
         />
-        <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} faculty={faculty} wear={worn} grade={profile?.grade} />
+        <Character uni={uni.id} stage={stage} variant={showEquip} size={200} faculty={faculty} wear={worn} grade={profile?.grade} />
       </div>
 
       {chatOpen && (

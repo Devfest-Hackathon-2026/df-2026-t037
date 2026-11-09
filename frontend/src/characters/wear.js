@@ -145,8 +145,8 @@ const fit = (layer, stage) => {
 
 // ===== 学年の小物（高1はそのまま・高2は学年章のバッジ・高3は必勝の鉢巻） =====
 // 図鑑で「同じキャラでも学年で見た目がちがう」ことが分かるように、着替えとは別に重ねる
-// 東大の装備つきの絵は左胸に銀杏バッジ（60,126）があるので、学年章はその左に小さくずらす
-const BADGE_AT = { 'todai-equip': 'translate(41 117) scale(.82)' };
+// 東大の銀杏バッジ（60,126）をつけた絵は、学年章はその左に小さくずらす
+const BADGE_AT = { 'todai-equip': 'translate(41 117) scale(.82)', 'todai-lv5': 'translate(41 117) scale(.82)' };
 const gradeBadge = (at = 'translate(52 116)') =>
   `<g class="grade-badge" transform="${at}">` +
   `<path d="M0 -9 L8 -5 L8 3 Q8 8 0 11 Q-8 8 -8 3 L-8 -5 Z" fill="#3D5A99" stroke="#F5C33B" stroke-width="1.8" stroke-linejoin="round"></path>` +

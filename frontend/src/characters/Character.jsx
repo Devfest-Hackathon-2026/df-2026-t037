@@ -47,10 +47,11 @@ function withFacultyMarks(svg, uni, ribbon) {
 
 /** キャラの絵のSVG文字列（図鑑の「画像で保存」でも使う）。絵がなければ '' */
 export function characterSvg({ uni, stage, variant = 'normal', faculty = null, wear = null, grade = null }) {
-  const name = variant === 'equip' && stage === 3 ? `${uni}-equip` : `${uni}-${stage}`;
+  // 大学の装備は最終進化だけ：両方 → {uni}-equip、片方 → {uni}-lv3 / {uni}-lv5
+  const name = ['equip', 'lv3', 'lv5'].includes(variant) && stage === 3 && svgOf(`${uni}-${variant}`) ? `${uni}-${variant}` : `${uni}-${stage}`;
   const base = svgOf(name);
   if (!base) return '';
-  const worn = wear || grade ? withWear(base, wear, stage, grade, { uni, variant: name.endsWith('-equip') ? 'equip' : 'normal' }) : base;
+  const worn = wear || grade ? withWear(base, wear, stage, grade, { uni, variant: name.slice(uni.length + 1) }) : base;
   return stage === 3 ? withFacultyMarks(worn, uni, faculty?.ribbon) : worn;
 }
 

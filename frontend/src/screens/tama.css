@@ -387,9 +387,11 @@
 .tama-kise-title h1 { margin: 0; font-size: 18px; font-weight: 900; }
 .tama-kise-title p { font-size: 9.5px; color: var(--t-sub); }
 .tama-kise-count { width: 44px; font-size: 11px; font-weight: 800; color: var(--t-sub); text-align: right; }
+/* 下のボタンがキャラ（胸の銀杏バッジなど）に重ならないよう、ボタンの段をキャラの下にとる */
 .tama-kise-stage {
   position: relative;
-  height: 158px;
+  min-height: 158px;
+  padding: 12px 10px 52px;
   border-radius: 26px;
   background: radial-gradient(circle at 50% 45%, #FFFBF2 0%, #FCF0DE 70%);
   display: flex;

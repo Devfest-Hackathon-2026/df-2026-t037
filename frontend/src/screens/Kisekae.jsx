@@ -83,7 +83,7 @@ export default function Kisekae({ uid, profile, onBack }) {
   const mythics = shown.filter((i) => i.kind === "mythic");
   const wornCount = BODY_SLOTS.filter((s) => equipped[s]).length;
   const wornNames = Object.values(equipped).map((id) => items.find((i) => i.id === id)?.name).filter(Boolean);
-  const showEquip = stage === 3 && wearsUniEquip(equipped, items);
+  const showEquip = stage === 3 ? wearsUniEquip(equipped, items) : "normal";
 
   return (
     <div className="tama tama-screen tama-kisekae">
@@ -101,7 +101,7 @@ export default function Kisekae({ uid, profile, onBack }) {
       )}
 
       <div className="tama-kise-stage">
-        {uni && <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={150} faculty={faculty} wear={equipped} grade={profile?.grade} />}
+        {uni && <Character uni={uni.id} stage={stage} variant={showEquip} size={160} faculty={faculty} wear={equipped} grade={profile?.grade} />}
         <div className="tama-kise-tools">
           <button type="button" onClick={removeAll} disabled={locked}><span>ぜんぶ外す</span></button>
           <button type="button" onClick={omakase} disabled={locked}><span>おまかせ</span></button>

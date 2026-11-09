@@ -125,12 +125,18 @@ export function sanitizeEquipped(equipped, items) {
   return out;
 }
 
-/** 大学の装備2つ（親密度3・5）を両方つけていれば、装備つきの絵（{大学id}-equip.svg）で表示する */
+/**
+ * 大学の装備（親密度3・5）をつけているときの絵の種類。
+ * 両方 → 'equip'（{大学id}-equip.svg）、片方だけ → 'lv3' / 'lv5'（{大学id}-lv3.svg など）、なし → 'normal'
+ */
 export function wearsUniEquip(equipped, items) {
   const tags = new Set(
     Object.values(equipped || {})
       .map((id) => items.find((i) => i.id === id)?.uniEquip)
       .filter(Boolean)
   );
-  return tags.has('lv3') && tags.has('lv5');
+  if (tags.has('lv3') && tags.has('lv5')) return 'equip';
+  if (tags.has('lv3')) return 'lv3';
+  if (tags.has('lv5')) return 'lv5';
+  return 'normal';
 }

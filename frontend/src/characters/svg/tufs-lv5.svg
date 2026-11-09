@@ -1,0 +1,21 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="コトまる。地球儀を持っている">
+<defs><radialGradient id="q6-tufs-lv5" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#EEFCF5"></stop><stop offset=".55" stop-color="#8EDDB8"></stop><stop offset="1" stop-color="#3FA47A"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="74" cy="148" rx="42" ry="6" fill="#2A5A44" opacity=".14"></ellipse>
+<g class="squish">
+
+<ellipse cx="56" cy="140" rx="10" ry="6" fill="#62C094"></ellipse><ellipse cx="88" cy="140" rx="10" ry="6" fill="#62C094"></ellipse>
+<circle cx="72" cy="94" r="46" fill="url(#q6-tufs-lv5)"></circle>
+<ellipse cx="28" cy="102" rx="7" ry="10" fill="#74CCA2" transform="rotate(20 28 102)"></ellipse><ellipse cx="116" cy="102" rx="7" ry="10" fill="#74CCA2" transform="rotate(-20 116 102)"></ellipse>
+<ellipse cx="54" cy="70" rx="13" ry="7.5" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="59" cy="94" rx="4.4" ry="6.4" fill="#2B2632"></ellipse><ellipse cx="85" cy="94" rx="4.4" ry="6.4" fill="#2B2632"></ellipse></g>
+<circle cx="57.5" cy="91.5" r="1.7" fill="#FFFFFF"></circle><circle cx="83.5" cy="91.5" r="1.7" fill="#FFFFFF"></circle>
+<ellipse cx="49" cy="106" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="95" cy="106" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M68 104 Q72 109 76 104" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+<path d="M30 114 Q72 132 114 114 L112 124 Q72 142 32 124 Z" fill="#F5C842"></path><path d="M42 119 L40 129 M58 124 L57 134 M86 124 L87 134 M102 119 L104 129" stroke="#F28C9C" stroke-width="2.6"></path><path d="M90 128 L100 152 L86 150 Z" fill="#E8B030"></path>
+
+<g transform="translate(0 0)"><path d="M120 108 A16 16 0 0 0 152 108" fill="none" stroke="#C2A060" stroke-width="2.4"></path><circle cx="136" cy="106" r="12.5" fill="#5DB2EA"></circle><path d="M128 100 Q134 96 138 102 Q134 108 128 106 Z M138 110 Q144 106 146 112 Q142 116 138 114 Z" fill="#8CCB5A"></path><line x1="136" y1="124" x2="136" y2="132" stroke="#8A5A36" stroke-width="3"></line><rect x="127" y="131" width="18" height="4" rx="2" fill="#8A5A36"></rect></g>
+</g>
+<g class="pop"><path d="M108 18 L148 18 Q154 18 154 24 L154 42 Q154 48 148 48 L126 48 L116 58 L118 48 L108 48 Q102 48 102 42 L102 24 Q102 18 108 18 Z" fill="#FFFFFF"></path><text x="128" y="39" font-size="16" fill="#3FA47A" font-family="'M PLUS Rounded 1c', sans-serif" font-weight="900" text-anchor="middle">Hi!</text></g>
+<g class="pop" style="animation-delay: .8s"><path d="M14 16 L38 16 Q42 16 42 20 L42 34 Q42 38 38 38 L32 38 L36 46 L26 38 L14 38 Q10 38 10 34 L10 20 Q10 16 14 16 Z" fill="#FFFFFF"></path><text x="26" y="33" font-size="15" fill="#F28C9C" font-family="'M PLUS Rounded 1c', sans-serif" font-weight="900" text-anchor="middle">あ</text></g>
+
+</svg>
