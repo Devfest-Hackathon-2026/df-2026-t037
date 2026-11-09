@@ -237,28 +237,39 @@ function WeekBars({ logs, faculty, profile }) {
       </p>
       <p className="tama-week-conclusion">{conclusion}</p>
 
+      <div className="tama-week-row tama-week-head" aria-hidden="true">
+        <span />
+        <span />
+        <span className="tama-week-cols">
+          <span>あなた</span>
+          <span>配点</span>
+          <span>EXP</span>
+        </span>
+      </div>
+
       {rows.map((r) => (
         <div key={r.id} className={`tama-week-row ${short && short.id === r.id ? "is-short" : ""}`}>
           <span className="tama-week-name" style={{ color: r.color }}>{r.label}</span>
           <div
             className="tama-week-bar"
             role="img"
-            aria-label={`${r.label}：あなた${r.me}%、入試の配点${r.goal}%`}
+            aria-label={`${r.label}：この7日の勉強の${r.me}%、入試の配点${r.goal}%、EXP${multiplierOf(r.goal)}`}
           >
             <div style={{ width: `${r.me}%`, background: r.color }} />
             <i style={{ left: `${r.goal}%` }} />
           </div>
-          <span className="tama-week-num">
-            <span>{`${r.me}%/${r.goal}% `}</span>
+          <span className="tama-week-cols">
+            <span className="tama-week-me" style={{ color: r.me > 0 ? r.color : undefined }}>{`${r.me}%`}</span>
+            <span className="tama-week-goal">{`${r.goal}%`}</span>
             <strong>{multiplierOf(r.goal)}</strong>
           </span>
         </div>
       ))}
 
       <div className="tama-week-legend">
-        <span className="tama-week-legend-item"><span className="tama-week-legend-bar" aria-hidden="true" /><span>あなた（教科の色）</span></span>
-        <span className="tama-week-legend-item"><span className="tama-week-legend-line" aria-hidden="true" /><span>入試の配点</span></span>
-        <span><span>×＝EXP倍率</span></span>
+        <span className="tama-week-legend-item"><span className="tama-week-legend-bar" aria-hidden="true" /><span>棒＝あなた（この7日の勉強の割合）</span></span>
+        <span className="tama-week-legend-item"><span className="tama-week-legend-line" aria-hidden="true" /><span>黒い線＝入試の配点（試験での割合）</span></span>
+        <span><span>EXP＝その教科を勉強したときのEXP倍率。配点が大きい教科ほど増えます</span></span>
       </div>
       {total > 0 && <p className="tama-tiny"><span>{`この7日の合計 ${total}分`}</span></p>}
     </div>
