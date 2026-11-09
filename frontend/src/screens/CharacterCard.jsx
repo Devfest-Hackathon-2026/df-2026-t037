@@ -99,7 +99,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
       <div className="tama-stage-box">
         <GreetingBubble
           enabled={logsReady}
-          greetingKey={`${todayLogCount(logs, today)}-${stage}-${profile.targetFacultyId}`}
+          greetingKey={`${todayLogCount(logs, today)}-${stage}-${bond}-${profile.targetFacultyId}`}
           color={uni.colors[2]}
           onTalk={() => setChatOpen(true)}
           onGreeting={setGreeting}

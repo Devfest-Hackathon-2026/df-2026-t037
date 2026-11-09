@@ -19,6 +19,7 @@ import ConfirmDialog from "./screens/ConfirmDialog";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
 import { getFaculty, getUniversity } from "./game/universities";
+import { newlyUnlockedItems } from "./game/items";
 import "./App.css";
 
 ChartJS.register(ArcElement, Tooltip);
@@ -256,6 +257,7 @@ export default function App() {
     return (
       <RecordScreen
         characterName={characterName}
+        universityId={faculty?.universityId}
         lastResult={lastResult}
         onResult={setLastResult}
         onBack={() => {
@@ -284,7 +286,7 @@ export default function App() {
             </button>
             <h1><span>記録しました</span></h1>
           </div>
-          <ResultCard result={lastResult} />
+          <ResultCard result={lastResult} universityId={faculty?.universityId} />
         </main>
       </div>
     );
@@ -410,7 +412,7 @@ function Header({ grade }) {
 }
 
 // ===== 記録（あとから）：docs/design/Henkou.dc.html ② =====
-function RecordScreen({ characterName, lastResult, onResult, onBack }) {
+function RecordScreen({ characterName, universityId, lastResult, onResult, onBack }) {
   const [subject, setSubject] = useState("物理");
   const [minutes, setMinutes] = useState("");
   const [reflection, setReflection] = useState("");
@@ -550,14 +552,14 @@ function RecordScreen({ characterName, lastResult, onResult, onBack }) {
           </button>
         </form>
 
-        {lastResult && <ResultCard result={lastResult} />}
+        {lastResult && <ResultCard result={lastResult} universityId={universityId} />}
       </main>
     </div>
   );
 }
 
 // ===== AI結果カード =====
-function ResultCard({ result }) {
+function ResultCard({ result, universityId }) {
   const rawRank = toText(result?.verbal_score);
   const rank = RANK_META[rawRank] ? rawRank : "C";
   const meta = RANK_META[rank];
@@ -567,6 +569,18 @@ function ResultCard({ result }) {
   const advice = toText(result?.advice);
   const growth = toNumber(result?.growth_exp);
   const evolved = result?.evolved === true;
+  // 親密度が上がった・新しい着替えが入手できた（サーバーが返す記録前の値と比べる）
+  const oldBond = result?.old_bond;
+  const newBond = result?.bond;
+  const bondUp = !evolved && typeof oldBond === "number" && typeof newBond === "number" && newBond > oldBond;
+  const unlocked =
+    universityId && typeof result?.old_growth_total === "number" && typeof result?.growth_total === "number"
+      ? newlyUnlockedItems(
+          universityId,
+          { growthExp: result.old_growth_total, bond: oldBond },
+          { growthExp: result.growth_total, bond: newBond }
+        )
+      : [];
   // G1：過去の似た振り返り（Vertex AI の埋め込み＋Firestore のベクトル検索）から見つけた、くり返しのつまずき
   const recurring = toText(result?.recurring_note);
   const similar = Array.isArray(result?.similar) ? result.similar.slice(0, 3) : [];
@@ -591,6 +605,16 @@ function ResultCard({ result }) {
       {(growth > 0 || evolved) && (
         <p className="growth-gain">
           <span>{evolved ? `🎉 進化した！ キャラに +${growth} 育成EXP` : `🌱 キャラに +${growth} 育成EXP`}</span>
+        </p>
+      )}
+      {bondUp && (
+        <p className="growth-gain bond-up" role="status">
+          <span>{`💗 親密度が${newBond}に上がった！`}</span>
+        </p>
+      )}
+      {unlocked.length > 0 && (
+        <p className="growth-gain unlock" role="status">
+          <span>{`🎁 新しい着替え：${unlocked.join("・")}（≡メニューの「着替え」でつけられます）`}</span>
         </p>
       )}
 

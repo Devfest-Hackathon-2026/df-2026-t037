@@ -282,8 +282,13 @@ def build_chat_prompt(user: dict, facts: dict, message: str, history: list[dict]
 {name}として、<message> に返事をしてください。"""
 
 
-def build_greeting_prompt(user: dict, facts: dict) -> str:
+def build_greeting_prompt(user: dict, facts: dict, milestone: str = "") -> str:
     name, voice = _persona(user)
+    # 進化・親密度アップの直後だけ、お祝いの一言にする（milestone は main.py が前回の状態との比較で決める）
+    milestone_rule = {
+        "evolved": "- たった今、進化した（見た目が変わった）。そのことを一言で祝う。",
+        "bond": "- たった今、生徒との親密度が上がった。うれしい気持ちを一言で伝える。",
+    }.get(milestone, "")
     return f"""あなたは「{name}」というキャラクターです。
 【口調】
 {voice}
@@ -297,7 +302,8 @@ def build_greeting_prompt(user: dict, facts: dict) -> str:
 - 1〜2文、60字程度まで。
 - 今日すでに勉強していればねぎらう。まだなら suggestion を参考に、今日やる教科を1つだけやさしくすすめる。
 - 受験日が近い（days_to_exam が100日以下）なら、あせらせずに今日できることに目を向けさせる。
-- ニックネームがあれば呼びかけてもよい。"""
+- ニックネームがあれば呼びかけてもよい。
+{milestone_rule}"""
 
 
 CHAT_SCHEMA = {

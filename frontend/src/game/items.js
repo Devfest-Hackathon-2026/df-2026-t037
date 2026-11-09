@@ -88,6 +88,21 @@ export function buildItems({ universityId, growthExp, bond }) {
   return items;
 }
 
+/**
+ * 記録のあとで新しく入手できた着替えの名前（親密度アップ・5万EXPごとのメダルなど）。
+ * before / after は { growthExp, bond }。入手済みが増えたものだけを返す
+ */
+export function newlyUnlockedItems(universityId, before, after) {
+  const had = new Set(
+    buildItems({ universityId, growthExp: before.growthExp, bond: before.bond })
+      .filter((i) => i.owned)
+      .map((i) => i.id)
+  );
+  return buildItems({ universityId, growthExp: after.growthExp, bond: after.bond })
+    .filter((i) => i.owned && !had.has(i.id))
+    .map((i) => i.name);
+}
+
 /** 着替えで使う空の装備 */
 export const emptyEquipped = () => ({ head: null, neck: null, chest: null, hand: null, back: null, effect: null });
 

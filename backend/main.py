@@ -327,7 +327,8 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
     log = {**log, "seasonId": int(user.get("seasonId") or 0), "category": progress.SUBJECT_CATEGORY.get(data.subject)}
     updates: dict = {"totalExp": firestore.Increment(total_exp_gain)}
     growth = {"growth_exp": 0, "growth_total": None, "stage": None, "bond": None,
-              "evolved": False, "streak": int(user.get("streak") or 0)}
+              "evolved": False, "streak": int(user.get("streak") or 0),
+              "old_growth_total": None, "old_bond": None}
 
     grade = progress.game_grade(user.get("grade"))
     if grade:
@@ -342,12 +343,14 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
             data.minutes, data.subject, user["targetFacultyId"], growth["streak"], rank
         )
         old_exp = int(user.get("growthExp") or 0)
-        old_stage, _ = progress.stage_and_bond(old_exp, plan)
+        old_stage, old_bond = progress.stage_and_bond(old_exp, plan)
         new_exp = old_exp + gained
         stage, bond = progress.stage_and_bond(new_exp, plan)
         updates.update({"growthExp": new_exp, "stage": stage, "bond": bond})
+        # old_* は画面が「親密度が上がった」「新しい着替えが解放された」を知らせるために使う
         growth.update({"growth_exp": gained, "growth_total": new_exp, "stage": stage,
-                       "bond": bond, "evolved": stage > old_stage})
+                       "bond": bond, "evolved": stage > old_stage,
+                       "old_growth_total": old_exp, "old_bond": old_bond})
         log = {**log, "growth_exp": gained, "streak": growth["streak"]}
 
     txn.set(log_ref, log)
@@ -458,15 +461,37 @@ GREETING_FALLBACK = "今日もいっしょにがんばろう！"
 GREETING_INFLIGHT_SEC = 60
 
 
+GREETING_MILESTONE_EXTRA = 4   # 進化・親密度アップの直後は、1日の上限に足して、お祝いの一言をあと数回まで作れる
+
+
+def _greeting_milestone(prev_key: str | None, key: str) -> str:
+    """前の一言を作ったときの状況（キー）と比べて、進化か親密度アップがあったか。"evolved" / "bond" / ""
+    キーの形：今日の記録数|進化段階|親密度|志望学部|ニックネーム。志望を変えたとき（学部が違う）は祝わない"""
+    try:
+        p = (prev_key or "").split("|", 4)
+        n = key.split("|", 4)
+        if p[3] != n[3]:
+            return ""
+        ps, pb, ns, nb = int(p[1]), int(p[2]), int(n[1]), int(n[2])
+    except (IndexError, ValueError):
+        return ""
+    if ns > ps:
+        return "evolved"
+    return "bond" if ns == ps and nb > pb else ""
+
+
 @firestore.transactional
 def _reserve_greeting(txn, ref, key: str, limit: int) -> tuple[str, str | None]:
     """一言を作り直してよいかを1つのトランザクションで決める（同時に2本来ても、AIを呼ぶのは1本だけ）
-    返り値：("cached", 保存した一言) / ("busy" か "limit", 前の一言か None) / ("go", None)"""
+    返り値：("cached", 保存した一言) / ("busy" か "limit", 前の一言か None) / ("go", 祝う種類 "evolved"|"bond"|"")"""
     snap = ref.get(transaction=txn)
     saved = (snap.to_dict() or {}) if snap.exists else {}
     cached = saved.get("greeting") if isinstance(saved.get("greeting"), dict) else {}
     if cached.get("key") == key and cached.get("text"):
         return "cached", cached["text"]
+    milestone = _greeting_milestone(cached.get("key"), key) if cached.get("key") else ""
+    if milestone:
+        limit += GREETING_MILESTONE_EXTRA
     inflight = saved.get("greetingInflight") if isinstance(saved.get("greetingInflight"), dict) else {}
     started = inflight.get("at")
     if inflight.get("key") == key and isinstance(started, datetime):
@@ -482,7 +507,7 @@ def _reserve_greeting(txn, ref, key: str, limit: int) -> tuple[str, str | None]:
         "updatedAt": firestore.SERVER_TIMESTAMP,
         "expireAt": datetime.now(timezone.utc) + timedelta(days=3),
     }, merge=True)
-    return "go", None
+    return "go", milestone
 
 
 @app.post("/greeting")
@@ -492,17 +517,19 @@ def greeting(uid: str = Depends(verify_user)):
     ref = chat.usage_ref(db, uid, today)
     user = _load_user(uid)
     facts = chat.build_facts(user, chat.fetch_recent_logs(db, uid), today)
-    # 志望を変えるとキャラ（口調）も変わるので、志望とニックネームもキーに入れる
+    # 志望を変えるとキャラ（口調）も変わるので、志望とニックネームもキーに入れる。進化と親密度が変わったときも作り直す
     key = "|".join(str(x) for x in (
-        facts.get("logs_today", 0), user.get("stage") or 1, user.get("targetFacultyId") or "", facts.get("nickname") or ""))
+        facts.get("logs_today", 0), user.get("stage") or 1, user.get("bond") or 0,
+        user.get("targetFacultyId") or "", facts.get("nickname") or ""))
 
     state, text = _reserve_greeting(db.transaction(), ref, key, chat.GREETING_DAILY_LIMIT)
     if state != "go":
         # 保存した一言／作っている途中／上限（費用の上限）。作り直さずに返す
         return {"greeting": text or GREETING_FALLBACK, "cached": True}
+    milestone = text or ""
 
     try:
-        result = call_gemini(chat.build_greeting_prompt(user, facts), chat.CHAT_SCHEMA)
+        result = call_gemini(chat.build_greeting_prompt(user, facts, milestone), chat.CHAT_SCHEMA)
         text = chat.clean_reply(result.get("reply", "")) or GREETING_FALLBACK
     except Exception:
         # 失敗したら回数だけ戻す。「作っている途中」の印は消さない（別の処理の印を消してしまうことがあるため。60秒で無効になる）
@@ -589,13 +616,22 @@ def discover_from_reflections(uid: str = Depends(verify_user)):
     except Exception:
         ref.set({"discovers": firestore.Increment(-1)}, merge=True)
         raise
-    reasons = {}
+    reasons, cited = {}, {}
     for item in result.get("items") or []:
         if isinstance(item, dict) and item.get("id") in explore.PROFILES:
             reasons[item["id"]] = str(item.get("reason") or "")
+            try:
+                cited[item["id"]] = int(item.get("evidence_no") or 0)
+            except (TypeError, ValueError):
+                cited[item["id"]] = 0
     results = explore.results_payload(picked, reasons)
     for r in results:
-        r["evidence"] = evidence.get(r["facultyId"], [])
+        ev = list(evidence.get(r["facultyId"], []))
+        # 理由の文が根拠にした振り返りを先頭にする（理由と根拠が食い違って見えないように）
+        n = cited.get(r["facultyId"], 0)
+        if 1 <= n <= len(ev):
+            ev.insert(0, ev.pop(n - 1))
+        r["evidence"] = ev
     themes = [str(t).strip()[:20] for t in (result.get("themes") or []) if str(t).strip()][:3]
     return {"results": results, "themes": themes, "usedLogs": len(logs), "needLogs": memory.DISCOVER_MIN_LOGS}
 
