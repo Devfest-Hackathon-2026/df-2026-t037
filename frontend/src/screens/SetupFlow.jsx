@@ -13,11 +13,12 @@ import { requestPlan } from "../api";
 import ConfirmDialog from "./ConfirmDialog";
 import "./tama.css";
 
-export default function SetupFlow({ profile, defaultNickname, closable, onClose }) {
+// newYear：4月1日に進級したあとの「新学年の設定」。やめるボタンなし・前の年の設定が入った状態で開く
+export default function SetupFlow({ profile, defaultNickname, closable, onClose, newYear = false }) {
   const today = useMemo(() => todayStart(), []);
   const initialGrade = APP_GRADES.includes(profile?.grade) ? profile.grade : "高校2年生";
   // はじめての人は、最初に「どんなアプリか」の説明（0）から。設定から開いたときは 1 から
-  const [step, setStep] = useState(closable ? 1 : 0);
+  const [step, setStep] = useState(closable || newYear ? 1 : 0);
   const [nickname, setNickname] = useState(profile?.nickname ?? defaultNickname ?? "");
   const [grade, setGrade] = useState(initialGrade);
   const [examDate, setExamDate] = useState(profile?.examDate || defaultExamDate(initialGrade, today));
@@ -65,12 +66,14 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
     }
   };
 
-  const common = { today, grade, examDate, pace };
+  const common = { today, grade, examDate, pace, newYear };
   return (
     <div className="tama tama-screen">
       {step === 0 ? (
         <IntroStep onNext={() => setStep(1)} />
       ) : step === 1 ? (
+        <>
+        {newYear && <NewYearBanner grade={profile?.grade} />}
         <SetupStep
           {...common}
           nickname={nickname}
@@ -84,6 +87,7 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
           onClose={onClose}
           onNext={() => setStep(2)}
         />
+        </>
       ) : (
         <SelectStep
           {...common}
@@ -111,6 +115,21 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
 }
 
 // ===== はじめての説明（初期設定の前に1回だけ） =====
+/** 新学年の設定の上に出すお知らせ */
+function NewYearBanner({ grade }) {
+  return (
+    <div className="tama-newyear" role="status">
+      <span className="tama-newyear-icon" aria-hidden="true">🌸</span>
+      <div>
+        <p className="tama-newyear-title"><span>{grade ? `${grade}に進級！` : "新しい学年！"}</span></p>
+        <p className="tama-newyear-text">
+          <span>前の年のキャラは図鑑に残しました。今年の学年・ペース・志望校を決めると、新しいたまごが生まれます（前の年の設定が入っています）。</span>
+        </p>
+      </div>
+    </div>
+  );
+}
+
 function IntroStep({ onNext }) {
   return (
     <>
@@ -173,7 +192,7 @@ function IntroStep({ onNext }) {
 // ===== 初期設定 1/2 =====
 function SetupStep({
   today, nickname, onNickname, grade, onGrade, examDate, onExamDate, editingExam, onEditExam,
-  pace, onPace, closable, onClose, onNext,
+  pace, onPace, closable, onClose, onNext, newYear,
 }) {
   const g = GRADE_FROM_APP[grade];
   const exam = parseYmd(examDate);
@@ -186,8 +205,8 @@ function SetupStep({
     <>
       <div className="tama-head">
         <div>
-          <p className="tama-kicker"><span>{closable ? "設定 1/2" : "初期設定 1/2"}</span></p>
-          <h1 className="tama-title"><span>あなたのことを教えて</span></h1>
+          <p className="tama-kicker"><span>{newYear ? "新学年の設定 1/2" : closable ? "設定 1/2" : "初期設定 1/2"}</span></p>
+          <h1 className="tama-title"><span>{newYear ? "今年の学年とペース" : "あなたのことを教えて"}</span></h1>
         </div>
         <Egg size={72} />
       </div>
@@ -292,7 +311,7 @@ function SetupStep({
 
 // ===== 初期設定 2/2 =====
 function SelectStep({
-  today, grade, examDate, pace, uniId, facultyId, onUni, onFaculty, onBack, onSave, saving, error, closable,
+  today, grade, examDate, pace, uniId, facultyId, onUni, onFaculty, onBack, onSave, saving, error, closable, newYear,
 }) {
   const g = GRADE_FROM_APP[grade];
   const uni = getUniversity(uniId);
@@ -313,8 +332,8 @@ function SelectStep({
   return (
     <>
       <div>
-        <p className="tama-kicker"><span>{closable ? "設定 2/2" : "初期設定 2/2"}</span></p>
-        <h1 className="tama-title"><span>どこをめざす？</span></h1>
+        <p className="tama-kicker"><span>{newYear ? "新学年の設定 2/2" : closable ? "設定 2/2" : "初期設定 2/2"}</span></p>
+        <h1 className="tama-title"><span>{newYear ? "今年はどこをめざす？" : "どこをめざす？"}</span></h1>
       </div>
 
       <p className="tama-label"><span>1. 大学を選ぶ（キャラが決まる）</span></p>

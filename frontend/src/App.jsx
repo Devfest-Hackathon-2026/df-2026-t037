@@ -19,6 +19,8 @@ import { RankBreakdown, RankHints } from "./screens/RankHelp";
 import { streakBonus } from "./game/rules";
 import Explore from "./screens/Explore";
 import Mocks from "./screens/Mocks";
+import Dex from "./screens/Dex";
+import StudyTime from "./screens/StudyTime";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
 import { getFaculty, getUniversity } from "./game/universities";
@@ -231,6 +233,18 @@ export default function App() {
   // 初期設定（学年・受験日・ペース・志望学部）がまだなら、まず初期設定へ。
   // 学年などの変更も同じ画面から POST /plan を通して保存する（plan を計算し直すため）
   const needSetup = !(profile?.plan && profile?.targetFacultyId);
+  // 4月1日に進級したら「新学年の設定」に答えるまでホームに進めない（前の年の設定が入った状態で開く）
+  if (!needSetup && profile?.newYearSetupPending && !profile?.seasonEnded) {
+    return (
+      <SetupFlow
+        profile={profile}
+        defaultNickname={user.isAnonymous ? "" : user.displayName || ""}
+        closable={false}
+        newYear
+        onClose={() => setSetupEditing(false)}
+      />
+    );
+  }
   if (needSetup || setupEditing) {
     return (
       <SetupFlow
@@ -270,6 +284,10 @@ export default function App() {
 
   if (screen === "explore") {
     return <Explore profile={profile} onBack={() => setScreen("home")} />;
+  }
+
+  if (screen === "dex") {
+    return <Dex uid={user.uid} profile={profile} onBack={() => setScreen("home")} />;
   }
 
   if (screen === "mocks") {
@@ -358,6 +376,7 @@ export default function App() {
               onKisekae={() => setScreen("kisekae")}
               onExplore={() => setScreen("explore")}
               onMocks={() => setScreen("mocks")}
+              onDex={() => setScreen("dex")}
             />
           }
         />
@@ -386,7 +405,7 @@ export default function App() {
           <span className="tama-explore-entry-sub">学びたいこと・解きたい課題から、9大学79学部を見てみよう</span>
         </button>
 
-        <ReportView logs={logs} profile={profile} />
+        <ReportView logs={logs} profile={profile} uid={user.uid} />
       </main>
     </div>
   );
@@ -740,7 +759,7 @@ function ResultCard({ result, universityId, faculty }) {
 }
 
 // ===== レポートタブ =====
-function ReportView({ logs, profile }) {
+function ReportView({ logs, profile, uid }) {
   const [period, setPeriod] = useState("week");
   const periodDays = period === "week" ? 7 : 30;
 
@@ -822,6 +841,12 @@ function ReportView({ logs, profile }) {
           </div>
         </div>
 
+        {/* これまでの合計（学年を変えてもリセットしない。サーバーが記録のたびに足す） */}
+        <div className="lifetime">
+          <span className="lifetime-label">これまでの合計勉強時間</span>
+          <strong>{typeof profile?.totalMinutes === "number" ? formatMinutes(profile.totalMinutes) : "次の記録から数えます"}</strong>
+        </div>
+
         <div className="stats">
           <Stat label="合計時間" value={formatMinutes(report.totalMinutes)} />
           <Stat label="記録回数" value={report.seasonCount} unit="回" />
@@ -829,6 +854,7 @@ function ReportView({ logs, profile }) {
           <Stat label="S・A率" value={report.highRate} unit="%" />
         </div>
 
+        <h3 className="report-sub"><span>教科のバランス</span></h3>
         {report.totalMinutes > 0 ? (
           <div className="chart-area" key="chart">
             <div className="doughnut-wrap">
@@ -868,6 +894,10 @@ function ReportView({ logs, profile }) {
             <span>この期間の記録はまだありません</span>
           </div>
         )}
+
+        {/* 勉強時間の変遷：日・週・月を切り替える1つの棒グラフ（上の7日／30日とは別に切り替える） */}
+        <h3 className="report-sub"><span>勉強時間の変遷</span></h3>
+        <StudyTime uid={uid} />
       </section>
 
       <section className="card">

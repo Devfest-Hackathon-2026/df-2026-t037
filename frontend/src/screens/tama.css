@@ -933,3 +933,77 @@
 .tama-bond-hearts .on { color: #F06A93; }
 .tama-bar.tama-bar-bond { background: #FBE6EC; }
 .tama-bar.tama-bar-bond > div { background: linear-gradient(90deg, #FF9EBB, #F06A93); }
+
+/* ===== 新学年の設定（4月1日） ===== */
+.tama-newyear { display: flex; gap: 10px; align-items: flex-start; background: linear-gradient(135deg, #FFF0F4, #FFF8E8); border: 1.5px solid #F6C9D5; border-radius: 18px; padding: 12px 14px; }
+.tama-newyear-icon { font-size: 26px; line-height: 1; }
+.tama-newyear-title { font-size: 15px; font-weight: 900; color: var(--t-main-dark); margin: 0 0 4px; }
+.tama-newyear-text { font-size: 12px; line-height: 1.7; margin: 0; }
+
+/* ===== 図鑑 ===== */
+.tama-dex-tabs { grid-template-columns: repeat(3, 1fr); }
+.tama-dex-loading { display: grid; place-items: center; padding: 40px 0; }
+.tama-dex-count { display: flex; justify-content: space-between; align-items: baseline; }
+.tama-dex-num { margin: 0; font-size: 26px; font-weight: 900; color: var(--t-main); }
+.tama-dex-of { font-size: 14px; color: #8A7A72; }
+.tama-dex-meter { height: 8px; border-radius: 999px; background: #F3E8E2; overflow: hidden; }
+.tama-dex-meter > div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #F2B8C6, #D0607A); }
+.tama-dex-grid { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.tama-dex-row { display: grid; grid-template-columns: 54px repeat(3, 1fr); gap: 6px; align-items: stretch; }
+.tama-dex-row.head { align-items: end; }
+.tama-dex-gh { text-align: center; font-size: 12px; font-weight: 900; color: #8A7A72; }
+.tama-dex-uni { display: flex; align-items: center; font-size: 11px; font-weight: 900; line-height: 1.3; }
+.tama-dex-cell { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px 5px; border-radius: 14px; border: 1.5px solid transparent; background: #FDF8F4; font-family: inherit; color: inherit; min-width: 0; }
+.tama-dex-cell .tama-char { max-width: 100%; }
+.tama-dex-cell.is-got { background: #FFFFFF; border-color: #F2D8DF; box-shadow: 0 2px 6px rgba(208, 96, 122, 0.12); cursor: pointer; }
+.tama-dex-cell.is-now { background: #FFFFFF; border: 1.5px dashed #E88AA0; cursor: pointer; }
+.tama-dex-cell-name { font-size: 10px; font-weight: 800; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tama-dex-cell.is-empty .tama-dex-cell-name { color: #C9B8B0; }
+.tama-dex-cell-tag { font-size: 10px; font-weight: 900; color: #FFFFFF; background: #E88AA0; border-radius: 999px; padding: 1px 7px; }
+.tama-dex-shadow { filter: brightness(0) opacity(0.12); }
+
+.tama-dex-card { background: #FFFFFF; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 16px rgba(74, 58, 52, 0.08); scroll-margin-top: 12px; }
+.tama-dex-card.is-current { border: 2px dashed #F2B8C6; }
+.tama-dex-card-top { display: flex; flex-direction: column; align-items: center; padding: 14px 14px 12px; }
+.tama-dex-card-meta { align-self: stretch; display: flex; gap: 6px; align-items: center; }
+.tama-dex-year { font-size: 12px; font-weight: 900; color: #4A3A34; background: rgba(255, 255, 255, 0.8); border-radius: 999px; padding: 2px 10px; }
+.tama-dex-grade { font-size: 12px; font-weight: 900; color: var(--t-main-dark); background: #FFFFFF; border-radius: 999px; padding: 2px 10px; }
+.tama-dex-now { font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E88AA0; border-radius: 999px; padding: 2px 9px; }
+.tama-dex-card-name { margin: 0; font-size: 18px; font-weight: 900; }
+.tama-dex-card-sub { margin: 2px 0 0; font-size: 12px; font-weight: 700; color: #6A5A54; text-align: center; }
+.tama-dex-hearts { margin: 6px 0 0; display: flex; gap: 2px; font-size: 13px; color: #E8DCD6; }
+.tama-dex-hearts .on { color: #E88AA0; }
+.tama-dex-pad { padding: 12px 14px 0; display: flex; flex-direction: column; gap: 10px; }
+.tama-dex-pad:last-child { padding-bottom: 14px; }
+.tama-dex-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.tama-dex-stat { display: flex; flex-direction: column; align-items: center; background: #FDF8F4; border-radius: 14px; padding: 8px 4px; }
+.tama-dex-stat-v { font-size: 17px; font-weight: 900; }
+.tama-dex-stat-k { font-size: 11px; color: #8A7A72; font-weight: 700; }
+.tama-dex-line { display: flex; justify-content: space-between; gap: 8px; margin: 0; font-size: 13px; }
+.tama-dex-k { color: #8A7A72; font-weight: 700; }
+.tama-dex-v { font-weight: 900; }
+.tama-dex-cat { display: flex; flex-direction: column; gap: 6px; }
+.tama-dex-cat-bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: #F3E8E2; }
+.tama-dex-cat-legend { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11px; font-weight: 700; }
+.tama-dex-cat-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; }
+.tama-dex-months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; align-items: end; }
+.tama-dex-month { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9px; color: #8A7A72; font-weight: 700; }
+.tama-dex-month-bar { width: 100%; height: 44px; display: flex; align-items: flex-end; }
+.tama-dex-month-bar > div { width: 100%; min-height: 2px; border-radius: 3px 3px 1px 1px; background: #E88AA0; }
+.tama-dex-quote { margin: 0; background: #FFF6F8; border-left: 4px solid #F2B8C6; border-radius: 12px; padding: 10px 12px; }
+.tama-dex-quote p { margin: 0; font-size: 13px; line-height: 1.7; font-weight: 700; overflow-wrap: anywhere; }
+.tama-dex-quote footer { margin-top: 4px; font-size: 11px; color: #8A7A72; }
+.tama-mock-chip.static { cursor: default; }
+
+.tama-dex-path { list-style: none; margin: 0; padding: 0 0 0 4px; display: flex; flex-direction: column; }
+.tama-dex-step { position: relative; display: flex; gap: 12px; padding-bottom: 16px; }
+.tama-dex-step::before { content: ""; position: absolute; left: 6px; top: 16px; bottom: 0; width: 2px; background: #F2D8DF; }
+.tama-dex-step:last-child::before { display: none; }
+.tama-dex-dot { flex: none; width: 14px; height: 14px; border-radius: 50%; margin-top: 3px; border: 3px solid #FFFFFF; box-shadow: 0 0 0 1.5px #F2D8DF; }
+.tama-dex-step.is-current .tama-dex-dot { box-shadow: 0 0 0 3px #F6C9D5; }
+.tama-dex-step-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.tama-dex-step-head { margin: 0; display: flex; gap: 6px; align-items: center; }
+.tama-dex-step-head .tama-dex-year, .tama-dex-step-head .tama-dex-grade { background: #FDF8F4; }
+.tama-dex-step-row { display: flex; gap: 10px; align-items: center; }
+.tama-dex-step-row p { margin: 0; }
+.tama-dex-change { font-size: 11px; font-weight: 800; color: #E08A3A; }

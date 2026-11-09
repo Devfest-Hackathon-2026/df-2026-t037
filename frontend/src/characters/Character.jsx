@@ -45,16 +45,25 @@ function withFacultyMarks(svg, uni, ribbon) {
   return end < 0 ? svg : svg.slice(0, end) + marks + svg.slice(end);
 }
 
-/** wear：着替えの装備（{ head, neck, chest, hand, back, effect }）。レジェンド・ミシック・メダル・エフェクトを絵に重ねる */
-export function Character({ uni, stage, variant = 'normal', size = 160, still = false, faculty = null, wear = null }) {
+/** キャラの絵のSVG文字列（図鑑の「画像で保存」でも使う）。絵がなければ '' */
+export function characterSvg({ uni, stage, variant = 'normal', faculty = null, wear = null, grade = null }) {
   const name = variant === 'equip' && stage === 3 ? `${uni}-equip` : `${uni}-${stage}`;
   const base = svgOf(name);
-  if (!base) return null;
-  const worn = wear ? withWear(base, wear, stage) : base;
-  const svg = stage === 3 ? withFacultyMarks(worn, uni, faculty?.ribbon) : worn;
+  if (!base) return '';
+  const worn = wear || grade ? withWear(base, wear, stage, grade, { uni, variant: name.endsWith('-equip') ? 'equip' : 'normal' }) : base;
+  return stage === 3 ? withFacultyMarks(worn, uni, faculty?.ribbon) : worn;
+}
+
+/**
+ * wear：着替えの装備（{ head, neck, chest, hand, back, effect }）。レジェンド・ミシック・メダル・エフェクトを絵に重ねる。
+ * grade：学年（"高校2年生" ならバッジ、"高校3年生" なら必勝の鉢巻をつける）
+ */
+export function Character({ uni, stage, variant = 'normal', size = 160, still = false, faculty = null, wear = null, grade = null, className = '' }) {
+  const svg = characterSvg({ uni, stage, variant, faculty, wear, grade });
+  if (!svg) return null;
   return (
     <div
-      className={still ? 'tama-char tama-still' : 'tama-char'}
+      className={`${still ? 'tama-char tama-still' : 'tama-char'} ${className}`.trim()}
       style={{ width: size, height: size }}
       // SVGはこのリポジトリ内の固定ファイル（リボンの色は16進数の色だけを通す）なので、そのまま埋め込んでよい
       dangerouslySetInnerHTML={{ __html: svg }}
