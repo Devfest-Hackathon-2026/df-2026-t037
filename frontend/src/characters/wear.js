@@ -190,12 +190,39 @@ export function gradeLayer(grade, look = {}) {
  * SVG文字列に重ねる（後ろは体のグループの前、前は </svg> の直前）。stage で位置と大きさを合わせる。
  * grade：学年の小物（高2のバッジ・高3の鉢巻）。着替えより先（下）に重ねる
  */
+// 高3の鉢巻は額に巻くので、額にある道具（科学大のゴーグル・千葉工大の頭のライト）が隠れてしまう。
+// その絵だけ、道具の部品を鉢巻の上にもう一度重ねる（部品は絵から抜き出して、鉢巻のあとへ移す）
+const GOGGLES = ['<path d="M32 72 Q80 56', '<circle cx="66" cy="66" r="9" fill="#BFE6F5"', '<circle cx="66" cy="66" r="9" fill="none"',
+  '<circle cx="94" cy="66" r="9" fill="#BFE6F5"', '<circle cx="94" cy="66" r="9" fill="none"', '<path d="M62 62 L66 60"', '<path d="M90 62 L94 60"'];
+const HEAD_LIGHT = ['<circle class="twinkle" cx="80" cy="56"', '<circle cx="80" cy="56" r="7" fill="#FFF3B0"', '<circle cx="80" cy="56" r="7" fill="none"'];
+const OVER_HACHIMAKI = { 'kagaku-lv5': GOGGLES, 'kagaku-equip': GOGGLES, 'chiba-3': HEAD_LIGHT, 'chiba-lv5': HEAD_LIGHT };
+
+/** svg から prefix ではじまる要素（入れ子なしの1つ）を抜き出す。[残りのsvg, 抜いた要素] */
+function pluck(svg, prefix) {
+  const i = svg.indexOf(prefix);
+  if (i < 0) return [svg, ''];
+  const tag = prefix.match(/^<(\w+)/)[1];
+  const close = `</${tag}>`;
+  const j = svg.indexOf(close, i);
+  if (j < 0) return [svg, ''];
+  return [svg.slice(0, i) + svg.slice(j + close.length), svg.slice(i, j + close.length)];
+}
+
 export function withWear(svg, equipped, stage = 3, grade = null, look = {}) {
   const layers = wearLayers(equipped);
   const back = layers.back;
-  const front = gradeLayer(grade, look) + layers.front;
+  let base = svg;
+  let over = '';
+  if (grade === '高校3年生') {
+    for (const prefix of OVER_HACHIMAKI[`${look.uni}-${look.variant}`] || []) {
+      const [rest, el] = pluck(base, prefix);
+      base = rest;
+      over += el;
+    }
+  }
+  const front = gradeLayer(grade, look) + over + layers.front;
   if (!back && !front) return svg;
-  let out = svg;
+  let out = base;
   if (back) {
     const i = out.indexOf('<g class="squish"');
     const at = i >= 0 ? i : out.indexOf('>') + 1;
