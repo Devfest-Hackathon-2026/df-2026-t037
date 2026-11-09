@@ -16,8 +16,9 @@ export const UNIVERSITIES = [
         equipLv3: { id: 'backpack', name: '旅のリュック', reason: '世界へ出かける' }, equipLv5: { id: 'globe', name: '地球儀', reason: 'たくさんの国と言葉' } },
     { id: 'waseda', name: '早稲田大学', short: '早稲田', character: 'ワセまる', stageNames: ['ワセまめ', 'ワセまる', 'ワセまる（バンカラ）'], colors: ['#FBE2E7', '#D27A8C', '#9A2A40'], item: '角帽とマント',
         equipLv3: { id: 'cheer-flag', name: '応援旗', reason: '早慶戦の応援' }, equipLv5: { id: 'megaphone', name: 'メガホン', reason: '応援団' } },
-    { id: 'kyoto', name: '京都大学', short: '京大', character: 'ゲタまる', stageNames: ['ゲタまめ', 'ゲタまる', 'ゲタまる（羽織）'], colors: ['#F4F8E6', '#BCD08A', '#7A9444'], item: '丸メガネと下駄（自由の学風）',
-        equipLv3: { id: 'wagasa', name: '和がさ', reason: '京都の町並み' }, equipLv5: { id: 'jiyu-fan', name: '「自由」のうちわ', reason: '自由の学風' } },
+    // D-1：京大は五山の送り火のダイまる（京紫）
+    { id: 'kyoto', name: '京都大学', short: '京大', character: 'ダイまる', stageNames: ['ダイまめ', 'ダイまる', 'ダイまる（送り火）'], colors: ['#F8F0FB', '#C9A6DC', '#7E4E9E'], item: '「大」の送り火の山（五山の送り火）',
+        equipLv3: { id: 'daimonji-fan', name: '大文字のうちわ', reason: '夏の夜の京都（左手）' }, equipLv5: { id: 'toro-lantern', name: '灯籠流しの灯籠', reason: '送り火の夜、鴨川にうかべる' } },
     { id: 'osaka', name: '大阪大学', short: '阪大', character: 'ワニまる', stageNames: ['ワニまめ', 'ワニまる', 'ワニまる（マチカネワニ）'], colors: ['#FFFAE6', '#F8DC86', '#D8A838'], item: 'マチカネワニのフード',
         equipLv3: { id: 'fossil-hammer', name: '化石のハンマー', reason: '待兼山で見つかった化石' }, equipLv5: { id: 'loupe', name: 'ルーペ', reason: '発掘と研究' } },
 ];

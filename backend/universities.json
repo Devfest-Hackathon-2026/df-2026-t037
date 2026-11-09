@@ -193,27 +193,27 @@
       "id": "kyoto",
       "name": "京都大学",
       "short": "京大",
-      "character": "ゲタまる",
+      "character": "ダイまる",
       "stageNames": [
-        "ゲタまめ",
-        "ゲタまる",
-        "ゲタまる（羽織）"
+        "ダイまめ",
+        "ダイまる",
+        "ダイまる（送り火）"
       ],
       "colors": [
-        "#F4F8E6",
-        "#BCD08A",
-        "#7A9444"
+        "#F8F0FB",
+        "#C9A6DC",
+        "#7E4E9E"
       ],
-      "item": "丸メガネと下駄（自由の学風）",
+      "item": "「大」の送り火の山（五山の送り火）",
       "equipLv3": {
-        "id": "wagasa",
-        "name": "和がさ",
-        "reason": "京都の町並み"
+        "id": "daimonji-fan",
+        "name": "大文字のうちわ",
+        "reason": "夏の夜の京都（左手）"
       },
       "equipLv5": {
-        "id": "jiyu-fan",
-        "name": "「自由」のうちわ",
-        "reason": "自由の学風"
+        "id": "toro-lantern",
+        "name": "灯籠流しの灯籠",
+        "reason": "送り火の夜、鴨川にうかべる"
       }
     },
     {

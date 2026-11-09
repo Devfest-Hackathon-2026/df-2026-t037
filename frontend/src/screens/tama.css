@@ -280,7 +280,8 @@
   top: calc(100% + 6px);
   right: 0;
   z-index: 20;
-  width: 230px;
+  width: 250px;
+  max-width: calc(100vw - 32px);
   background: #FFFFFF;
   color: #3A3530;
   border-radius: 16px;
@@ -311,6 +312,9 @@
 .tama-menu-locked { padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; opacity: 0.55; }
 .tama-menu-lockrow { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; }
 .tama-menu-sub { font-size: 11px; font-weight: 500; color: #6B5E58; }
+/* 項目名（「興味から学部をさがす」など）は1行のまま。説明のほうを縮める */
+.tama-menu-item > span:first-child { white-space: nowrap; }
+.tama-menu-item > .tama-menu-sub { text-align: right; line-height: 1.3; }
 
 /* ===== ホームのボタン ===== */
 .tama-home-actions { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
@@ -446,11 +450,15 @@
 /* ===== 2026-11-08 の変更（docs/design/Henkou.dc.html ①〜③-2） ===== */
 
 /* C-2：メインの行動は横いっぱいのピンクのボタン、あとからの記録は文字リンク */
+/* App.css のページ全体用 .main（縦並び・上下の余白）と名前が同じなので、ここで打ち消す */
 .tama-btn.main {
+  flex: none;
   height: 56px;
+  padding: 0 16px;
   border-radius: 28px;
   font-size: 17px;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 8px;

@@ -15,7 +15,6 @@ import Menu from "./screens/Menu";
 import Timer from "./screens/Timer";
 import Kisekae from "./screens/Kisekae";
 import Explore from "./screens/Explore";
-import ConfirmDialog from "./screens/ConfirmDialog";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
 import { getFaculty, getUniversity } from "./game/universities";
@@ -101,7 +100,6 @@ export default function App() {
   const [profileReady, setProfileReady] = useState(false);
   const [setupEditing, setSetupEditing] = useState(false);
   const [screen, setScreen] = useState("home"); // home / timer / kisekae / record / result / explore
-  const [confirmSettings, setConfirmSettings] = useState(false);
   const [logs, setLogs] = useState([]);
   // 学習ログの最初の読み込みが終わったか（終わる前に一言を取りに行くと、記録数が0→nと変わって2回取りに行ってしまう）
   const [logsReady, setLogsReady] = useState(false);
@@ -121,7 +119,7 @@ export default function App() {
       setLogsReady(false);
       setLastResult(null);
       setScreen("home");
-      setConfirmSettings(false);
+      setSetupEditing(false);
       if (!currentUser) return;
 
       unsubProfile = onSnapshot(
@@ -211,19 +209,8 @@ export default function App() {
   const faculty = getFaculty(profile?.targetFacultyId);
   const characterName = getUniversity(faculty?.universityId)?.character || "キャラ";
 
-  // 学年を変える入口は ≡ メニューの「設定」だけ（C-1）。予定が作り直されるので、先に確認する
-  const settingsDialog = confirmSettings && (
-    <ConfirmDialog
-      message="学年を変えると、今のキャラと今シーズンの育成がはじめからになります（勉強の記録の履歴は残ります）。変えますか？"
-      confirmLabel="設定を開く"
-      onConfirm={() => {
-        setConfirmSettings(false);
-        setSetupEditing(true);
-      }}
-      onCancel={() => setConfirmSettings(false)}
-    />
-  );
-  const openSettings = () => setConfirmSettings(true);
+  // 学年を変える入口は ≡ メニューの「設定」だけ（C-1）。育成がはじめからになる確認は、学年を変えて保存するときだけ出す（SetupFlow）
+  const openSettings = () => setSetupEditing(true);
 
   // 計測中のタイマーがあれば、再読み込みしてもタイマーの画面にもどる
   if (timerRunning || screen === "timer") {
@@ -240,7 +227,6 @@ export default function App() {
             setScreen("result");
           }}
         />
-        {settingsDialog}
       </>
     );
   }
@@ -337,7 +323,6 @@ export default function App() {
 
         <ReportView logs={logs} profile={profile} />
       </main>
-      {settingsDialog}
     </div>
   );
 }

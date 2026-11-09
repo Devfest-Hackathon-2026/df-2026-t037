@@ -28,7 +28,7 @@ const UNI_EQUIP_SLOT = {
   soroban: 'hand', 'messenger-bag': 'back',
   backpack: 'back', globe: 'hand',
   'cheer-flag': 'back', megaphone: 'hand',
-  wagasa: 'back', 'jiyu-fan': 'hand',
+  'daimonji-fan': 'hand', 'toro-lantern': 'back', // 灯籠は棒の先につるすので、うちわと同時につけられるよう背中の枠
   'fossil-hammer': 'hand', loupe: 'neck',
 };
 

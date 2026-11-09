@@ -373,10 +373,11 @@ export default function Timer({ uid, profile, subjects, onRecorded, onClose, onS
     setNow(Date.now());
   };
 
-  // 目標より前に終わるときは、そこまでの時間でふりかえりへ
+  // 目標より前に終わるときは、そこまでの時間でふりかえりへ（C-23：秒を切り上げて最低1分。サーバーの上限と同じ式）
   const endEarly = () => {
-    const minutes = Math.max(1, elapsedMin);
-    updateLocal({ phase: "reflect", pausedAt: local.pausedAt || Date.now(), measured: minutes, recordMinutes: Math.min(minutes, MAX_RECORD) });
+    const t = local.pausedAt || Date.now();
+    const minutes = Math.max(1, Math.ceil(elapsedOf({ ...local, pausedAt: null }, startedMs, t) / 60000));
+    updateLocal({ phase: "reflect", pausedAt: t, measured: minutes, recordMinutes: Math.min(minutes, MAX_RECORD) });
   };
 
   return (

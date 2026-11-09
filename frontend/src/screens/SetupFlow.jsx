@@ -10,6 +10,7 @@ import {
 } from "../game/display";
 import { CATEGORIES } from "../game/subjects";
 import { requestPlan } from "../api";
+import ConfirmDialog from "./ConfirmDialog";
 import "./tama.css";
 
 export default function SetupFlow({ profile, defaultNickname, closable, onClose }) {
@@ -19,7 +20,10 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
   const [nickname, setNickname] = useState(profile?.nickname ?? defaultNickname ?? "");
   const [grade, setGrade] = useState(initialGrade);
   const [examDate, setExamDate] = useState(profile?.examDate || defaultExamDate(initialGrade, today));
-  const [examEdited, setExamEdited] = useState(Boolean(profile?.examDate));
+  // 保存した受験日が学年の自動の日付と違うときだけ「自分で変えた」とみなす（同じなら学年を変えたときに入れ直す）
+  const [examEdited, setExamEdited] = useState(
+    Boolean(profile?.examDate) && profile.examDate !== defaultExamDate(initialGrade, today)
+  );
   const [editingExam, setEditingExam] = useState(false);
   const [pace, setPace] = useState(profile?.pace || "futsuu");
   const initialFaculty = getFaculty(profile?.targetFacultyId) || FACULTIES[0];
@@ -27,6 +31,9 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
   const [facultyId, setFacultyId] = useState(initialFaculty.id);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [confirmReset, setConfirmReset] = useState(false);
+  // 設定から学年を変えたときは、育成がはじめからになるので保存の前に確認する（C-25）
+  const gradeChanging = closable && APP_GRADES.includes(profile?.grade) && grade !== profile.grade;
 
   const handleGrade = (g) => {
     setGrade(g);
@@ -41,6 +48,11 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
   };
 
   const handleSave = async () => {
+    if (gradeChanging && !confirmReset) {
+      setConfirmReset(true);
+      return;
+    }
+    setConfirmReset(false);
     setError("");
     setSaving(true);
     try {
@@ -77,9 +89,18 @@ export default function SetupFlow({ profile, defaultNickname, closable, onClose 
           onUni={handleUni}
           onFaculty={setFacultyId}
           onBack={() => setStep(1)}
+          closable={closable}
           onSave={handleSave}
           saving={saving}
           error={error}
+        />
+      )}
+      {confirmReset && (
+        <ConfirmDialog
+          message={`学年を${GRADE_FROM_APP[grade]}に変えると、今のキャラと今シーズンの育成がはじめからになります（勉強の記録の履歴は残ります）。変えますか？`}
+          confirmLabel="学年を変える"
+          onConfirm={handleSave}
+          onCancel={() => setConfirmReset(false)}
         />
       )}
     </div>
@@ -102,7 +123,7 @@ function SetupStep({
     <>
       <div className="tama-head">
         <div>
-          <p className="tama-kicker"><span>初期設定 1/2</span></p>
+          <p className="tama-kicker"><span>{closable ? "設定 1/2" : "初期設定 1/2"}</span></p>
           <h1 className="tama-title"><span>あなたのことを教えて</span></h1>
         </div>
         <Egg size={72} />
@@ -208,7 +229,7 @@ function SetupStep({
 
 // ===== 初期設定 2/2 =====
 function SelectStep({
-  today, grade, examDate, pace, uniId, facultyId, onUni, onFaculty, onBack, onSave, saving, error,
+  today, grade, examDate, pace, uniId, facultyId, onUni, onFaculty, onBack, onSave, saving, error, closable,
 }) {
   const g = GRADE_FROM_APP[grade];
   const uni = getUniversity(uniId);
@@ -229,7 +250,7 @@ function SelectStep({
   return (
     <>
       <div>
-        <p className="tama-kicker"><span>初期設定 2/2</span></p>
+        <p className="tama-kicker"><span>{closable ? "設定 2/2" : "初期設定 2/2"}</span></p>
         <h1 className="tama-title"><span>どこをめざす？</span></h1>
       </div>
 
