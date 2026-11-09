@@ -70,14 +70,22 @@
   "universityId": "todai",
   "university": "東京大学",
   "faculty": "理科一類",
-  "summary": "",
-  "keywords": [],
-  "sourceUrl": "",
-  "sourceIsOfficial": false,
+  "summary": "前期課程では、数理科学・物質科学・生命科学の幅広い基礎学力を修得します。さらに外国語や情報、初年次ゼミナールなどを学び、特定の分野に偏らない総合的な基礎力を身につけます。",
+  "keywords": [
+   "数理科学",
+   "物質科学",
+   "生命科学",
+   "情報",
+   "外国語",
+   "身体運動・健康科学",
+   "自然科学"
+  ],
+  "sourceUrl": "https://www.c.u-tokyo.ac.jp/info/academics/zenki/overview.html",
+  "sourceIsOfficial": true,
   "groundingTitles": [],
   "reviewed": false,
   "draftedBy": "gemini-3.8-flash",
-  "draftedAt": "2026-11-08"
+  "draftedAt": "2026-11-09"
  },
  "todai-r2": {
   "id": "todai-r2",
@@ -151,14 +159,23 @@
   "universityId": "kagaku",
   "university": "東京科学大学",
   "faculty": "工学院",
-  "summary": "",
-  "keywords": [],
-  "sourceUrl": "",
-  "sourceIsOfficial": false,
+  "summary": "機械系や情報通信系など5つの系で、生活を豊かで快適にする先進的な工学技術を学びます。身近な機器からロボットやロケットまで、開発や生産管理、経営に至る幅広いものづくりを探究します。",
+  "keywords": [
+   "機械系",
+   "システム制御",
+   "電気電子",
+   "情報通信",
+   "経営工学",
+   "ものづくり",
+   "介護ロボット",
+   "省エネルギー技術"
+  ],
+  "sourceUrl": "https://www.isct.ac.jp/ja/001/about/organizations/school-of-engineering",
+  "sourceIsOfficial": true,
   "groundingTitles": [],
   "reviewed": false,
   "draftedBy": "gemini-3.8-flash",
-  "draftedAt": "2026-11-08"
+  "draftedAt": "2026-11-09"
  },
  "kagaku-mat": {
   "id": "kagaku-mat",
@@ -277,14 +294,23 @@
   "universityId": "kagaku",
   "university": "東京科学大学",
   "faculty": "医学部 保健衛生学科 看護学専攻",
-  "summary": "",
-  "keywords": [],
-  "sourceUrl": "",
-  "sourceIsOfficial": false,
+  "summary": "幅広い教養や医学の基礎を土台に、あらゆる健康状態の人を支える看護の実践的な知識と技術を学びます。成人や小児、老年、地域看護学などの専門分野を段階的に修得し、臨地実習や卒業研究を通して看護を探究します。",
+  "keywords": [
+   "基礎看護学",
+   "成人看護学",
+   "小児看護学",
+   "老年看護学",
+   "母性看護学",
+   "精神看護学",
+   "在宅看護学",
+   "地域看護学"
+  ],
+  "sourceUrl": "https://www.tmd.ac.jp/faculties/policies/igakubu/nursing-science/",
+  "sourceIsOfficial": true,
   "groundingTitles": [],
   "reviewed": false,
   "draftedBy": "gemini-3.8-flash",
-  "draftedAt": "2026-11-08"
+  "draftedAt": "2026-11-09"
  },
  "kagaku-lab": {
   "id": "kagaku-lab",
@@ -423,22 +449,23 @@
   "universityId": "chiba",
   "university": "千葉工業大学",
   "faculty": "先進工学部",
-  "summary": "工学の基礎知識をもとに、人々の生活を便利にする先進的な技術や学際領域を学びます。ロボット技術や生命科学、音・映像や人工知能を扱う知能メディア工学を探究し、未来社会を支える技術を身につけます。",
+  "summary": "生活の利便性を高める先進科学技術について、基礎から幅広く学びます。ロボティクス、生命科学、知能メディア工学の領域で、ロボットや創薬、人工知能などを研究します。",
   "keywords": [
    "ロボティクス",
    "生命科学",
-   "知能メディア",
+   "知能メディア工学",
+   "ロボット",
+   "遺伝子と細胞",
+   "創薬",
    "人工知能",
-   "遺伝子工学",
-   "制御工学",
    "情報デザイン"
   ],
-  "sourceUrl": "https://www.chibatech.ac.jp/faculty/",
-  "sourceIsOfficial": false,
+  "sourceUrl": "https://chibatech.jp/faculty/",
+  "sourceIsOfficial": true,
   "groundingTitles": [],
   "reviewed": false,
   "draftedBy": "gemini-3.8-flash",
-  "draftedAt": "2026-11-08"
+  "draftedAt": "2026-11-09"
  },
  "chiba-info": {
   "id": "chiba-info",
