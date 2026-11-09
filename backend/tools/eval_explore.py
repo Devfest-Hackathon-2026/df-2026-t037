@@ -240,6 +240,25 @@ def main(report_only: bool):
         if cmp_v:
             print(f"   {cmp_v[:4]}: " + " / ".join(("○" if f in exp else "×") + short(f) for f in b))
 
+    # 学部ごとの「出た回数」：60回（記録30＋言葉30）の上位5件に、各学部が何回入ったか（偏りの確認用）
+    # 30問は30の分野だけなので、「一度も出ない」は不具合とは限らない（その分野の問題が無いだけ）。出すぎ・大学の偏りを見る
+    for v in ("raw", cmp_v):
+        cnt = {f: 0 for f in ids}
+        for c in CASES:
+            for kind in ("logs", "interest"):
+                for f in detail[(v, c["id"], kind)]:
+                    cnt[f] += 1
+        never = [nm(f) for f in ids if cnt[f] == 0]
+        top = sorted(ids, key=lambda f: cnt[f], reverse=True)[:8]
+        by_uni = {}
+        for f in ids:
+            u = explore.PROFILES[f]["university"]
+            by_uni[u] = by_uni.get(u, 0) + cnt[f]
+        print(f"\n=== 出た回数（{v}：60回の上位5件に入った数）===")
+        print("  多い順：" + " / ".join(f"{short(f)} {cnt[f]}" for f in top))
+        print("  大学ごとの合計：" + " / ".join(f"{u} {n}" for u, n in sorted(by_uni.items(), key=lambda x: -x[1])))
+        print(f"  一度も出ない学部：{len(never)}件（{len(ids)}件中）" + ("" if not never else "\n   " + "、".join(never)))
+
     # 本番用の補正値を、全問から作って保存する（best が mean/z/csls のときに explore.py が使う）
     refs_single = [q for cid in single for q in single[cid]]
     refs_agg = [agg[cid] for cid in agg]

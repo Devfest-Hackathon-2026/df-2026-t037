@@ -4,6 +4,7 @@
     cd ~/my-hackathon-app/backend
     python3 tools/check_sources.py            # 全学部を検査して表を出す
     python3 tools/check_sources.py todai-r1   # 学部IDを指定
+    python3 tools/check_sources.py --apply    # OK以外の「公式URL」の表示を外す（画面にURLを出さない）
 
 見ること（機械でわかる範囲だけ）
   1. URLが開けるか（HTTP 200）
@@ -61,7 +62,9 @@ def check(fid: str, p: dict) -> tuple[str, str, str]:
 
 
 def main() -> None:
-    ids = sys.argv[1:] or list(PROFILES)
+    args = sys.argv[1:]
+    apply = "--apply" in args
+    ids = [a for a in args if not a.startswith("--")] or list(PROFILES)
     rows = []
     for fid in ids:
         p = PROFILES.get(fid)
@@ -72,6 +75,15 @@ def main() -> None:
         rows.append((fid, p["university"], p["faculty"], status, note, url))
         print(f"{status:<6} {p['university']} {p['faculty']}  {note}")
         time.sleep(0.5)
+    if apply:
+        # 画面に出す「公式URL」は sourceIsOfficial が true のものだけ。検査を通らないものは外す
+        for fid, _u, _f, status, note, _url in rows:
+            PROFILES[fid]["sourceCheck"] = status
+            if status != "OK":
+                PROFILES[fid]["sourceIsOfficial"] = False
+        path = ROOT / "faculty_profiles.json"
+        path.write_text(json.dumps(PROFILES, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print("faculty_profiles.json に反映しました（OK以外は公式URLの表示を外しました）")
     out = Path.home() / "source_check.tsv"
     out.write_text("\n".join("\t".join(r) for r in rows), encoding="utf-8")
     ng = [r for r in rows if r[3] != "OK"]
