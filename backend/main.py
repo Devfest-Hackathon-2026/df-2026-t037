@@ -27,6 +27,8 @@ from game_rules import FACULTIES, PACE_FACTOR, make_plan
 # ---- 設定（env.yaml から読み込み） ----
 PROJECT_ID = os.environ.get("GCP_PROJECT_ID", "pivotal-pager-514008-d0")
 MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.8-flash")
+# AIの「考える量」。空なら今までどおり（モデルの既定）。"low" にすると応答が速くなる（デモ・審査の待ち時間対策）
+THINKING_LEVEL = os.environ.get("GEMINI_THINKING_LEVEL", "").strip()
 LOCATION = os.environ.get("GEMINI_LOCATION", "global")
 ALLOWED_ORIGINS = os.environ.get("FRONTEND_ORIGINS", "http://localhost:5173").split()
 
@@ -217,6 +219,8 @@ def call_gemini(prompt: str, schema: dict | None = None, temperature: float | No
     generation_config = {"responseMimeType": "application/json", "responseSchema": schema or RESPONSE_SCHEMA}
     if temperature is not None:
         generation_config["temperature"] = temperature
+    if THINKING_LEVEL:
+        generation_config["thinkingConfig"] = {"thinkingLevel": THINKING_LEVEL}
     try:
         resp = requests.post(
             ENDPOINT,

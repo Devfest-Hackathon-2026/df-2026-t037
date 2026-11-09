@@ -57,6 +57,8 @@ export default function Mocks({ uid, profile, onBack }) {
         seriesId: current.id, fiscalYear: year, round: Math.min(round, current.rounds), judge,
         deviation: deviation === "" ? null : Number(deviation),
       });
+      // 一覧は Firestore の更新でも変わるが、届くのが遅れても消えたように見えないよう、保存した記録をすぐ一覧に入れる
+      if (res?.record?.id) setRecords((prev) => [...prev.filter((x) => x.id !== res.record.id), res.record]);
       const got = (res.newlyUnlocked || []).map((id) => ITEM_NAME[id]).filter(Boolean);
       setNotice(got.length ? `🎉 ${got.join("・")}を手に入れた！（着替えでつけられます）` : "保存しました");
       setJudge("");
@@ -211,6 +213,7 @@ export default function Mocks({ uid, profile, onBack }) {
             setRemoving(null);
             try {
               await requestDeleteMock(r.id);
+              setRecords((prev) => prev.filter((x) => x.id !== r.id));
             } catch (err) {
               setError(err.message || "消せませんでした。");
             }
