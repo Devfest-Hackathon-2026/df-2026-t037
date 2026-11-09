@@ -965,3 +965,39 @@
 /* 「記録しました」の画面の下：ホームに戻る */
 .result-actions { margin-top: 4px; padding-bottom: 8px; display: flex; }
 .result-actions .tama-btn.main { width: 100%; }
+
+/* これまでの合計 */
+.lifetime { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin: 4px 0 12px; padding: 12px 14px; border-radius: 14px; background: linear-gradient(135deg, #FFF1F4, #FCE7EC); }
+.lifetime-label { font-size: 12px; font-weight: 800; color: #B0506E; }
+.lifetime strong { font-size: 20px; font-weight: 900; color: #8E3554; }
+.report-sub { margin: 18px 0 8px; font-size: 14px; font-weight: 900; }
+
+/* 勉強時間の変遷（スクリーンタイム風） */
+.stime { display: flex; flex-direction: column; gap: 10px; }
+.stime-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 8px; }
+.stime-kicker { margin: 0; font-size: 12px; color: var(--muted); }
+.stime-big { margin: 0; font-size: 26px; font-weight: 900; }
+.stime-change { margin: 0; font-size: 12px; font-weight: 800; color: var(--muted); }
+.stime-change.up { color: #2E9E6A; }
+.stime-change.down { color: #D64545; }
+.stime-chart { position: relative; height: 170px; padding-left: 40px; margin-bottom: 18px; }
+.stime-grid { position: absolute; inset: 0 0 0 40px; pointer-events: none; }
+.stime-tick { position: absolute; left: 0; right: 0; border-top: 1px solid #EFE7DF; }
+.stime-tick span { position: absolute; left: -40px; top: -7px; width: 36px; text-align: right; font-size: 9.5px; color: var(--muted); }
+.stime-avg { position: absolute; left: 0; right: 0; border-top: 1.5px dashed #2E9E6A; }
+.stime-avg span { position: absolute; right: 0; top: -15px; font-size: 9.5px; font-weight: 800; color: #2E9E6A; background: rgba(255, 255, 255, 0.85); padding: 0 3px; border-radius: 4px; }
+.stime-bars { position: absolute; inset: 0 0 0 40px; display: flex; align-items: flex-end; gap: 8px; }
+.stime-bars.many { gap: 2px; }
+.stime-bar { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch; border: 0; padding: 0; background: none; cursor: pointer; position: relative; font-family: inherit; }
+.stime-stack { display: flex; flex-direction: column-reverse; border-radius: 5px 5px 2px 2px; overflow: hidden; min-height: 0; transition: height 0.4s ease, opacity 0.2s; }
+.stime-stack > span { min-height: 1px; }
+.stime-bar.dim .stime-stack { opacity: 0.35; }
+.stime-bar.on .stime-stack { outline: 2px solid #4A3E3A; outline-offset: 1px; }
+.stime-day { position: absolute; bottom: -17px; left: -6px; right: -6px; text-align: center; font-size: 10px; color: var(--muted); white-space: nowrap; }
+.stime-bars.many .stime-day.last { left: auto; right: 0; text-align: right; }
+.stime-detail { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.stime-detail li { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.stime-detail li strong { margin-left: auto; }
+.stime-none { color: var(--muted); }
+.stime-foot { margin: 0; font-size: 11px; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .stime-stack { transition: none; } }

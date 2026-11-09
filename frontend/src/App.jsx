@@ -19,6 +19,7 @@ import { RankBreakdown, RankHints } from "./screens/RankHelp";
 import { streakBonus } from "./game/rules";
 import Explore from "./screens/Explore";
 import Mocks from "./screens/Mocks";
+import StudyTime from "./screens/StudyTime";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
 import { getFaculty, getUniversity } from "./game/universities";
@@ -822,6 +823,12 @@ function ReportView({ logs, profile }) {
           </div>
         </div>
 
+        {/* これまでの合計（学年を変えてもリセットしない。サーバーが記録のたびに足す） */}
+        <div className="lifetime">
+          <span className="lifetime-label">これまでの合計勉強時間</span>
+          <strong>{typeof profile?.totalMinutes === "number" ? formatMinutes(profile.totalMinutes) : "次の記録から数えます"}</strong>
+        </div>
+
         <div className="stats">
           <Stat label="合計時間" value={formatMinutes(report.totalMinutes)} />
           <Stat label="記録回数" value={report.seasonCount} unit="回" />
@@ -829,6 +836,10 @@ function ReportView({ logs, profile }) {
           <Stat label="S・A率" value={report.highRate} unit="%" />
         </div>
 
+        <h3 className="report-sub"><span>勉強時間の変遷</span></h3>
+        <StudyTime key={periodDays} logs={logs} days={periodDays} />
+
+        <h3 className="report-sub"><span>教科のバランス</span></h3>
         {report.totalMinutes > 0 ? (
           <div className="chart-area" key="chart">
             <div className="doughnut-wrap">
