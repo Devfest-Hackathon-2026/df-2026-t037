@@ -643,7 +643,7 @@ function ResultCard({ result, universityId, faculty }) {
     const catLabel = CATEGORIES.find((c) => c.id === cat)?.label;
     const streak = toNumber(result?.streak);
     return {
-      text: `${result.subject}${result.minutes}分 × ${(1 + w / 100).toFixed(1)}${catLabel ? `（${catLabel}）` : ""} × ${streakBonus(streak).toFixed(2)}（連続）× ${multiplier.toFixed(1)}（${penalty ? "量の確認" : rank}）＝ `,
+      text: `${result.subject}${result.minutes}分 × ${(1 + w / 100).toFixed(2)}${catLabel ? `（${catLabel}）` : ""} × ${streakBonus(streak).toFixed(2)}（連続）× ${multiplier.toFixed(1)}（${penalty ? "量の確認" : rank}）＝ `,
       growth,
     };
   })();

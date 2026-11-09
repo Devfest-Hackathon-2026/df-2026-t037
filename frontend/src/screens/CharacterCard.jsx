@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Character } from "../characters/Character";
 import { ChatSheet, GreetingBubble } from "./CharacterChat";
 import { getFaculty, getUniversity } from "../game/universities";
-import { BOND_UNLOCKS, bondOf, timeToGo } from "../game/rules";
+import { BOND_UNLOCKS, GRADE_HOURS, bondOf, timeToGo, ymd } from "../game/rules";
 import {
   GRADE_FROM_APP, addDays, comma, daysBetween, hoursLabel, nextGoal, parseYmd,
   roughDate, streakInfo, todayHours, todayStart,
@@ -43,6 +43,11 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
   const seasonEnd = parseYmd(plan.seasonEnd);
   const seasonLeft = seasonEnd ? Math.max(0, daysBetween(today, seasonEnd)) : null;
   const s = streakInfo(streak);
+  // 連続は「その日の合計が学年の目安の1/4」をこえたら+1（サーバーの update_streak と同じ）。今日あと何分かを出す
+  const todayStr = ymd(today);
+  const streakNeed = Math.round((GRADE_HOURS[grade] || 0) * 60 / 4);
+  const studiedToday = profile.lastStudyDate === todayStr ? Number(profile.todayMinutes) || 0 : 0;
+  const streakLeft = profile.lastStreakDate === todayStr ? 0 : Math.max(0, streakNeed - studiedToday);
   const name = uni.stageNames[stage - 1] || uni.character;
   const items = buildItems({ universityId: uni.id, growthExp: exp, bond, legends: profile?.legends });
   const worn = sanitizeEquipped(profile.equipped, items);
@@ -64,6 +69,9 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
             <p className="tama-note"><span>{`連続 ${streak}日`}</span></p>
             <p className="tama-streak-x"><span>{s.bonus}</span></p>
             <p className="tama-tiny"><span>{s.hint}</span></p>
+            {streakLeft > 0 && (
+              <p className="tama-tiny strong"><span>{`今日あと${streakLeft}分で連続+1`}</span></p>
+            )}
           </div>
           {menu}
         </div>

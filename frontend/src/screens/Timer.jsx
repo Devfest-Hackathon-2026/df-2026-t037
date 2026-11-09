@@ -30,7 +30,7 @@ function multiplierText(subject, faculty) {
   const cat = SUBJECT_CATEGORY[subject];
   const w = cat ? faculty?.weights[cat] ?? 0 : 0;
   const label = CATEGORIES.find((c) => c.id === cat)?.label;
-  return { w, text: label ? `${label} ×${(1 + w / 100).toFixed(1)}` : `×${(1).toFixed(1)}` };
+  return { w, text: label ? `${label} ×${(1 + w / 100).toFixed(2)}` : `×${(1).toFixed(2)}` };
 }
 
 const clock = (ms) => {
@@ -423,7 +423,7 @@ export default function Timer({ uid, profile, subjects, onRecorded, onClose, onS
       <p className="tama-timer-exp">
         <span>いまのEXP </span>
         <strong>{`+${expNow}`}</strong>
-        <span>{`（${elapsedMin}分 × ${(1 + mult.w / 100).toFixed(1)} × 連続${streakBonus(streak).toFixed(2)}）`}</span>
+        <span>{`（${elapsedMin}分 × ${(1 + mult.w / 100).toFixed(2)} × 連続${streakBonus(streak).toFixed(2)}）`}</span>
       </p>
       <p className="tama-timer-hint">
         <span>記録すると言語化ランクの倍率（S×1.3〜C×1.0）もかかります</span>
