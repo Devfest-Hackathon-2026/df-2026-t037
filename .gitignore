@@ -25,3 +25,4 @@ __pycache__/
 # OS・エディタ・作業用
 .DS_Store
 .tmp_claude/
+.firebase/
