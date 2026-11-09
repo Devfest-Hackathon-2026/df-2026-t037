@@ -276,7 +276,15 @@ function SelectStep({
         ))}
       </div>
 
-      <p className="tama-label"><span>2. 学部・科類を選ぶ（リボンとピンが変わる）</span></p>
+      {/* C-13：見出しは大学で変える。東京科学大学のときだけ「学院」の説明を出す */}
+      <p className="tama-label">
+        <span>{`2. ${uniId === "todai" ? "科類" : uniId === "kagaku" ? "学院・学部" : "学部"}を選ぶ（リボンとピンが変わる）`}</span>
+      </p>
+      {uniId === "kagaku" && (
+        <p className="tama-gakuin-note">
+          <span>東京科学大学（旧東工大）の理工系は、学部ではなく『学院』ごとに募集します（学院＝学部と大学院をひとつにした単位）</span>
+        </p>
+      )}
       <div className="tama-wrap">
         {faculties.map((f) => {
           const on = f.id === facultyId;

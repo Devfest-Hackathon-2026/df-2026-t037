@@ -107,6 +107,11 @@ export function requestGreeting() {
   return postJson("/greeting", {}, { serverError: CHAT_ERROR_MESSAGE });
 }
 
+/** 起動のときに呼ぶ：4月1日をこえていたら進級する（C-9。定期実行は作らない） */
+export function requestSeasonCheck() {
+  return postJson("/season/check", {}, { serverError: "進級の確認ができませんでした。" });
+}
+
 const EXPLORE_ERROR_MESSAGE = "うまく探せませんでした。少し待ってからもう一度お試しください。";
 const EXPLORE_STATUS_MESSAGES = {
   422: "4〜200字で書いてね。",

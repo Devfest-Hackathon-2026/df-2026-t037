@@ -14,6 +14,7 @@ import { loadTimerLocal, saveTimerLocal, startTimer, stopTimer } from "../game/u
 import { isChimeOn, playChime, unlockChime } from "../lib/chime";
 import { requestAdvice } from "../api";
 import Menu from "./Menu";
+import { RankHints } from "./RankHelp";
 import "./tama.css";
 
 const GOALS = [30, 45, 60, 90, 120];
@@ -333,6 +334,7 @@ export default function Timer({ uid, profile, subjects, onRecorded, onClose, onS
         <div className="tama-white-card">
           <p className="tama-strong"><span>おつかれさま！ふりかえりを書こう</span></p>
           <p className="tama-note"><span>何をどれだけ・どこでつまずいたか・次に何をやるか</span></p>
+          <RankHints />
           <textarea
             className="tama-textarea"
             value={text}

@@ -44,6 +44,12 @@ service cloud.firestore {
         // 書き込みはCloud Run（Admin SDK）だけ。Admin SDKにはルールが適用されない
         allow write: if false;
       }
+
+      // 図鑑：シーズンが終わったキャラ（C-9。users/{uid}/dex/{年度}）。書き込みはサーバーだけ
+      match /dex/{fiscalYear} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
     }
   }
 }

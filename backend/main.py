@@ -323,12 +323,15 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
     if data.fromTimer:
         check_timer_minutes(user, data.minutes)
 
+    # 4月1日をこえていたら、先に進級の処理をする（C-9）。この記録は新しいシーズンの1件目になる
+    user, season_updates, season_kind = _apply_rollover(txn, user_ref, user)
+
     # 記録はシーズンの番号をつけて残す（C-25：学年を変えたあとは、新しいシーズンの計算やグラフに入れない）
     log = {**log, "seasonId": int(user.get("seasonId") or 0), "category": progress.SUBJECT_CATEGORY.get(data.subject)}
-    updates: dict = {"totalExp": firestore.Increment(total_exp_gain)}
+    updates: dict = {**season_updates, "totalExp": firestore.Increment(total_exp_gain)}
     growth = {"growth_exp": 0, "growth_total": None, "stage": None, "bond": None,
               "evolved": False, "streak": int(user.get("streak") or 0),
-              "old_growth_total": None, "old_bond": None}
+              "old_growth_total": None, "old_bond": None, "season": season_kind}
 
     grade = progress.game_grade(user.get("grade"))
     if grade:
@@ -336,8 +339,8 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
         updates.update(streak_fields)
         growth["streak"] = streak_fields["streak"]
 
-    # 初期設定（plan）がまだの人は、今までどおり totalExp だけを足す
-    if grade and progress.has_plan(user):
+    # 初期設定（plan）がまだの人・高3のシーズンが終わった人は、今までどおり totalExp だけを足す
+    if grade and progress.has_plan(user) and not user.get("seasonEnded"):
         plan = user["plan"]
         gained = progress.growth_for_log(
             data.minutes, data.subject, user["targetFacultyId"], growth["streak"], rank
@@ -356,6 +359,37 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
     txn.set(log_ref, log)
     txn.set(user_ref, updates, merge=True)
     return growth
+
+
+# ---- 4月1日の自動進級（C-9） ----
+def _apply_rollover(txn, user_ref, user: dict) -> tuple[dict, dict, str | None]:
+    """シーズンの切りかえが必要なら、図鑑への保存（users/{uid}/dex/{年度}）をトランザクションに入れ、
+    書きかえた後の user・users/{uid} に書く項目・種類（label / promoted / ended）を返す。
+    トランザクションの読み取り（user_ref.get）がすんでから呼ぶこと"""
+    roll = progress.season_rollover(user, progress.today_jst())
+    if not roll:
+        return user, {}, None
+    if roll["dex"] is not None:
+        dex_ref = user_ref.collection("dex").document(roll["dexId"])
+        txn.set(dex_ref, {**roll["dex"], "savedAt": firestore.SERVER_TIMESTAMP}, merge=True)
+    return {**user, **roll["updates"]}, roll["updates"], roll["kind"]
+
+
+@firestore.transactional
+def _commit_season_check(txn, user_ref) -> dict:
+    snap = user_ref.get(transaction=txn)
+    user = (snap.to_dict() or {}) if snap.exists else {}
+    user, updates, kind = _apply_rollover(txn, user_ref, user)
+    if updates:
+        txn.set(user_ref, updates, merge=True)
+    return {"season": kind, "grade": user.get("grade"), "seasonEnded": bool(user.get("seasonEnded"))}
+
+
+@app.post("/season/check")
+def season_check(uid: str = Depends(verify_user)):
+    """起動のときに呼ぶ。4月1日をこえていたら進級する（定期実行は作らない）"""
+    user_ref = db.collection("users").document(uid)
+    return _commit_season_check(db.transaction(), user_ref)
 
 
 @app.post("/plan")
@@ -407,6 +441,9 @@ def _commit_plan(txn, user_ref, data: PlanRequest, plan: dict) -> dict:
         "stage": stage,
         "bond": bond,
         "nickname": data.nickname.strip(),
+        # 進級（C-9）で使う：このシーズンを始めたときの学年と、シーズンが終わったか
+        "seasonStartGrade": data.grade,
+        "seasonEnded": False,
     }
     if not snap.exists:
         updates["createdAt"] = firestore.SERVER_TIMESTAMP

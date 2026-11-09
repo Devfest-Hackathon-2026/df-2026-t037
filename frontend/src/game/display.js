@@ -92,3 +92,19 @@ export function streakInfo(streak) {
 
 /** 今日の学年の目安（時間） */
 export const todayHours = (grade) => standardHours(grade, todayStart());
+
+/** 年度（4月はじまり） */
+const fiscalYearOf = (d) => (d.getMonth() >= 3 ? d.getFullYear() : d.getFullYear() - 1);
+
+/**
+ * 起動のときに進級の確認（POST /season/check）が要るか（C-9）。
+ * シーズンが終わっている、または年度が変わっている（つないだシーズンの途中で4月をこえた）ときだけ true
+ */
+export function seasonCheckDue(profile, today = todayStart()) {
+  const plan = profile?.plan;
+  if (!plan || profile?.seasonEnded) return false;
+  const start = parseYmd(plan.seasonStart);
+  const end = parseYmd(plan.seasonEnd);
+  if (!start || !end) return false;
+  return today > end || fiscalYearOf(today) > fiscalYearOf(start);
+}

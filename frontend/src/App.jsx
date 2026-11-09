@@ -1,5 +1,5 @@
 // File: frontend/src/App.jsx
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import {
   collection, doc, query, where, orderBy, limit,
@@ -8,12 +8,14 @@ import {
 import { Chart as ChartJS, ArcElement, Tooltip } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { auth, db, loginAsGuest, loginWithGoogle } from "./firebase";
-import { requestAdvice } from "./api";
+import { requestAdvice, requestSeasonCheck } from "./api";
+import { seasonCheckDue } from "./game/display";
 import SetupFlow from "./screens/SetupFlow";
 import CharacterCard from "./screens/CharacterCard";
 import Menu from "./screens/Menu";
 import Timer from "./screens/Timer";
 import Kisekae from "./screens/Kisekae";
+import { RankHints } from "./screens/RankHelp";
 import Explore from "./screens/Explore";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
@@ -45,7 +47,6 @@ const RANK_META = {
   C: { title: "もう一歩具体的に", className: "rank-c" },
 };
 
-const S_TIPS = ["なぜその公式になる？", "他の単元とのつながり", "ミスの本当の原因"];
 const GOOD_LENGTH = 80;
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -104,6 +105,9 @@ export default function App() {
   // 学習ログの最初の読み込みが終わったか（終わる前に一言を取りに行くと、記録数が0→nと変わって2回取りに行ってしまう）
   const [logsReady, setLogsReady] = useState(false);
   const [lastResult, setLastResult] = useState(null);
+  // 進級の確認（C-9）は1回のログインにつき1回だけ。結果はホームのお知らせに出す
+  const seasonCheckedFor = useRef(null);
+  const [seasonNotice, setSeasonNotice] = useState(null);
 
   // 認証とプロフィールの監視
   useEffect(() => {
@@ -140,6 +144,26 @@ export default function App() {
       unsubAuth();
     };
   }, []);
+
+  // 4月1日をこえていそうなら、起動のときに進級の処理をサーバーに頼む（C-9）
+  useEffect(() => {
+    if (!user || !profileReady || !seasonCheckDue(profile)) return;
+    if (seasonCheckedFor.current === user.uid) return;
+    seasonCheckedFor.current = user.uid;
+    requestSeasonCheck()
+      .then((res) => {
+        if (res?.season === "promoted") {
+          setSeasonNotice(`${res.grade}に進級しました！前のキャラは図鑑に残っています。新しいたまごといっしょにがんばろう`);
+        } else if (res?.season === "ended") {
+          setSeasonNotice("受験日でシーズンが終わりました。ここまで育てたキャラは図鑑に残っています");
+        }
+      })
+      .catch((err) => {
+        // 次の記録のときにもサーバーが同じ処理をするので、ここで失敗しても画面は止めない
+        console.error("[season check error]", err);
+        seasonCheckedFor.current = null;
+      });
+  }, [user, profileReady, profile]);
 
   // 直近30日の学習ログ
   useEffect(() => {
@@ -283,6 +307,14 @@ export default function App() {
       <Header grade={profile?.grade} />
 
       <main className="container main">
+        {seasonNotice && (
+          <div className="tama tama-notice" role="status">
+            <span>{seasonNotice}</span>
+            <button type="button" className="tama-notice-close" aria-label="お知らせを閉じる" onClick={() => setSeasonNotice(null)}>
+              <span>×</span>
+            </button>
+          </div>
+        )}
         <CharacterCard
           profile={profile}
           logs={logs}
@@ -497,15 +529,9 @@ function RecordScreen({ characterName, universityId, lastResult, onResult, onBac
           </div>
           {showMinutesError && <p className="tama-field-err"><span>1〜600分で入力してね</span></p>}
 
-          <div className="tama-record-label with-hint">
-            <span>ふりかえり</span>
-            <span className="tama-note">Sランクのヒント</span>
-          </div>
-          <div className="tips">
-            {S_TIPS.map((t) => (
-              <span key={t} className="tip">{t}</span>
-            ))}
-          </div>
+          <p className="tama-record-label"><span>ふりかえり</span></p>
+          {/* C-5：ヒントは押すと開く。ⓘ でランクの説明 */}
+          <RankHints />
           <textarea
             className="tama-textarea"
             value={reflection}
@@ -665,7 +691,7 @@ function ReportView({ logs, profile }) {
     const highRate = seasonLogs.length ? Math.round((highRank / seasonLogs.length) * 100) : 0;
 
     return { filtered, seasonCount: seasonLogs.length, subjects, totalMinutes, totalExp, highRate };
-  }, [logs, periodDays]);
+  }, [logs, periodDays, profile]);
 
   const chartData = {
     labels: report.subjects.map((s) => s.name),

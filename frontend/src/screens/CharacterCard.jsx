@@ -118,6 +118,11 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
         />
       )}
 
+      {profile.seasonEnded && (
+        <p className="tama-note tama-season-ended">
+          <span>受験日でシーズンが終わりました。記録はこれまでどおりできますが、キャラはもう育ちません。新しい目標は ≡ メニューの「設定」から</span>
+        </p>
+      )}
       <WeekBars logs={logs} faculty={faculty} profile={profile} />
     </section>
   );
@@ -129,8 +134,8 @@ function todayLogCount(logs, today) {
   return (logs || []).filter((l) => l.dateObj && l.dateObj.getTime() >= t).length;
 }
 
-/** EXP倍率＝1＋その教科の配点比率（game/rules.js の expForLog と同じ式） */
-const multiplierOf = (goal) => `×${(1 + goal / 100).toFixed(1)}`;
+/** EXP倍率＝1＋その教科の配点比率（game/rules.js の expForLog と同じ式）。丸めずに出す（C-8：×1.55 など） */
+const multiplierOf = (goal) => `×${(1 + goal / 100).toFixed(2)}`;
 
 /** 配点より「足りない」とみなす差（ポイント）。これ未満なら配点どおりとする */
 const SHORT_THRESHOLD = 5;
@@ -146,11 +151,12 @@ function pickShortage(rows) {
 }
 
 /**
- * この7日の教科の割合（6教科・C-22）と、志望学部の配点。今のシーズンの記録だけで数える（C-25）
- * 上：いちばん足りない教科を1つだけ提案するカード／下：開くと見出し付きの表
+ * この7日の勉強の配分 と 志望学部の入試の配点（C-8。デザイン元：docs/design/Henkou.dc.html ①）
+ * - 1行目に結論（いちばん足りない教科）を出す
+ * - 棒＝あなた（教科の色・C-3）、黒い線＝入試の配点。凡例を図の下に出す
+ * - 6教科（C-22）。今のシーズンの記録だけで数える（C-25）
  */
 function WeekBars({ logs, faculty, profile }) {
-  const [open, setOpen] = useState(false);
   const since = Date.now() - 7 * DAY_MS;
   const recent = (logs || []).filter((l) => l.dateObj && l.dateObj.getTime() >= since && inSeason(l, profile));
   const total = recent.reduce((a, l) => a + (Number(l.minutes) || 0), 0);
@@ -169,75 +175,58 @@ function WeekBars({ logs, faculty, profile }) {
   const top = [...rows].sort((a, b) => b.goal - a.goal)[0];
   const short = total > 0 ? pickShortage(rows) : null;
 
-  let tip;
+  let conclusion;
   if (total === 0) {
-    tip = {
-      color: top.color,
-      title: `まずは${top.label}から始めよう。やると${multiplierOf(top.goal)}`,
-      sub: `${faculty.name}でいちばん配点が大きい教科です（${top.goal}%）`,
-    };
+    conclusion = (
+      <>
+        <span>まずは</span>
+        <strong>{top.label}</strong>
+        <span>{`から（配点${top.goal}%でいちばん大きい・EXP${multiplierOf(top.goal)}）`}</span>
+      </>
+    );
   } else if (short) {
-    tip = {
-      color: short.color,
-      title: `今は${short.label}が足りません。やると${multiplierOf(short.goal)}`,
-      sub: `配点${short.goal}%に対して、この7日は${short.me}%（${short.minutes}分）`,
-    };
+    conclusion = (
+      <>
+        <span>いちばん足りないのは </span>
+        <strong>{short.label}</strong>
+        <span>{`（配点${short.goal}%・あなた${short.me}%）`}</span>
+      </>
+    );
   } else {
-    tip = {
-      color: "#2E9E6A",
-      title: "配点どおりのバランスです。この調子！",
-      sub: `どの教科も、配点との差が${SHORT_THRESHOLD}ポイント未満です`,
-    };
+    conclusion = <span>{`配点どおりのバランスです（どの教科も差が${SHORT_THRESHOLD}ポイント未満）`}</span>;
   }
 
   return (
     <div className="tama-card tama-week">
-      <p className="tama-strong small"><span>{`この7日（${total}分）と${faculty.name}の配点`}</span></p>
+      <p className="tama-strong small">
+        <span>{`この7日の勉強の配分 と ${faculty.name}の入試の配点`}</span>
+      </p>
+      <p className="tama-week-conclusion">{conclusion}</p>
 
-      <div className="tama-short" style={{ borderColor: tip.color }}>
-        <p className="tama-short-title" style={{ color: tip.color }}><span>{tip.title}</span></p>
-        <p className="tama-short-sub"><span>{tip.sub}</span></p>
+      {rows.map((r) => (
+        <div key={r.id} className={`tama-week-row ${short && short.id === r.id ? "is-short" : ""}`}>
+          <span className="tama-week-name" style={{ color: r.color }}>{r.label}</span>
+          <div
+            className="tama-week-bar"
+            role="img"
+            aria-label={`${r.label}：あなた${r.me}%、入試の配点${r.goal}%`}
+          >
+            <div style={{ width: `${r.me}%`, background: r.color }} />
+            <i style={{ left: `${r.goal}%` }} />
+          </div>
+          <span className="tama-week-num">
+            <span>{`${r.me}%/${r.goal}% `}</span>
+            <strong>{multiplierOf(r.goal)}</strong>
+          </span>
+        </div>
+      ))}
+
+      <div className="tama-week-legend">
+        <span className="tama-week-legend-item"><span className="tama-week-legend-bar" aria-hidden="true" /><span>あなた（教科の色）</span></span>
+        <span className="tama-week-legend-item"><span className="tama-week-legend-line" aria-hidden="true" /><span>入試の配点</span></span>
+        <span><span>×＝EXP倍率</span></span>
       </div>
-
-      <button type="button" className="tama-week-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-        <span>{open ? "▲ 教科ごとの内訳を閉じる" : "▼ 教科ごとの内訳を見る"}</span>
-      </button>
-
-      {open && (
-        <>
-          <table className="tama-week-table">
-            <thead>
-              <tr>
-                <th scope="col"><span>教科</span></th>
-                <th scope="col"><span>この7日の自分</span></th>
-                <th scope="col"><span>志望学部の配点</span></th>
-                <th scope="col"><span>EXP倍率</span></th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.id} className={short && short.id === r.id ? "is-short" : undefined}>
-                  <th scope="row" style={{ color: r.color }}><span>{r.label}</span></th>
-                  <td>
-                    <div className="tama-week-bar" aria-hidden="true">
-                      <div style={{ width: `${r.me}%`, background: r.color }} />
-                      <i style={{ left: `${r.goal}%` }} />
-                    </div>
-                    <span className="tama-week-pct">{`${r.me}%`}</span>
-                  </td>
-                  <td><span>{`${r.goal}%`}</span></td>
-                  <td><span>{r.goal > 0 ? multiplierOf(r.goal) : "×1.0"}</span></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <p className="tama-tiny">
-            <span>
-              {"この7日の自分＝勉強時間のうちその教科の割合（棒）。志望学部の配点＝2次試験の配点の割合（黒い線）。EXP倍率＝その教科を勉強したときに育成EXPが何倍になるか（1＋配点の割合）"}
-            </span>
-          </p>
-        </>
-      )}
+      {total > 0 && <p className="tama-tiny"><span>{`この7日の合計 ${total}分`}</span></p>}
     </div>
   );
 }

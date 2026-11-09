@@ -14,6 +14,7 @@ from game_rules import (
     bond_of,
     growth_exp,
     growth_exp_raw,
+    make_plan,
     resolve_faculty_id,
     round_half_up,
     stage_of,
@@ -172,3 +173,102 @@ def grade_changed(user: dict, new_grade: str) -> bool:
     """初期設定がすんでいる人が、学年を変えたか"""
     old = user.get("grade")
     return bool(user.get("plan")) and bool(old) and old != new_grade
+
+
+# ===== C-9 4月1日の自動進級 =====
+# 定期実行は作らず、4月1日以降の最初の記録・起動（POST /season/check）のときにまとめて処理する
+
+NEXT_APP_GRADE = {"高校1年生": "高校2年生", "高校2年生": "高校3年生"}
+APP_GRADE_NUM = {"高校1年生": 1, "高校2年生": 2, "高校3年生": 3}
+
+
+def fiscal_year(d: date) -> int:
+    """年度（4月はじまり）。2027-03-31 → 2026、2027-04-01 → 2027"""
+    return d.year if d.month >= 4 else d.year - 1
+
+
+def default_exam_date(app_grade: str, fy: int) -> date:
+    """受験日の初期値（初期設定と同じ考え方）：高3はその年度の2月25日、高2は1年後、高1は2年後"""
+    return date(fy + 1 + (3 - APP_GRADE_NUM[app_grade]), 2, 25)
+
+
+def _is_joined(start: date, end: date) -> bool:
+    """残り60日未満で始めて、次の学年とつないだシーズンか（make_season と同じ考え方）"""
+    return end > date(fiscal_year(start) + 1, 3, 31)
+
+
+def season_rollover(user: dict, today: date) -> dict | None:
+    """シーズンの切りかえが必要なら、その内容を返す（必要なければ None）。
+
+    返す形：{"kind": "label" | "promoted" | "ended", "updates": {...}, "dex": {...} | None, "dexId": "2026" | None}
+    - label   ：つないだシーズンの途中で4月1日をこえた。学年の表示だけ1つ上げる（育成はそのまま）
+    - promoted：シーズンが終わった。今のキャラを図鑑に残し、学年を上げて新しい予定・育成EXP 0から（新しいたまご）
+    - ended   ：高3のシーズン（受験日まで）が終わった。図鑑に残して、育成を止める
+    """
+    if not has_plan(user) or user.get("seasonEnded"):
+        return None
+    plan = user["plan"]
+    start, end = _parse_date(plan.get("seasonStart")), _parse_date(plan.get("seasonEnd"))
+    grade = user.get("grade")
+    if not start or not end or grade not in APP_GRADE_NUM:
+        return None
+    start_grade = user.get("seasonStartGrade") or grade
+    joined = _is_joined(start, end)
+
+    if today <= end:
+        if joined and fiscal_year(today) > fiscal_year(start) and grade == start_grade and grade in NEXT_APP_GRADE:
+            return {"kind": "label", "updates": {"grade": NEXT_APP_GRADE[grade]}, "dex": None, "dexId": None}
+        return None
+
+    # シーズンが終わった時点の学年（つないだシーズンで表示を上げそびれていたら、ここで上げる）
+    end_grade = grade
+    if joined and grade == start_grade and grade in NEXT_APP_GRADE:
+        end_grade = NEXT_APP_GRADE[grade]
+
+    dex_id = str(fiscal_year(start))
+    dex = {
+        "fiscalYear": fiscal_year(start),
+        "grade": end_grade,
+        "facultyId": resolve_faculty_id(user.get("targetFacultyId")),
+        "pace": user.get("pace"),
+        "growthExp": int(user.get("growthExp") or 0),
+        "stage": int(user.get("stage") or 1),
+        "bond": int(user.get("bond") or 0),
+        "seasonStart": plan.get("seasonStart"),
+        "seasonEnd": plan.get("seasonEnd"),
+        "seasonId": int(user.get("seasonId") or 0),
+        "equipped": user.get("equipped") or {},
+    }
+
+    # 高3は受験日でシーズン終了（C-9）。4月をこえて卒業したときも同じ
+    new_grade = end_grade
+    for _ in range(max(1, fiscal_year(today) - fiscal_year(end))):
+        if new_grade not in NEXT_APP_GRADE:
+            new_grade = None
+            break
+        new_grade = NEXT_APP_GRADE[new_grade]
+    if end_grade == "高校3年生" or new_grade is None:
+        return {"kind": "ended", "updates": {"grade": end_grade, "seasonEnded": True}, "dex": dex, "dexId": dex_id}
+
+    fy = fiscal_year(today)
+    new_start = date(fy, 4, 1)
+    exam = _parse_date(user.get("examDate"))
+    if not exam or exam <= new_start:
+        exam = default_exam_date(new_grade, fy)
+    new_plan = make_plan(GRADE_FROM_APP[new_grade], new_start, exam, user["targetFacultyId"], user.get("pace") or "futsuu")
+    if not plan_is_usable(new_plan):
+        return None
+
+    reset = season_reset_fields(user)
+    # 連続日数は学年をまたいでも続ける（勉強の習慣は切らない）
+    for key in ("streak", "todayMinutes", "lastStreakDate", "restTicketWeek"):
+        reset.pop(key, None)
+    updates = {
+        **reset,
+        "grade": new_grade,
+        "seasonStartGrade": new_grade,
+        "seasonEnded": False,
+        "examDate": exam.isoformat(),
+        "plan": new_plan,
+    }
+    return {"kind": "promoted", "updates": updates, "dex": dex, "dexId": dex_id}
