@@ -91,7 +91,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
             )}
             <p className="tama-note">
               <span>{`${comma(exp)} / ${comma(goal.target)} EXP｜${goal.label} `}</span>
-              <strong className="tama-togo">{`あと約${togo.hours}時間`}</strong>
+              <strong className="tama-togo">{togo.hours >= 1 ? `あと約${togo.hours}時間` : "あと1時間たらず"}</strong>
               <br />
               <span>
                 {`（1日${hoursLabel(daily)}時間なら約${togo.days}日・${roughDate(addDays(today, togo.days))}／残り${comma(goal.target - exp)}EXP）`}

@@ -200,7 +200,17 @@ def evidence_for(fid: str, logs: list[dict], k: int = 2) -> list[dict]:
     if fid not in explore.VECTORS:
         return []
     # 学部の並べ方（explore.rank）と同じ「中心化した近さ」で、その学部にいちばん近い振り返りを選ぶ
-    scored = sorted(logs, key=lambda l: explore.similarity(l["vec"], fid), reverse=True)[:k]
+    ranked = sorted(logs, key=lambda l: explore.similarity(l["vec"], fid), reverse=True)
+    # 同じ文の振り返り（同じ問題集を何日も続けたときなど）は1つだけ出す
+    scored, seen = [], set()
+    for l in ranked:
+        text = (l.get("reflection") or "").strip()
+        if text in seen:
+            continue
+        seen.add(text)
+        scored.append(l)
+        if len(scored) >= k:
+            break
     return [{
         "date": _ymd_jst(l.get("createdAt")),
         "subject": l.get("subject"),
