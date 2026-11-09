@@ -1,0 +1,16 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="最終進化のハネまる。大きな翼と金の輪">
+<defs><radialGradient id="k5c" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FAF9FF"></stop><stop offset=".55" stop-color="#CFCBE6"></stop><stop offset="1" stop-color="#8E88BA"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#4A4470" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#A8A2CE"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#A8A2CE"></ellipse>
+<g class="flap"><path d="M34 82 Q8 66 4 82 Q12 86 8 94 Q18 94 16 102 Q28 100 36 96 Z" fill="#FFFFFF" stroke="#7A72AE" stroke-width="2.2" stroke-linejoin="round"></path><path d="M33 86 Q20 76 8 81 M34 91 Q22 87 11 93 M34 96 Q26 95 18 100" fill="none" stroke="#A9A2D2" stroke-width="1.3" stroke-linecap="round"></path></g>
+<g class="flapR"><path d="M126 82 Q152 66 156 82 Q148 86 152 94 Q142 94 144 102 Q132 100 124 96 Z" fill="#FFFFFF" stroke="#7A72AE" stroke-width="2.2" stroke-linejoin="round"></path><path d="M127 86 Q140 76 152 81 M126 91 Q138 87 149 93 M126 96 Q134 95 142 100" fill="none" stroke="#A9A2D2" stroke-width="1.3" stroke-linecap="round"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#k5c)"></circle>
+<path d="M44 58 Q80 40 116 58" fill="none" stroke="#E8C058" stroke-width="5" stroke-linecap="round"></path>
+<ellipse cx="60" cy="68" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 105 Q80 109 84 105" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>

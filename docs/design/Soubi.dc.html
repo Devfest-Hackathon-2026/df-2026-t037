@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>大学ごとの装備</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#D0607A}a:hover{color:#A0405A}
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.15)}}
+@keyframes flap{0%,100%{transform:rotate(0)}50%{transform:rotate(-22deg)}}
+@keyframes flapR{0%,100%{transform:rotate(0)}50%{transform:rotate(22deg)}}
+@keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes arm{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes peek{0%,40%,100%{transform:translateX(-4px)}55%,85%{transform:translateX(0)}}
+@keyframes ripple{0%{transform:scale(.7);opacity:.8}100%{transform:scale(1.1);opacity:0}}
+@keyframes chomp{0%,60%,100%{transform:translateY(0)}75%{transform:translateY(-2.5px)}}
+@media (prefers-reduced-motion: no-preference){
+.squish{animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.shadow{animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.blink{animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.swayV{animation:sway 2s ease-in-out infinite;transform-box:view-box}
+.tick{animation:spin 6s steps(12) infinite;transform-box:view-box}
+.spinM{animation:spin 1.6s linear infinite;transform-box:fill-box;transform-origin:center}
+.pop{animation:pop 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 100%}
+.flap{animation:flap 1s ease-in-out infinite;transform-box:fill-box;transform-origin:100% 60%}
+.flapR{animation:flapR 1s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 60%}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+.armM{animation:arm 2s ease-in-out infinite;transform-box:view-box;transform-origin:120px 98px}
+.peek{animation:peek 2.4s ease-in-out infinite}
+.ripple{animation:ripple 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center}
+.chomp{animation:chomp 1.6s ease-in-out infinite}
+}
+@keyframes step{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@media (prefers-reduced-motion: no-preference){.stepA{animation:step .8s ease-in-out infinite}.stepB{animation:step .8s ease-in-out infinite;animation-delay:.4s}}
+</style>
+<style>
+@keyframes flick{0%,100%{transform:scale(1,1)}30%{transform:scale(.85,1.15)}60%{transform:scale(1.1,.9)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-22px);opacity:0}}
+@keyframes ripple2{0%,100%{transform:translateX(0);opacity:.5}50%{transform:translateX(4px);opacity:1}}
+@keyframes pend{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(9deg)}}
+@keyframes pend2{0%,100%{transform:rotate(6deg)}50%{transform:rotate(-6deg)}}
+@media (prefers-reduced-motion: no-preference){.flick{animation:flick 1.2s ease-in-out infinite}.rise{animation:rise 2.8s ease-out infinite;transform-box:fill-box}.ripple{animation:ripple2 2.4s ease-in-out infinite}.pend{animation:pend 1.9s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0%}.pend2{animation:pend2 1.9s ease-in-out infinite;animation-delay:-.25s;transform-box:fill-box;transform-origin:50% 0%}}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1320px; box-sizing: border-box; padding: 36px 40px; background: #FDF8F4; font-family: 'M PLUS Rounded 1c', sans-serif; color: #4A3E3A; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<div>
+<p style="margin: 0; font-size: 14px; font-weight: 800; color: #D0607A">大学ごとの装備｜親密度3と5でもらえる</p>
+<h1 style="margin: 2px 0 0; font-size: 30px; font-weight: 900">その大学の「場所・歴史・学び」から1つずつ</h1>
+</div>
+<p style="margin: 0; font-size: 13px; color: #8A7A72; text-align: right; line-height: 1.6">同じ大学なら学部が違っても共通。校章やロゴは使わず、ものの形で表す<br>描き方：顔（目〜口）には重ねない。かばんは手に持つか背中に。「着替え」画面で自由に組み合わせられる</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 14px">
+
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #EEF5FC; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="0 0 160 160" role="img" aria-label="ギンまる。赤門の形のかばんと銀杏バッジを装備">
+<defs><radialGradient id="q1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="q1l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="url(#q1l)"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#q1)"></circle>
+<path d="M24 106 Q14 108 15 118" fill="none" stroke="#7A2A22" stroke-width="2.6" stroke-linecap="round"></path>
+<rect x="2" y="119" width="28" height="22" rx="4" fill="#C8402E"></rect><path d="M-1 121 L16 111 L33 121 L30 123 L16 115 L2 123 Z" fill="#3A2A26"></path>
+<rect x="6" y="125" width="3" height="14" rx="1" fill="#8A2A22"></rect><rect x="23" y="125" width="3" height="14" rx="1" fill="#8A2A22"></rect><rect x="13" y="128" width="6" height="4" rx="1" fill="#F2C230"></rect>
+<ellipse cx="26" cy="104" rx="8" ry="11" fill="#86B2E2" transform="rotate(35 26 104)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 106 Q77.5 109 80 106 Q82.5 109 85 106" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+<g class="twinkle"><circle cx="104" cy="124" r="10" fill="#FFFFFF"></circle><path d="M104 129 L97 120 Q100.5 116.5 104 118.5 Q107.5 116.5 111 120 Z" fill="#F2C230"></path></g>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">東京大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">ギンまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>赤門のかばん</strong><br><span style="font-size: 11px; color: #8A7A72">本郷の赤門（手に持つ）</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>銀杏バッジ</strong><br><span style="font-size: 11px; color: #8A7A72">銀杏並木（今のバッジから続投）</span></span></div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #FCF4EA; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="0 0 160 160" role="img" aria-label="チクまる。白衣を着て、実験ゴーグルを頭につけている">
+<defs><radialGradient id="q2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FFF6E6"></stop><stop offset=".55" stop-color="#F6C88E"></stop><stop offset="1" stop-color="#D08A4E"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#6A4A2A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#DC9A60"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#DC9A60"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#q2)"></circle>
+<path d="M33 100 Q34 132 62 142 L72 116 Q56 112 48 94 Z" fill="#F7F8FA"></path><path d="M127 100 Q126 132 98 142 L88 116 Q104 112 112 94 Z" fill="#F7F8FA"></path>
+<path d="M72 116 L80 126 L88 116" fill="none" stroke="#E2E6EE" stroke-width="2"></path>
+<rect x="100" y="122" width="12" height="9" rx="1.5" fill="#E2E6EE"></rect><rect x="104" y="115" width="2.6" height="10" rx="1" fill="#2468B8"></rect>
+<ellipse cx="80" cy="46" rx="26" ry="6" fill="#8A5A2B"></ellipse>
+<rect x="68" y="18" width="24" height="28" rx="2" fill="#F4EAD2"></rect><rect x="68" y="18" width="5" height="28" fill="#E0D2B0"></rect>
+<path d="M64 18 L80 4 L96 18 Z" fill="#A86A34"></path>
+<circle cx="80" cy="30" r="7.5" fill="#FFFFFF"></circle><circle cx="80" cy="30" r="1.4" fill="#4A3E3A"></circle>
+<line class="tick" style="transform-origin: 80px 30px" x1="80" y1="30" x2="80" y2="24.5" stroke="#4A3E3A" stroke-width="1.6" stroke-linecap="round"></line>
+<path d="M32 72 Q80 56 128 72" stroke="#5A6470" stroke-width="4" fill="none"></path>
+<circle cx="66" cy="66" r="9" fill="#BFE6F5"></circle><circle cx="66" cy="66" r="9" fill="none" stroke="#5A6470" stroke-width="2.6"></circle><circle cx="94" cy="66" r="9" fill="#BFE6F5"></circle><circle cx="94" cy="66" r="9" fill="none" stroke="#5A6470" stroke-width="2.6"></circle>
+<path d="M62 62 L66 60" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"></path><path d="M90 62 L94 60" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"></path>
+<ellipse cx="31" cy="102" rx="8" ry="11" fill="#F0F2F6" transform="rotate(20 31 102)"></ellipse><ellipse cx="129" cy="102" rx="8" ry="11" fill="#F0F2F6" transform="rotate(-20 129 102)"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 105 Q80 110 84 105" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">東京科学大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">チクまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>白衣</strong><br><span style="font-size: 11px; color: #8A7A72">理工系の実験室</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>実験ゴーグル</strong><br><span style="font-size: 11px; color: #8A7A72">実験の安全装備</span></span></div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #F0F8EA; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="0 0 160 160" role="img" aria-label="キャタまる。レスキューヘルメットをかぶり、探査アンテナを持っている">
+<defs><radialGradient id="q3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#EEFAE4"></stop><stop offset=".55" stop-color="#A8DA8C"></stop><stop offset="1" stop-color="#5E9E4C"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="46" ry="6" fill="#3A4A2A" opacity=".14"></ellipse>
+<g class="armM"><path d="M120 98 L138 84 L146 66" fill="none" stroke="#8A929E" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"></path><circle cx="138" cy="84" r="4.5" fill="#C2C8D0"></circle><path d="M142 66 L140 56 M150 66 L153 56" stroke="#6A707C" stroke-width="3.5" stroke-linecap="round"></path></g>
+<g class="squish">
+<circle cx="80" cy="88" r="50" fill="url(#q3)"></circle>
+<ellipse cx="31" cy="96" rx="8" ry="11" fill="#90C878" transform="rotate(20 31 96)"></ellipse>
+<ellipse cx="58" cy="80" rx="11" ry="6" fill="#FFFFFF" opacity=".55"></ellipse>
+<path d="M36 66 Q38 26 80 24 Q122 26 124 66 Z" fill="#F28C28"></path><path d="M60 30 Q80 24 100 30 L98 34 Q80 29 62 34 Z" fill="#FFB060" opacity=".7"></path><rect x="32" y="62" width="96" height="9" rx="4.5" fill="#E07A18"></rect>
+<circle class="twinkle" cx="80" cy="46" r="12" fill="#FFE27A" opacity=".5"></circle><circle cx="80" cy="46" r="7" fill="#FFF3B0"></circle><circle cx="80" cy="46" r="7" fill="none" stroke="#C2C8D0" stroke-width="2.5"></circle>
+<g class="blink"><ellipse cx="66" cy="92" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="92" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="89.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="89.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="106" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="106" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 103 Q80 110 85 103 Z" fill="#E8687A"></path>
+<line x1="26" y1="100" x2="16" y2="62" stroke="#8A929E" stroke-width="3" stroke-linecap="round"></line><g class="swayV" style="transform-origin: 16px 62px"><ellipse cx="16" cy="56" rx="13" ry="5.5" fill="#D8DEE6" transform="rotate(-25 16 56)"></ellipse><line x1="16" y1="56" x2="22" y2="46" stroke="#8A929E" stroke-width="1.6"></line><circle class="twinkle" cx="22" cy="45" r="2.4" fill="#F25C5C"></circle></g>
+</g>
+<rect x="38" y="132" width="84" height="18" rx="9" fill="#4A4E58"></rect><rect x="38" y="132" width="84" height="5" rx="2.5" fill="#6A707C"></rect>
+<g class="spinM"><circle cx="50" cy="141" r="5.5" fill="#C2C8D0"></circle><rect x="49" y="135.5" width="2" height="11" fill="#4A4E58"></rect></g><g class="spinM"><circle cx="70" cy="141" r="5.5" fill="#C2C8D0"></circle><rect x="69" y="135.5" width="2" height="11" fill="#4A4E58"></rect></g><g class="spinM"><circle cx="90" cy="141" r="5.5" fill="#C2C8D0"></circle><rect x="89" y="135.5" width="2" height="11" fill="#4A4E58"></rect></g><g class="spinM"><circle cx="110" cy="141" r="5.5" fill="#C2C8D0"></circle><rect x="109" y="135.5" width="2" height="11" fill="#4A4E58"></rect></g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">千葉工業大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">キャタまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>レスキューヘルメット</strong><br><span style="font-size: 11px; color: #8A7A72">災害対応ロボットの研究</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>探査アンテナ</strong><br><span style="font-size: 11px; color: #8A7A72">惑星探査の研究</span></span></div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #EEF1FA; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="0 0 160 160" role="img" aria-label="ペンまる。万年筆を持ち、赤い蝶ネクタイをつけている">
+<defs><radialGradient id="q4" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#8EA4DA"></stop><stop offset=".55" stop-color="#3E5698"></stop><stop offset="1" stop-color="#1E2D5E"></stop></radialGradient><radialGradient id="q4w" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset="1" stop-color="#D6DCEA"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="44" ry="6" fill="#1E2D5E" opacity=".16"></ellipse>
+<g class="squish">
+<path d="M58 122 L44 154 L72 140 Z" fill="#16224A"></path><path d="M102 122 L116 154 L88 140 Z" fill="#16224A"></path>
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#F0B848"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#F0B848"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#q4)"></circle>
+<ellipse cx="80" cy="100" rx="36" ry="38" fill="url(#q4w)"></ellipse>
+<ellipse cx="31" cy="100" rx="8" ry="12" fill="#34497E" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="12" fill="#34497E" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="58" cy="62" rx="12" ry="6.5" fill="#FFFFFF" opacity=".35"></ellipse>
+<g transform="rotate(-6 80 46)"><ellipse cx="80" cy="47" rx="27" ry="7" fill="#1A1A26"></ellipse><path d="M66 46 L67 16 Q80 12 93 16 L94 46 Q80 50 66 46 Z" fill="#22222E"></path><ellipse cx="80" cy="16" rx="13" ry="3.4" fill="#2E2E3C"></ellipse><path d="M66.4 37 Q80 41 93.6 37 L93.8 43 Q80 47 66.2 43 Z" fill="#F0B848"></path><path d="M70 19 L70.6 35" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".16"></path><path d="M55 47 Q80 55 105 47" stroke="#0E0E16" stroke-width="2" fill="none" opacity=".5"></path></g>
+<g class="blink"><ellipse cx="68" cy="88" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="92" cy="88" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="66.5" cy="85.5" r="1.8" fill="#FFFFFF"></circle><circle cx="90.5" cy="85.5" r="1.8" fill="#FFFFFF"></circle>
+<path d="M76 96 L84 96 L80 101 Z" fill="#F0B848"></path>
+<ellipse cx="57" cy="100" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="103" cy="100" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse>
+<g class="twinkle"><circle cx="80" cy="126" r="10" fill="#F0C858"></circle><path d="M75 121 L85 131 M85 121 L75 131" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"></path></g>
+<path d="M80 111 L68 104 L68 118 Z M80 111 L92 104 L92 118 Z" fill="#D8404A"></path><circle cx="80" cy="111" r="3.2" fill="#A82A34"></circle>
+<g transform="rotate(30 138 90)"><rect x="134" y="62" width="9" height="30" rx="3.5" fill="#22264A"></rect><rect x="134" y="70" width="9" height="3" fill="#F0B848"></rect><path d="M134 92 L143 92 L138.5 104 Z" fill="#F0B848"></path></g>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">慶應義塾大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">ペンまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>万年筆</strong><br><span style="font-size: 11px; color: #8A7A72">「ペンは剣よりも強し」</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>赤い蝶ネクタイ</strong><br><span style="font-size: 11px; color: #8A7A72">紳士の装い（シルクハットに合わせて）</span></span></div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #F3F2FA; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="0 0 160 160" role="img" aria-label="ハネまる。そろばんを持ち、伝令のかばんを肩にかけている">
+<defs><radialGradient id="q5" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FAF9FF"></stop><stop offset=".55" stop-color="#CFCBE6"></stop><stop offset="1" stop-color="#8E88BA"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#4A4470" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#A8A2CE"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#A8A2CE"></ellipse>
+<path class="flap" d="M34 82 Q8 66 4 82 Q12 86 8 94 Q18 94 16 102 Q28 100 36 96 Z" fill="#FFFFFF"></path>
+<path class="flapR" d="M126 82 Q152 66 156 82 Q148 86 152 94 Q142 94 144 102 Q132 100 124 96 Z" fill="#FFFFFF"></path>
+<circle cx="80" cy="92" r="50" fill="url(#q5)"></circle>
+<path d="M44 58 Q80 40 116 58" fill="none" stroke="#E8C058" stroke-width="5" stroke-linecap="round"></path>
+<path d="M134 108 Q146 110 145 120" fill="none" stroke="#6E4428" stroke-width="2.6" stroke-linecap="round"></path>
+<rect x="130" y="120" width="28" height="22" rx="4" fill="#8A5A36"></rect><path d="M130 124 Q144 132 158 124 L158 123 Q144 118 130 123 Z" fill="#6E4428"></path><rect x="141" y="128" width="6" height="5" rx="1" fill="#E8C058"></rect>
+<ellipse cx="133" cy="104" rx="7" ry="10" fill="#BCB6DA" transform="rotate(-35 133 104)"></ellipse>
+<ellipse cx="60" cy="68" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 105 Q80 109 84 105" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+<g transform="rotate(-12 30 116)"><rect x="8" y="103" width="44" height="26" rx="3" fill="#8A5A36"></rect><rect x="11" y="106" width="38" height="20" fill="#F6EBD8"></rect><line x1="11" y1="115.5" x2="49" y2="115.5" stroke="#8A5A36" stroke-width="1.6"></line><circle cx="16" cy="110" r="2" fill="#5A3A24"></circle><circle cx="16" cy="121" r="2" fill="#5A3A24"></circle><circle cx="23" cy="110" r="2" fill="#5A3A24"></circle><circle cx="23" cy="121" r="2" fill="#5A3A24"></circle><circle cx="30" cy="110" r="2" fill="#5A3A24"></circle><circle cx="30" cy="121" r="2" fill="#5A3A24"></circle><circle cx="37" cy="110" r="2" fill="#5A3A24"></circle><circle cx="37" cy="121" r="2" fill="#5A3A24"></circle><circle cx="44" cy="110" r="2" fill="#5A3A24"></circle><circle cx="44" cy="121" r="2" fill="#5A3A24"></circle></g>
+<ellipse cx="40" cy="120" rx="7" ry="9" fill="#BCB6DA"></ellipse>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">一橋大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">ハネまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>そろばん</strong><br><span style="font-size: 11px; color: #8A7A72">商学から始まった歴史</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>伝令のかばん</strong><br><span style="font-size: 11px; color: #8A7A72">翼のある使者（手に持つ）</span></span></div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #ECF8F2; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="0 0 160 160" role="img" aria-label="コトまる。旅のリュックを背負い、地球儀を持っている">
+<defs><radialGradient id="q6" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#EEFCF5"></stop><stop offset=".55" stop-color="#8EDDB8"></stop><stop offset="1" stop-color="#3FA47A"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="74" cy="148" rx="42" ry="6" fill="#2A5A44" opacity=".14"></ellipse>
+<g class="squish">
+<rect x="36" y="30" width="72" height="48" rx="16" fill="#D88A48"></rect><rect x="40" y="22" width="64" height="12" rx="6" fill="#5DB2EA"></rect><rect x="40" y="26" width="64" height="3" fill="#FFFFFF" opacity=".4"></rect>
+<ellipse cx="56" cy="140" rx="10" ry="6" fill="#62C094"></ellipse><ellipse cx="88" cy="140" rx="10" ry="6" fill="#62C094"></ellipse>
+<circle cx="72" cy="94" r="46" fill="url(#q6)"></circle>
+<ellipse cx="28" cy="102" rx="7" ry="10" fill="#74CCA2" transform="rotate(20 28 102)"></ellipse><ellipse cx="116" cy="102" rx="7" ry="10" fill="#74CCA2" transform="rotate(-20 116 102)"></ellipse>
+<ellipse cx="54" cy="70" rx="13" ry="7.5" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="59" cy="94" rx="4.4" ry="6.4" fill="#2B2632"></ellipse><ellipse cx="85" cy="94" rx="4.4" ry="6.4" fill="#2B2632"></ellipse></g>
+<circle cx="57.5" cy="91.5" r="1.7" fill="#FFFFFF"></circle><circle cx="83.5" cy="91.5" r="1.7" fill="#FFFFFF"></circle>
+<ellipse cx="49" cy="106" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="95" cy="106" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M68 104 Q72 109 76 104" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+<path d="M30 114 Q72 132 114 114 L112 124 Q72 142 32 124 Z" fill="#F5C842"></path><path d="M42 119 L40 129 M58 124 L57 134 M86 124 L87 134 M102 119 L104 129" stroke="#F28C9C" stroke-width="2.6"></path><path d="M90 128 L100 152 L86 150 Z" fill="#E8B030"></path>
+<path d="M40 58 Q32 70 29 86" stroke="#B8682E" stroke-width="5" fill="none" stroke-linecap="round"></path><path d="M104 58 Q112 70 115 86" stroke="#B8682E" stroke-width="5" fill="none" stroke-linecap="round"></path>
+<g transform="translate(0 0)"><path d="M120 108 A16 16 0 0 0 152 108" fill="none" stroke="#C2A060" stroke-width="2.4"></path><circle cx="136" cy="106" r="12.5" fill="#5DB2EA"></circle><path d="M128 100 Q134 96 138 102 Q134 108 128 106 Z M138 110 Q144 106 146 112 Q142 116 138 114 Z" fill="#8CCB5A"></path><line x1="136" y1="124" x2="136" y2="132" stroke="#8A5A36" stroke-width="3"></line><rect x="127" y="131" width="18" height="4" rx="2" fill="#8A5A36"></rect></g>
+</g>
+<g class="pop"><path d="M108 18 L148 18 Q154 18 154 24 L154 42 Q154 48 148 48 L126 48 L116 58 L118 48 L108 48 Q102 48 102 42 L102 24 Q102 18 108 18 Z" fill="#FFFFFF"></path><text x="128" y="39" font-size="16" fill="#3FA47A" font-family="'M PLUS Rounded 1c', sans-serif" font-weight="900" text-anchor="middle">Hi!</text></g>
+<g class="pop" style="animation-delay: .8s"><path d="M14 16 L38 16 Q42 16 42 20 L42 34 Q42 38 38 38 L32 38 L36 46 L26 38 L14 38 Q10 38 10 34 L10 20 Q10 16 14 16 Z" fill="#FFFFFF"></path><text x="26" y="33" font-size="15" fill="#F28C9C" font-family="'M PLUS Rounded 1c', sans-serif" font-weight="900" text-anchor="middle">あ</text></g>
+
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">東京外国語大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">コトまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>旅のリュック</strong><br><span style="font-size: 11px; color: #8A7A72">世界へ出かける</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>地球儀</strong><br><span style="font-size: 11px; color: #8A7A72">たくさんの国と言葉</span></span></div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #FBEFF2; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="0 0 160 160" role="img" aria-label="ワセまる。えんじの応援旗とメガホンを持っている">
+<defs><radialGradient id="q7" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FBE2E7"></stop><stop offset=".55" stop-color="#D27A8C"></stop><stop offset="1" stop-color="#9A2A40"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="46" ry="6" fill="#5A1A28" opacity=".14"></ellipse>
+<g class="squish">
+<path d="M40 102 Q20 128 24 150 L136 150 Q140 128 120 102 Z" fill="#26222A"></path>
+<path d="M44 112 Q32 132 34 148 L46 148 Q44 128 52 114 Z" fill="#9A2A40"></path><path d="M116 112 Q128 132 126 148 L114 148 Q116 128 108 114 Z" fill="#9A2A40"></path>
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#B85468"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#B85468"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#q7)"></circle>
+<path d="M60 52 L60 40 Q80 34 100 40 L100 52 Q80 58 60 52 Z" fill="#26262E"></path>
+<path d="M44 38 L80 22 L116 38 L80 54 Z" fill="#33333C"></path><path d="M44 38 L80 22 L80 28 L54 38 Z" fill="#4A4A56"></path>
+<circle cx="80" cy="38" r="2.5" fill="#E8C058"></circle>
+<g class="swayV" style="transform-origin: 80px 38px"><path d="M80 38 L110 46 L112 66" fill="none" stroke="#E8C058" stroke-width="2" stroke-linecap="round"></path><path d="M108 64 L116 64 L114 74 L110 74 Z" fill="#E8C058"></path></g>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#C66476" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#C66476" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="58" cy="70" rx="13" ry="7" fill="#FFFFFF" opacity=".55"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<path d="M58 84 L72 86 M102 84 L88 86" stroke="#2B2632" stroke-width="2.4" stroke-linecap="round"></path>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FFB0BE" opacity=".6"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FFB0BE" opacity=".6"></ellipse>
+<path d="M74 104 Q80 112 86 104 Z" fill="#E8687A"></path>
+<path d="M50 118 Q80 130 110 118" fill="none" stroke="#E8C058" stroke-width="2.2"></path><circle cx="50" cy="118" r="4.2" fill="#E8C058"></circle><circle cx="110" cy="118" r="4.2" fill="#E8C058"></circle>
+<line x1="24" y1="142" x2="14" y2="14" stroke="#8A5A36" stroke-width="3.2" stroke-linecap="round"></line>
+<g class="swayV" style="transform-origin: 15px 18px; animation-duration: 1.4s"><path d="M15 16 Q32 10 46 20 Q34 30 17 40 Z" fill="#9A2A40"></path><path d="M16 26 Q30 22 40 25" stroke="#FFFFFF" stroke-width="2.6" fill="none" stroke-linecap="round"></path></g>
+<path d="M124 100 L148 86 L154 110 L128 108 Z" fill="#F4F0EA"></path><path d="M148 86 L154 110" stroke="#9A2A40" stroke-width="3.5" stroke-linecap="round"></path><rect x="120" y="99" width="9" height="10" rx="2.5" fill="#9A2A40"></rect>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">早稲田大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">ワセまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>応援旗</strong><br><span style="font-size: 11px; color: #8A7A72">早慶戦の応援</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>メガホン</strong><br><span style="font-size: 11px; color: #8A7A72">応援団</span></span></div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #EFE9F7; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="-8 -26 176 190" role="img" aria-label="ダイまる。大文字のうちわと、灯籠流しの灯籠を装備">
+<defs><radialGradient id="sb" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F8F0FB"></stop><stop offset=".55" stop-color="#C9A6DC"></stop><stop offset="1" stop-color="#7E4E9E"></stop></radialGradient></defs>
+<path d="M142 -8 a11 11 0 1 0 8 18 a9 9 0 1 1 -8 -18z" fill="#FFF1B8"></path><path class="twinkle" style="animation-delay: 0s" d="M4 -6 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6z" fill="#FFF1B8"></path><path class="twinkle" style="animation-delay: 0.6s" d="M20 12 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6z" fill="#FFF1B8"></path><path class="twinkle" style="animation-delay: 1.1s" d="M150 26 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6z" fill="#FFF1B8"></path><path class="twinkle" style="animation-delay: 0.3s" d="M130 -14 l1.6 3.4 3.4 1.6 -3.4 1.6 -1.6 3.4 -1.6 -3.4 -3.4 -1.6 3.4 -1.6z" fill="#FFF1B8"></path>
+<path d="M6 64 Q40 -14 80 -16 Q120 -14 154 64 Z" fill="#33593A"></path><path d="M20 52 Q50 -2 80 -6" fill="none" stroke="#4C7A50" stroke-width="3"></path>
+<path d="M18 52 l-5 9 l10 0 z" fill="#2A4A30"></path><path d="M28 40 l-5 9 l10 0 z" fill="#2A4A30"></path><path d="M132 40 l-5 9 l10 0 z" fill="#2A4A30"></path><path d="M142 52 l-5 9 l10 0 z" fill="#2A4A30"></path><path d="M40 30 l-5 9 l10 0 z" fill="#2A4A30"></path><path d="M120 30 l-5 9 l10 0 z" fill="#2A4A30"></path>
+<path d="M80 -4 L80 19.1 M62.36 6.5 L97.64 6.5 M80 6.5 L62.36 29.6 M80 6.5 L97.64 29.6" stroke="#FFB040" stroke-width="3.6" stroke-linecap="round" opacity=".9"></path><g class="flick" style="transform-origin: 80.0px -2.5px; animation-delay: 0.00s"><path d="M80.0 -2.5 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M80.0 -2.5 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 80.0px 9.05px; animation-delay: 0.17s"><path d="M80.0 9.05 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M80.0 9.05 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 80.0px 20.6px; animation-delay: 0.34s"><path d="M80.0 20.6 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M80.0 20.6 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 62.36px 8.0px; animation-delay: 0.51s"><path d="M62.36 8.0 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M62.36 8.0 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 74.12px 8.0px; animation-delay: 0.68s"><path d="M74.12 8.0 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M74.12 8.0 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 85.88px 8.0px; animation-delay: 0.85s"><path d="M85.88 8.0 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M85.88 8.0 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 97.64px 8.0px; animation-delay: 1.02s"><path d="M97.64 8.0 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M97.64 8.0 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 80.0px 8.0px; animation-delay: 1.19s"><path d="M80.0 8.0 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M80.0 8.0 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 71.18px 19.55px; animation-delay: 0.16s"><path d="M71.18 19.55 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M71.18 19.55 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 62.36px 31.1px; animation-delay: 0.33s"><path d="M62.36 31.1 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M62.36 31.1 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 80.0px 8.0px; animation-delay: 0.50s"><path d="M80.0 8.0 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M80.0 8.0 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 88.82px 19.55px; animation-delay: 0.67s"><path d="M88.82 19.55 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M88.82 19.55 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g><g class="flick" style="transform-origin: 97.64px 31.1px; animation-delay: 0.84s"><path d="M97.64 31.1 q-3.2 -4.2 0 -9.5 q3.2 5.2 0 9.5z" fill="#FF8A2C"></path><path d="M97.64 31.1 q-1.6 -2.1 0 -5.2 q1.6 2.6 0 5.2z" fill="#FFE07A"></path></g>
+<g><ellipse cx="80" cy="152" rx="52" ry="7" fill="#3E5A9E" opacity=".35"></ellipse>
+<path class="ripple" d="M48.8 151 q6 -3 12 0 q6 3 12 0" fill="none" stroke="#FFB648" stroke-width="1.6" opacity=".8"></path>
+<path class="ripple" style="animation-delay: .8s" d="M85.2 154 q6 -3 12 0 q6 3 12 0" fill="none" stroke="#FFE07A" stroke-width="1.4" opacity=".8"></path></g>
+<ellipse class="shadow" cx="80" cy="150" rx="42" ry="6" fill="#2A3060" opacity=".2"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#B58CCB"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#B58CCB"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#sb)"></circle>
+<ellipse cx="60" cy="66" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse>
+<circle cx="80" cy="92" r="50" fill="none" stroke="#FFB648" stroke-width="2" opacity=".25"></circle>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 105 Q80 111 85 105 Z" fill="#E8687A"></path>
+
+<path d="M129 104 L139 74 q3.0 0 3.0 3.0" fill="none" stroke="#8A5A36" stroke-width="2.4" stroke-linecap="round"></path>
+<g transform="translate(142.0 77.0)"><g class="pend"><line x1="0" y1="0" x2="0" y2="6.0" stroke="#4A3E3A" stroke-width="1.2"></line>
+<circle cx="0" cy="20.0" r="14.0" fill="#FFD27A" opacity=".3"></circle>
+<rect x="-5.0" y="6.0" width="10.0" height="3.0" rx="1" fill="#2B2632"></rect>
+<rect x="-8.0" y="8.0" width="16.0" height="22.0" rx="7.0" fill="#FFF4E0"></rect>
+<path d="M-8.0 15.0 L8.0 15.0 M-8.0 23.0 L8.0 23.0" stroke="#F0D8B8" stroke-width="1"></path>
+<rect x="-5.0" y="29.0" width="10.0" height="3.0" rx="1" fill="#2B2632"></rect>
+<text x="0" y="23.0" font-size="10.0" font-weight="900" text-anchor="middle" fill="#D8404A" font-family="'M PLUS Rounded 1c', sans-serif">大</text>
+<g class="pend2"><line x1="0" y1="32.0" x2="0" y2="34.0" stroke="#D8404A" stroke-width="1"></line><path d="M0 33.0 L-2.0 39.0 L2.0 39.0 Z" fill="#D8404A"></path><line x1="-2.0" y1="32.0" x2="2.0" y2="32.0" stroke="none"></line></g></g></g><ellipse cx="129" cy="102" rx="8" ry="11" fill="#B58CCB" transform="rotate(-20 129 102)"></ellipse>
+<g transform="rotate(-18 26 112)"><line x1="26" y1="126" x2="26" y2="104" stroke="#8A5A36" stroke-width="2.6" stroke-linecap="round"></line><circle cx="26" cy="96" r="13" fill="#F5F0E6"></circle><path d="M26 86 L26 98 M18 91 L34 91 M26 91 L18 102 M26 91 L34 102" stroke="#FF8A2C" stroke-width="2.6" stroke-linecap="round"></path></g>
+<g class="sway" style="transform-origin: 136px 152px; animation-duration: 3.4s"><rect x="126" y="140" width="20" height="12" rx="2" fill="#F5F0E6"></rect><rect x="124" y="150" width="24" height="4" rx="1.5" fill="#8A5A36"></rect><circle cx="136" cy="146" r="9" fill="#FFD27A" opacity=".35"></circle><text x="136" y="149.5" font-size="8" font-weight="900" text-anchor="middle" fill="#D8404A" font-family="'M PLUS Rounded 1c', sans-serif">京</text></g><ellipse cx="31" cy="112" rx="8" ry="10" fill="#B58CCB"></ellipse>
+</g><circle class="rise" cx="52" cy="20" r="1.6" fill="#FFC060" style="animation-delay: 0s"></circle><circle class="rise" cx="110" cy="18" r="1.4" fill="#FFC060" style="animation-delay: 0.7s"></circle><circle class="rise" cx="70" cy="8" r="1.2" fill="#FFC060" style="animation-delay: 1.4s"></circle><circle class="rise" cx="96" cy="4" r="1.5" fill="#FFC060" style="animation-delay: 2.0s"></circle>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">京都大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">ダイまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>大文字のうちわ</strong><br><span style="font-size: 11px; color: #8A7A72">夏の夜の京都（左手）</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>灯籠流しの灯籠</strong><br><span style="font-size: 11px; color: #8A7A72">送り火の夜、鴨川にうかべる</span></span></div>
+</div>
+</div>
+<div style="background: #FFFFFF; border-radius: 24px; padding: 14px; display: flex; flex-direction: column; align-items: center; gap: 6px">
+<div style="width: 100%; height: 214px; border-radius: 18px; background: #FFF8E2; display: flex; align-items: center; justify-content: center">
+<svg width="200" height="200" viewBox="0 0 160 160" role="img" aria-label="ワニまる。化石のハンマーとルーペを持っている">
+<defs><radialGradient id="q10" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FFFAE6"></stop><stop offset=".55" stop-color="#F8DC86"></stop><stop offset="1" stop-color="#D8A838"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#6A4A2A" opacity=".14"></ellipse>
+<g class="swayV" style="transform-origin: 118px 124px; animation-duration: 2.6s"><path d="M116 116 Q144 116 152 96 Q150 110 158 110 Q148 132 114 132 Z" fill="#6AAE5A"></path><circle cx="134" cy="118" r="2.4" fill="#4A8A3E"></circle><circle cx="144" cy="112" r="2" fill="#4A8A3E"></circle></g>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#E2B850"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#E2B850"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#q10)"></circle>
+<ellipse cx="31" cy="102" rx="8" ry="11" fill="#ECC662" transform="rotate(20 31 102)"></ellipse><ellipse cx="129" cy="102" rx="8" ry="11" fill="#ECC662" transform="rotate(-20 129 102)"></ellipse>
+<path d="M30 88 Q26 38 80 34 Q134 38 130 88 Q108 75 80 75 Q52 75 30 88 Z" fill="#6AAE5A"></path>
+<path d="M48 52 Q80 38 112 52" stroke="#8CCB72" stroke-width="4.5" fill="none" stroke-linecap="round"></path>
+<circle cx="66" cy="40" r="3.2" fill="#4A8A3E"></circle><circle cx="73" cy="37" r="3.2" fill="#4A8A3E"></circle><circle cx="80" cy="36" r="3.2" fill="#4A8A3E"></circle><circle cx="87" cy="37" r="3.2" fill="#4A8A3E"></circle><circle cx="94" cy="40" r="3.2" fill="#4A8A3E"></circle>
+<g class="chomp"><path d="M33.0 85.1 L39.0 85.1 L36.0 89.6 Z" fill="#FFFFFF"></path><path d="M41.0 81.7 L47.0 81.7 L44.0 86.2 Z" fill="#FFFFFF"></path><path d="M49.0 79.1 L55.0 79.1 L52.0 83.6 Z" fill="#FFFFFF"></path><path d="M57.0 77.1 L63.0 77.1 L60.0 81.6 Z" fill="#FFFFFF"></path><path d="M65.0 75.7 L71.0 75.7 L68.0 80.2 Z" fill="#FFFFFF"></path><path d="M73.0 75.1 L79.0 75.1 L76.0 79.6 Z" fill="#FFFFFF"></path><path d="M81.0 75.1 L87.0 75.1 L84.0 79.6 Z" fill="#FFFFFF"></path><path d="M89.0 75.7 L95.0 75.7 L92.0 80.2 Z" fill="#FFFFFF"></path><path d="M97.0 77.1 L103.0 77.1 L100.0 81.6 Z" fill="#FFFFFF"></path><path d="M105.0 79.1 L111.0 79.1 L108.0 83.6 Z" fill="#FFFFFF"></path><path d="M113.0 81.7 L119.0 81.7 L116.0 86.2 Z" fill="#FFFFFF"></path><path d="M121.0 85.1 L127.0 85.1 L124.0 89.6 Z" fill="#FFFFFF"></path></g>
+<circle cx="60" cy="38" r="9" fill="#6AAE5A"></circle><circle cx="60" cy="37.5" r="5.2" fill="#FFFFFF"></circle><ellipse cx="60.6" cy="37.7" rx="1.8" ry="3.8" fill="#2B2632"></ellipse><circle cx="100" cy="38" r="9" fill="#6AAE5A"></circle><circle cx="100" cy="37.5" r="5.2" fill="#FFFFFF"></circle><ellipse cx="100.6" cy="37.7" rx="1.8" ry="3.8" fill="#2B2632"></ellipse>
+<g class="blink"><ellipse cx="66" cy="100" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="100" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="97.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="97.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="114" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="114" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 111 Q80 117 85 111 Z" fill="#E8687A"></path>
+<line x1="28" y1="104" x2="14" y2="80" stroke="#8A5A36" stroke-width="3.5" stroke-linecap="round"></line><rect x="4" y="72" width="20" height="9" rx="2.5" fill="#7A828E" transform="rotate(-30 14 76)"></rect>
+<line x1="134" y1="96" x2="128" y2="108" stroke="#8A5A36" stroke-width="4.5" stroke-linecap="round"></line><circle cx="141" cy="84" r="10" fill="#DDF0FA" opacity=".85"></circle><circle cx="141" cy="84" r="10" fill="none" stroke="#C8962A" stroke-width="3"></circle><path d="M136 80 Q138 77 141 77" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round"></path>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 12px; font-weight: 800; color: #8A7A72">大阪大学</p>
+<p style="margin: 0; font-size: 21px; font-weight: 900">ワニまる</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E8A35A; padding: 2px 8px; border-radius: 8px">親密度3</span><span style="font-size: 13px; line-height: 1.5"><strong>化石のハンマー</strong><br><span style="font-size: 11px; color: #8A7A72">待兼山で見つかった化石</span></span></div>
+<div style="display: flex; gap: 8px; align-items: baseline"><span style="flex-shrink: 0; font-size: 11px; font-weight: 900; color: #FFFFFF; background: #D0607A; padding: 2px 8px; border-radius: 8px">親密度5</span><span style="font-size: 13px; line-height: 1.5"><strong>ルーペ</strong><br><span style="font-size: 11px; color: #8A7A72">発掘と研究</span></span></div>
+</div>
+</div>
+</div>
+<div style="background: linear-gradient(135deg, #FFF4D6 0%, #FDEFD8 100%); border: 2px solid #F2D06A; border-radius: 24px; padding: 14px 18px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; justify-content: space-between; align-items: baseline"><p style="margin: 0; font-size: 18px; font-weight: 900">レジェンド装備（全大学共通・とても難しい）</p><p style="margin: 0; font-size: 11px; color: #8A7A72">模試の成績は、成績表の写真をGeminiで読み取って判定・偏差値・順位だけ保存し、写真はすぐ削除する</p></div>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px"><div style="background: #FFFFFF; border-radius: 18px; padding: 10px 12px; display: flex; gap: 10px; align-items: center">
+<div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 30px; background: #FFF4D6; display: flex; align-items: center; justify-content: center"><svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30 L8 12 L15 20 L20 8 L25 20 L32 12 L34 30 Z" fill="#F5C842"></path><rect x="6" y="29" width="28" height="5" rx="2" fill="#E0A21A"></rect><circle cx="20" cy="8" r="2.2" fill="#E8584A"></circle><text x="20" y="27" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle" font-family="sans-serif">A</text></svg></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><p style="margin: 0; font-size: 14px; font-weight: 900">A判定の王冠 <span style="font-size: 10px; font-weight: 800; color: #C8962A">頭</span></p><p style="margin: 0; font-size: 11px; color: #6B6358; line-height: 1.45">志望校の模試でA判定</p></div>
+</div><div style="background: #FFFFFF; border-radius: 18px; padding: 10px 12px; display: flex; gap: 10px; align-items: center">
+<div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 30px; background: #FFF4D6; display: flex; align-items: center; justify-content: center"><svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><path d="M19 24 Q8 8 2 15 Q6 19 3 25 Q10 26 8 31 Q14 30 19 28 Z" fill="#FFFFFF" stroke="#F2C230" stroke-width="1.6"></path><path d="M21 24 Q32 8 38 15 Q34 19 37 25 Q30 26 32 31 Q26 30 21 28 Z" fill="#FFFFFF" stroke="#F2C230" stroke-width="1.6"></path><path d="M20 30 L20 12 M15 17 L20 11 L25 17" stroke="#E0A21A" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><p style="margin: 0; font-size: 14px; font-weight: 900">逆転の翼 <span style="font-size: 10px; font-weight: 800; color: #C8962A">背中</span></p><p style="margin: 0; font-size: 11px; color: #6B6358; line-height: 1.45">模試の判定を2段階以上アップ</p></div>
+</div><div style="background: #FFFFFF; border-radius: 18px; padding: 10px 12px; display: flex; gap: 10px; align-items: center">
+<div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 30px; background: #FFF4D6; display: flex; align-items: center; justify-content: center"><svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 L24.5 14 L36 14.5 L27 22 L30 34 L20 27.5 L10 34 L13 22 L4 14.5 L15.5 14 Z" fill="#7A5CD0"></path><text x="20" y="24" font-size="9" font-weight="900" fill="#FFFFFF" text-anchor="middle" font-family="sans-serif">70</text></svg></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><p style="margin: 0; font-size: 14px; font-weight: 900">偏差値70の星章 <span style="font-size: 10px; font-weight: 800; color: #C8962A">胸</span></p><p style="margin: 0; font-size: 11px; color: #6B6358; line-height: 1.45">模試の総合偏差値70以上</p></div>
+</div><div style="background: #FFFFFF; border-radius: 18px; padding: 10px 12px; display: flex; gap: 10px; align-items: center">
+<div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 30px; background: #FFF4D6; display: flex; align-items: center; justify-content: center"><svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 36 L22 18" stroke="#B49AF2" stroke-width="4" stroke-linecap="round" opacity=".45"></path><path d="M8 36 L22 22" stroke="#B49AF2" stroke-width="2" stroke-linecap="round" opacity=".7"></path><path d="M27 6 L29.5 12.5 L36 13 L31 17.5 L32.5 24 L27 20.5 L21.5 24 L23 17.5 L18 13 L24.5 12.5 Z" fill="#F5C842"></path></svg></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><p style="margin: 0; font-size: 14px; font-weight: 900">流れ星 <span style="font-size: 10px; font-weight: 800; color: #C8962A">効果</span></p><p style="margin: 0; font-size: 11px; color: #6B6358; line-height: 1.45">模試の1教科で全国上位1%</p></div>
+</div><div style="background: #FFFFFF; border-radius: 18px; padding: 10px 12px; display: flex; gap: 10px; align-items: center">
+<div style="width: 60px; height: 60px; flex-shrink: 0; border-radius: 30px; background: #FFF4D6; display: flex; align-items: center; justify-content: center"><svg width="44" height="44" viewBox="0 0 40 40" aria-hidden="true"><g stroke="#FFB648" stroke-width="2.6" stroke-linecap="round"><path d="M20 3 L20 8 M20 32 L20 37 M3 20 L8 20 M32 20 L37 20 M8 8 L11.5 11.5 M28.5 28.5 L32 32 M8 32 L11.5 28.5 M28.5 11.5 L32 8"></path></g><circle cx="20" cy="20" r="8.5" fill="#FFB648"></circle><circle cx="17.5" cy="17.5" r="2.5" fill="#FFE2A8"></circle></svg></div>
+<div style="display: flex; flex-direction: column; gap: 2px"><p style="margin: 0; font-size: 14px; font-weight: 900">太陽のオーラ <span style="font-size: 10px; font-weight: 800; color: #C8962A">効果</span></p><p style="margin: 0; font-size: 11px; color: #6B6358; line-height: 1.45">365日連続で記録</p></div>
+</div></div>
+<p style="margin: 0; font-size: 11px; color: #8A7A72">上位の人だけでなく、伸びた人も取れるように「逆転の翼」（判定2段階アップ）と「太陽のオーラ」（365日連続）を入れている</p>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

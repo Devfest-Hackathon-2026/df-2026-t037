@@ -1,0 +1,24 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="チクまる。白衣を着ている">
+<defs><radialGradient id="q2-kagaku-lv3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FFF6E6"></stop><stop offset=".55" stop-color="#F6C88E"></stop><stop offset="1" stop-color="#D08A4E"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#6A4A2A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#DC9A60"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#DC9A60"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#q2-kagaku-lv3)"></circle>
+<path d="M33 100 Q34 132 62 142 L72 116 Q56 112 48 94 Z" fill="#F7F8FA"></path><path d="M127 100 Q126 132 98 142 L88 116 Q104 112 112 94 Z" fill="#F7F8FA"></path>
+<path d="M72 116 L80 126 L88 116" fill="none" stroke="#E2E6EE" stroke-width="2"></path>
+<rect x="100" y="122" width="12" height="9" rx="1.5" fill="#E2E6EE"></rect><rect x="104" y="115" width="2.6" height="10" rx="1" fill="#2468B8"></rect>
+<ellipse cx="80" cy="46" rx="26" ry="6" fill="#8A5A2B"></ellipse>
+<rect x="68" y="18" width="24" height="28" rx="2" fill="#F4EAD2"></rect><rect x="68" y="18" width="5" height="28" fill="#E0D2B0"></rect>
+<path d="M64 18 L80 4 L96 18 Z" fill="#A86A34"></path>
+<circle cx="80" cy="30" r="7.5" fill="#FFFFFF"></circle><circle cx="80" cy="30" r="1.4" fill="#4A3E3A"></circle>
+<line class="tick" style="transform-origin: 80px 30px" x1="80" y1="30" x2="80" y2="24.5" stroke="#4A3E3A" stroke-width="1.6" stroke-linecap="round"></line>
+
+
+
+<ellipse cx="31" cy="102" rx="8" ry="11" fill="#F0F2F6" transform="rotate(20 31 102)"></ellipse><ellipse cx="129" cy="102" rx="8" ry="11" fill="#F0F2F6" transform="rotate(-20 129 102)"></ellipse><ellipse cx="60" cy="66" rx="14" ry="8" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 105 Q80 110 84 105" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>

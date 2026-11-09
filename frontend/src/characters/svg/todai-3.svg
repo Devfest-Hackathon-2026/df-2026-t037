@@ -1,0 +1,17 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="最終進化のギンまる。大きな金色の銀杏の葉と光の粒">
+<defs><radialGradient id="b3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="b3l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient></defs>
+<path class="twinkle" d="M24 46 L26 52 L32 54 L26 56 L24 62 L22 56 L16 54 L22 52 Z" fill="#F5C842"></path>
+<path class="twinkle" style="animation-delay: .8s" d="M136 40 L137.5 44 L141.5 45.5 L137.5 47 L136 51 L134.5 47 L130.5 45.5 L134.5 44 Z" fill="#F5C842"></path>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="url(#b3l)"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#b3)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 106 Q77.5 109 80 106 Q82.5 109 85 106" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>

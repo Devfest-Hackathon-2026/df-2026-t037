@@ -18,17 +18,11 @@ node_modules/
 dist/
 build/
 out/
-.next/
-.wrangler/
+frontend/dist/
 __pycache__/
-*.pyc
 .venv/
-venv/
 
-# OS とエディタ
+# OS・エディタ・作業用
 .DS_Store
-Thumbs.db
-.idea/
-.vscode/*
-!.vscode/extensions.json
-*.log
+.tmp_claude/
+.firebase/

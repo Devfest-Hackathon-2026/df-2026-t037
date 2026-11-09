@@ -1,0 +1,99 @@
+/* キャラクターの動き。動きを減らす設定の端末では止まる */
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.15)}}
+@keyframes flap{0%,100%{transform:rotate(0)}50%{transform:rotate(-22deg)}}
+@keyframes flapR{0%,100%{transform:rotate(0)}50%{transform:rotate(22deg)}}
+@keyframes twinkle{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes arm{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+@keyframes peek{0%,40%,100%{transform:translateX(-4px)}55%,85%{transform:translateX(0)}}
+@keyframes ripple{0%{transform:scale(.7);opacity:.8}100%{transform:scale(1.1);opacity:0}}
+@keyframes chomp{0%,60%,100%{transform:translateY(0)}75%{transform:translateY(-2.5px)}}
+@keyframes step{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes flicker{0%,100%{transform:scale(1,1)}50%{transform:scale(1.05,1.12)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-40px);opacity:0}}
+@keyframes drift{0%,100%{transform:translateX(-6px)}50%{transform:translateX(6px)}}
+@keyframes fall{0%{transform:translate(0,-20px) rotate(0deg);opacity:0}15%{opacity:1}100%{transform:translate(14px,60px) rotate(200deg);opacity:0}}
+@keyframes wobble{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes hop{0%,60%,100%{transform:translateY(0)}75%{transform:translateY(-6px)}}
+@media (prefers-reduced-motion: no-preference) {
+  .tama-char .armM { animation:arm 2s ease-in-out infinite;transform-box:view-box;transform-origin:120px 98px }
+  .tama-char .blink { animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .chomp { animation:chomp 1.6s ease-in-out infinite }
+  .tama-char .drift { animation:drift 5s ease-in-out infinite }
+  .tama-char .fall { animation:fall 3.2s linear infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .flap { animation:flap 1s ease-in-out infinite;transform-box:fill-box;transform-origin:100% 60% }
+  .tama-char .flapR { animation:flapR 1s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 60% }
+  .tama-char .flicker { animation:flicker .9s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100% }
+  .tama-char .hop { animation:hop 2.4s ease-in-out infinite }
+  .tama-char .peek { animation:peek 2.4s ease-in-out infinite }
+  .tama-char .pop { animation:pop 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 100% }
+  .tama-char .ripple { animation:ripple 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .rise { animation:rise 2.2s ease-out infinite }
+  .tama-char .shadow { animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .spinM { animation:spin 1.6s linear infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .squish { animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100% }
+  .tama-char .stepA { animation:step .8s ease-in-out infinite }
+  .tama-char .stepB { animation:step .8s ease-in-out infinite;animation-delay:.4s }
+  .tama-char .sway { animation:sway 2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100% }
+  .tama-char .swayV { animation:sway 2s ease-in-out infinite;transform-box:view-box }
+  .tama-char .tick { animation:spin 6s steps(12) infinite;transform-box:view-box }
+  .tama-char .twinkle { animation:twinkle 1.6s ease-in-out infinite }
+  .tama-char .wobble { animation:wobble 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100% }
+}
+
+/* 一覧などで動きを止める */
+.tama-still * { animation: none !important; }
+
+/* 京大ダイまる（五山の送り火） */
+@keyframes flick{0%,100%{transform:scale(1,1)}30%{transform:scale(.85,1.15)}60%{transform:scale(1.1,.9)}}
+@keyframes rise{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(-22px);opacity:0}}
+@keyframes ripple2{0%,100%{transform:translateX(0);opacity:.5}50%{transform:translateX(4px);opacity:1}}
+@keyframes pend{0%,100%{transform:rotate(-12deg)}50%{transform:rotate(12deg)}}
+@keyframes pend2{0%,100%{transform:rotate(8deg)}50%{transform:rotate(-8deg)}}
+@media (prefers-reduced-motion: no-preference){.flick{animation:flick 1.2s ease-in-out infinite}.rise{animation:rise 2.8s ease-out infinite;transform-box:fill-box}.ripple{animation:ripple2 2.4s ease-in-out infinite}.pend{animation:pend 1.9s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 0%}.pend2{animation:pend2 1.9s ease-in-out infinite;animation-delay:-.25s;transform-box:fill-box;transform-origin:50% 0%}}
+
+/* 着替えで重ねるアイテム（wear.js） */
+@keyframes wearFall{0%{transform:translate(0,-10px) rotate(0);opacity:0}15%{opacity:1}100%{transform:translate(18px,90px) rotate(240deg);opacity:0}}
+@keyframes wearFloat{0%{transform:translateY(6px);opacity:0}25%{opacity:1}100%{transform:translateY(-16px);opacity:0}}
+@keyframes wearWingL{0%,100%{transform:rotate(0)}50%{transform:rotate(8deg)}}
+@keyframes wearWingR{0%,100%{transform:rotate(0)}50%{transform:rotate(-8deg)}}
+@keyframes wearMeteor{0%,55%{transform:translate(0,0);opacity:0}62%{opacity:1}90%{transform:translate(-26px,22px);opacity:1}100%{transform:translate(-30px,25px);opacity:0}}
+@keyframes wearSun{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: no-preference) {
+  .tama-char .wear-fall { animation:wearFall 4.2s linear infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-float { animation:wearFloat 2.6s ease-out infinite;transform-box:fill-box }
+  .tama-char .wear-wingL { animation:wearWingL 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:100% 80% }
+  .tama-char .wear-wingR { animation:wearWingR 1.6s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 80% }
+  .tama-char .wear-meteor { animation:wearMeteor 3.6s ease-in infinite }
+  .tama-char .wear-sun { animation:wearSun 24s linear infinite;transform-box:view-box;transform-origin:80px 92px }
+}
+/* 流れ星・ミシックを派手に */
+@keyframes wearPulse{0%,100%{transform:scale(.94);opacity:.55}50%{transform:scale(1.06);opacity:1}}
+@keyframes wearFlapL{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(14deg) scale(1.06)}}
+@keyframes wearFlapR{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(-14deg) scale(1.06)}}
+@keyframes wearEmber{0%{transform:translateY(0) scale(1);opacity:0}15%{opacity:1}100%{transform:translateY(-70px) scale(.3);opacity:0}}
+@keyframes wearAurora{0%,100%{transform:translateX(-8px) skewX(-6deg);opacity:.45}50%{transform:translateX(8px) skewX(6deg);opacity:.95}}
+@keyframes wearSparkle{0%,100%{transform:scale(.4);opacity:.2}50%{transform:scale(1.4);opacity:1}}
+@keyframes wearBloom{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.15) rotate(12deg)}}
+@media (prefers-reduced-motion: no-preference) {
+  .tama-char .wear-meteor { animation:wearMeteor 3.2s ease-in infinite }
+  .tama-char .wear-pulse { animation:wearPulse 1.8s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-flapL { animation:wearFlapL 1.1s ease-in-out infinite;transform-box:fill-box;transform-origin:100% 85% }
+  .tama-char .wear-flapR { animation:wearFlapR 1.1s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 85% }
+  .tama-char .wear-ember { animation:wearEmber 2.4s ease-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-aurora { animation:wearAurora 4s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-sparkle { animation:wearSparkle 1.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-bloom-in { animation:wearBloom 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
+  .tama-char .wear-fall { animation-duration:3.4s }
+}
+/* 学年の小物：高3の鉢巻のはしが風になびく */
+@keyframes hachiTail{0%,100%{transform:rotate(0)}50%{transform:rotate(-12deg)}}
+@keyframes hachiTail2{0%,100%{transform:rotate(0)}50%{transform:rotate(10deg)}}
+@media (prefers-reduced-motion: no-preference) {
+  .tama-char .hachi-tail { animation:hachiTail 1.3s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 50% }
+  .tama-char .hachi-tail2 { animation:hachiTail2 1.3s ease-in-out infinite .2s;transform-box:fill-box;transform-origin:0% 0% }
+}

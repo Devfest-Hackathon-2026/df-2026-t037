@@ -1,0 +1,19 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="銀河のオーロラのエフェクト。背後に緑と紫の光の帯がゆらめき、星がまたたくギンまる">
+<defs><radialGradient id="m2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="m2l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient><linearGradient id="m2a" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5CF2C2" stop-opacity="0"></stop><stop offset=".3" stop-color="#5CF2C2"></stop><stop offset=".7" stop-color="#5CC8F2"></stop><stop offset="1" stop-color="#5CC8F2" stop-opacity="0"></stop></linearGradient><linearGradient id="m2b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#B07AF2" stop-opacity="0"></stop><stop offset=".4" stop-color="#B07AF2"></stop><stop offset=".8" stop-color="#F27AC8"></stop><stop offset="1" stop-color="#F27AC8" stop-opacity="0"></stop></linearGradient></defs>
+<g class="drift"><path d="M-6 50 Q30 22 72 42 T166 30 L166 48 Q124 62 80 58 T-6 70 Z" fill="url(#m2a)" opacity=".75"></path></g>
+<g class="drift" style="animation-delay: -2.5s"><path d="M-6 74 Q36 50 80 66 T166 56 L166 70 Q120 82 80 80 T-6 90 Z" fill="url(#m2b)" opacity=".6"></path></g>
+<path class="twinkle" style="animation-delay: 0s" d="M16 20 L17.2 22.8 L20 24 L17.2 25.2 L16 28 L14.8 25.2 L12 24 L14.8 22.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 0.5s" d="M140 14 L141.2 16.8 L144 18 L141.2 19.2 L140 22 L138.8 19.2 L136 18 L138.8 16.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 1s" d="M150 92 L151.2 94.8 L154 96 L151.2 97.2 L150 100 L148.8 97.2 L146 96 L148.8 94.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 0.3s" d="M10 106 L11.2 108.8 L14 110 L11.2 111.2 L10 114 L8.8 111.2 L6 110 L8.8 108.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 0.8s" d="M126 128 L127.2 130.8 L130 132 L127.2 133.2 L126 136 L124.8 133.2 L122 132 L124.8 130.8 Z" fill="#FFFFFF"></path><path class="twinkle" style="animation-delay: 1.2s" d="M34 136 L35.2 138.8 L38 140 L35.2 141.2 L34 144 L32.8 141.2 L30 140 L32.8 138.8 Z" fill="#FFFFFF"></path>
+<circle cx="60" cy="14" r="1.4" fill="#FFFFFF" opacity=".8"></circle><circle cx="104" cy="10" r="1.2" fill="#FFFFFF" opacity=".7"></circle><circle cx="148" cy="64" r="1.3" fill="#FFFFFF" opacity=".7"></circle>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#000000" opacity=".25"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="url(#m2l)"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#m2)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".55"></ellipse>
+<path d="M74 104 Q80 113 86 104 Z" fill="#E8687A"></path>
+</g>
+</svg>

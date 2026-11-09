@@ -1,0 +1,1021 @@
+/* キャラ育成まわりの画面。値は docs/design/*.dc.html（Setup・Select・Launch）から取っている */
+.tama {
+  --t-bg: #FDF8F4;
+  --t-text: #4A3E3A;
+  --t-sub: #8A7A72;
+  --t-main: #D0607A;
+  --t-main-dark: #A0405A;
+  --t-main-soft: #FCEAF0;
+  --t-line: #E6DCD2;
+  --t-track: #F1E6DA;
+  --t-tip: #FFF1C9;
+  font-family: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", sans-serif;
+  color: var(--t-text);
+}
+.tama p { margin: 0; }
+
+/* ===== 画面全体（初期設定） ===== */
+.tama-screen {
+  min-height: 100vh;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 20px 18px 24px;
+  background: var(--t-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tama-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tama-kicker { font-size: 13px; font-weight: 800; color: var(--t-main); }
+.tama-title { margin: 2px 0 0; font-size: 22px; font-weight: 900; }
+.tama-progress { height: 6px; background: var(--t-track); border-radius: 3px; }
+.tama-progress > div { height: 6px; background: var(--t-main); border-radius: 3px; }
+
+.tama-field { display: flex; flex-direction: column; gap: 6px; }
+.tama-label { font-size: 13px; font-weight: 900; }
+.tama-input {
+  height: 44px;
+  border-radius: 12px;
+  border: 1.5px solid var(--t-line);
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--t-text);
+  background: #FFFFFF;
+}
+.tama-date { height: 36px; font-size: 14px; }
+
+.tama-row { display: flex; gap: 6px; }
+.tama-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+.tama-pill {
+  flex: 1;
+  height: 40px;
+  border-radius: 20px;
+  border: 1.5px solid var(--t-line);
+  background: #FFFFFF;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--t-text);
+}
+.tama-pill.on { border: 2px solid var(--t-main); background: var(--t-main); font-weight: 900; color: #FFFFFF; }
+.tama-pill.wide { flex: 1 1 auto; min-width: 96px; height: 44px; border-radius: 22px; font-size: 14px; padding: 0 14px; }
+
+.tama-box {
+  background: #FFFFFF;
+  border-radius: 14px;
+  border: 1.5px solid var(--t-line);
+  padding: 10px 14px;
+}
+.tama-exam { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tama-exam-side { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+.tama-badge {
+  font-size: 12px;
+  font-weight: 900;
+  color: var(--t-main);
+  background: var(--t-main-soft);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+.tama-link {
+  border: 0;
+  background: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--t-main);
+  text-decoration: underline;
+}
+.tama-link:hover { color: var(--t-main-dark); }
+
+.tama-grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.tama-pace {
+  height: 64px;
+  border-radius: 14px;
+  border: 1.5px solid var(--t-line);
+  background: #FFFFFF;
+  font-family: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+}
+.tama-pace.on { border: 2px solid #E0A21A; background: #FFF6DA; }
+.tama-pace-name { font-size: 14px; font-weight: 900; }
+
+.tama-tip {
+  background: var(--t-tip);
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.tama-strong { font-size: 16px; font-weight: 900; }
+.tama-strong.small { font-size: 13px; }
+.tama-note { font-size: 11px; color: var(--t-sub); }
+.tama-note.strong { font-size: 12px; font-weight: 800; }
+.tama-home .tama-note { font-size: 12px; }
+.tama-tiny { font-size: 10px; color: var(--t-sub); }
+.tama-small { font-size: 12px; line-height: 1.6; }
+.tama-muted { color: var(--t-sub); }
+.tama-name { font-size: 20px; font-weight: 900; }
+.tama-name.big { font-size: 22px; display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; }
+.tama-stage { font-size: 12px; font-weight: 800; }
+
+.tama-error {
+  background: #FDECEF;
+  color: #B03050;
+  border-radius: 14px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.tama-actions { margin-top: auto; display: flex; gap: 8px; padding-top: 8px; }
+.tama-btn {
+  flex: 1.3;
+  height: 54px;
+  border: 0;
+  border-radius: 27px;
+  background: var(--t-main);
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 900;
+}
+.tama-btn.ghost {
+  flex: 1;
+  background: #FFFFFF;
+  color: var(--t-main);
+  border: 1.5px solid #F0D0D8;
+  font-size: 14px;
+}
+.tama-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ===== 初期設定 2/2：大学 ===== */
+.tama-unis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; }
+.tama-uni {
+  height: 66px;
+  border-radius: 16px;
+  border: 1.5px solid #EEE4DA;
+  background: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-family: inherit;
+  padding: 0;
+}
+.tama-uni.on { border: 2px solid var(--t-main); }
+.tama-uni-ball {
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding-top: 3px;
+  box-sizing: border-box;
+}
+.tama-uni-ball > span { width: 3.5px; height: 5px; border-radius: 2px; }
+.tama-uni-name { font-size: 11px; font-weight: 800; color: var(--t-text); }
+
+.tama-card { background: #FFFFFF; border-radius: 22px; padding: 12px 14px; }
+.tama-preview { display: flex; align-items: center; gap: 12px; }
+.tama-preview-ball {
+  width: 118px;
+  height: 118px;
+  flex-shrink: 0;
+  border-radius: 59px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tama-preview-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+
+/* ===== ホーム（Launch） ===== */
+.tama-home {
+  background: var(--t-bg);
+  border-radius: 26px;
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.tama-streak { background: #FFFFFF; border-radius: 14px; padding: 4px 12px; text-align: center; flex-shrink: 0; }
+.tama-streak-x { font-size: 18px; font-weight: 900; color: #E0A21A; }
+.tama-goal { display: flex; flex-direction: column; gap: 4px; }
+.tama-bar { height: 12px; background: var(--t-track); border-radius: 6px; overflow: hidden; }
+.tama-bar > div { height: 12px; background: #E8A35A; border-radius: 6px; transition: width 0.6s ease; }
+.tama-togo { color: var(--t-text); font-size: 14px; }
+.tama-season { font-size: 12px; font-weight: 800; color: var(--t-main); }
+.tama-stage-box {
+  height: 210px;
+  background: #FCF4EA;
+  border-radius: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tama-week { border-radius: 18px; padding: 12px 14px; display: flex; flex-direction: column; gap: 7px; }
+.tama-week-row { display: grid; grid-template-columns: 62px 1fr 132px; align-items: center; gap: 8px; font-size: 12px; }
+.tama-week-name { font-weight: 900; }
+.tama-week-bar { position: relative; height: 10px; background: var(--t-track); border-radius: 5px; }
+.tama-week-bar > div { height: 10px; border-radius: 5px; }
+.tama-week-bar > i {
+  position: absolute;
+  top: -3px;
+  width: 3px;
+  height: 16px;
+  margin-left: -1.5px;
+  background: var(--t-text);
+  border-radius: 2px;
+}
+.tama-week-num { color: var(--t-sub); text-align: right; white-space: nowrap; }
+/* C-8：結論の1行・凡例（Henkou.dc.html ①） */
+.tama-week-conclusion {
+  font-size: 13px;
+  font-weight: 800;
+  background: #EAF6EF;
+  color: #1E6E48;
+  border-radius: 10px;
+  padding: 6px 10px;
+  line-height: 1.5;
+}
+.tama-week-conclusion strong { font-weight: 900; }
+.tama-week-row.is-short .tama-week-name { text-decoration: underline; text-underline-offset: 3px; }
+.tama-week-num strong { color: var(--t-text); }
+.tama-week-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11px; color: var(--t-sub); align-items: center; }
+.tama-week-legend-item { display: flex; align-items: center; gap: 5px; }
+.tama-week-legend-bar { width: 18px; height: 8px; border-radius: 4px; background: var(--t-sub); }
+.tama-week-legend-line { width: 3px; height: 14px; border-radius: 2px; background: var(--t-text); }
+
+@media (prefers-reduced-motion: reduce) {
+  .tama-bar > div { transition: none; }
+}
+
+/* ===== メニュー（≡） ===== */
+.tama-menu { position: relative; }
+.tama-menu-btn {
+  width: 36px;
+  height: 44px;
+  border: 0;
+  background: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #B0A296;
+  font-family: inherit;
+  font-size: 20px;
+}
+.tama-menu-btn.dark { width: 36px; height: 36px; border-radius: 18px; background: #34425A; color: #FFFFFF; font-size: 18px; }
+.tama-menu-pop {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  width: 250px;
+  max-width: calc(100vw - 32px);
+  background: #FFFFFF;
+  color: #3A3530;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+}
+.tama-menu-item {
+  height: 44px;
+  border: 0;
+  background: none;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 800;
+  color: #3A3530;
+  text-align: left;
+}
+.tama-menu-item:hover:not(:disabled) { background: #FCF4EA; }
+.tama-menu-item:disabled { opacity: 0.55; cursor: not-allowed; }
+.tama-menu-sep { border-top: 1px solid #EEE4DA; margin: 2px 0; }
+.tama-menu-locked { padding: 8px 12px; display: flex; flex-direction: column; gap: 2px; opacity: 0.55; }
+.tama-menu-lockrow { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 800; }
+.tama-menu-sub { font-size: 11px; font-weight: 500; color: #6B5E58; }
+/* 項目名（「興味から学部をさがす」など）は1行のまま。説明のほうを縮める */
+.tama-menu-item > span:first-child { white-space: nowrap; }
+.tama-menu-item > .tama-menu-sub { text-align: right; line-height: 1.3; }
+
+/* ===== ホームのボタン ===== */
+.tama-home-actions { display: flex; flex-direction: column; align-items: stretch; gap: 10px; }
+.tama-btn.outline {
+  flex: 1;
+  background: transparent;
+  border: 1.5px solid #4A5A74;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+/* ===== 勉強タイマー（Timer.dc.html） ===== */
+.tama-timer {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 20px 18px 24px;
+  background: #1F2A3A;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.tama-timer > * { max-width: 440px; }
+.tama-timer-top { width: 100%; display: flex; justify-content: space-between; align-items: center; }
+.tama-timer-kicker { font-size: 13px; font-weight: 800; color: #A8B4C8; display: flex; align-items: center; gap: 6px; }
+.tama-dot { display: inline-block; width: 8px; height: 8px; border-radius: 4px; background: #F25C5C; }
+.tama-dot.paused { background: #A8B4C8; }
+@media (prefers-reduced-motion: no-preference) {
+  .tama-dot:not(.paused) { animation: twinkle 1.6s ease-in-out infinite; }
+}
+.tama-timer-label { align-self: stretch; font-size: 13px; font-weight: 900; color: #CFD8E6; }
+.tama-wrap.center { justify-content: center; }
+.tama-timer-chip {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 18px;
+  border: 1.5px solid #4A5A74;
+  background: transparent;
+  color: #FFFFFF;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 800;
+}
+.tama-timer-chip.on { background: #2E3E58; border-color: #F5C842; color: #F5C842; }
+.tama-timer-subject { margin-top: 4px; font-size: 14px; font-weight: 900; background: #2E3E58; padding: 6px 14px; border-radius: 14px; }
+.tama-ring { position: relative; width: 220px; height: 220px; }
+.tama-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.tama-ring-time { font-size: 46px; font-weight: 900; letter-spacing: 1px; font-variant-numeric: tabular-nums; }
+.tama-ring-goal { font-size: 12px; color: #A8B4C8; }
+.tama-timer-buddy { display: flex; align-items: center; gap: 10px; }
+.tama-bubble { background: #FFFFFF; color: #3A3530; border-radius: 16px; padding: 8px 12px; font-size: 13px; font-weight: 800; line-height: 1.5; max-width: 170px; }
+.tama-timer-exp { font-size: 13px; color: #CFD8E6; text-align: center; }
+.tama-timer-exp strong { color: #F5C842; font-size: 17px; }
+.tama-timer-hint { font-size: 11px; color: #A8B4C8; text-align: center; }
+.tama-timer-actions { margin-top: auto; width: 100%; display: flex; gap: 10px; }
+.tama-timer-actions .tama-btn { height: 52px; border-radius: 26px; font-size: 15px; }
+.tama-timer-quit { display: flex; gap: 12px; align-items: center; font-size: 12px; color: #CFD8E6; }
+.tama-link.light { color: #CFD8E6; font-size: 12px; }
+
+/* ===== 着替え（Kisekae.dc.html） ===== */
+.tama-kisekae { gap: 8px; padding: 16px 16px 18px; }
+.tama-kise-head { display: flex; align-items: center; justify-content: space-between; }
+.tama-back { width: 44px; height: 44px; border: 0; background: none; font-size: 24px; color: var(--t-text); font-family: inherit; }
+.tama-kise-title { text-align: center; }
+.tama-kise-title h1 { margin: 0; font-size: 18px; font-weight: 900; }
+.tama-kise-title p { font-size: 9.5px; color: var(--t-sub); }
+.tama-kise-count { width: 44px; font-size: 11px; font-weight: 800; color: var(--t-sub); text-align: right; }
+/* 下のボタンがキャラ（胸の銀杏バッジなど）に重ならないよう、ボタンの段をキャラの下にとる */
+.tama-kise-stage {
+  position: relative;
+  min-height: 158px;
+  padding: 12px 10px 52px;
+  border-radius: 26px;
+  background: radial-gradient(circle at 50% 45%, #FFFBF2 0%, #FCF0DE 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tama-kise-tools { position: absolute; left: 10px; bottom: 10px; display: flex; gap: 6px; }
+.tama-kise-tools button {
+  height: 32px; padding: 0 12px; border-radius: 16px; border: none; background: #FFFFFF;
+  font-family: inherit; font-size: 12px; font-weight: 800; color: var(--t-text);
+}
+.tama-kise-outfits { position: absolute; right: 10px; top: 10px; display: flex; gap: 4px; }
+.tama-kise-outfits button {
+  width: 32px; height: 32px; border-radius: 16px; border: none; background: #FFFFFF;
+  font-family: inherit; font-size: 12px; font-weight: 900; color: #B0A296;
+}
+.tama-kise-outfits button.on { border: 2px solid var(--t-main); color: var(--t-main); }
+.tama-kise-save { position: absolute; right: 12px; bottom: 12px; font-size: 10px; color: var(--t-sub); }
+.tama-kise-filters { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+.tama-kise-filters button {
+  flex-shrink: 0; height: 30px; padding: 0 11px; border-radius: 15px; border: 0; background: #FFFFFF;
+  font-family: inherit; font-size: 12px; font-weight: 800; color: var(--t-text);
+}
+.tama-kise-filters button.on { background: var(--t-text); color: #FFFFFF; font-weight: 900; }
+.tama-kise-grid { display: grid; gap: 7px; }
+.tama-kise-grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tama-kise-grid.five { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+/* レジェンド・ミシック・エフェクトは説明が長いので3列（文字が重ならないように） */
+.tama-kise-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.tama-kise-grid.three .tama-item { padding: 20px 6px 8px; justify-content: flex-start; }
+.tama-kise-grid.three .tama-item-name { font-size: 11px; }
+.tama-kise-grid.three .tama-item-note { font-size: 9.5px; line-height: 1.35; }
+.tama-label.legend { color: #C8962A; font-size: 12px; }
+.tama-label.mythic { color: #7A4FD0; font-size: 12px; }
+.tama-item {
+  position: relative;
+  min-height: 64px;
+  border-radius: 14px;
+  border: 1.5px solid #EEE4DA;
+  background: #FFFFFF;
+  font-family: inherit;
+  padding: 16px 2px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  text-align: center;
+}
+.tama-item.on { border: 2.5px solid var(--t-main); background: var(--t-main-soft); }
+.tama-item.lockedItem { border: 1.5px dashed #E2D6CA; background: #F4EFE9; cursor: default; }
+.tama-item.legend { border: 1.5px dashed #E0B040; background: #FFF8E4; }
+/* ミシックはレジェンドの金色と分けて紫 */
+.tama-item.mythic { border: 1.5px dashed #9B7BE0; background: #F4EEFF; }
+.tama-item.mythic .tama-item-slot { color: #7A4FD0; }
+.tama-item.mythic .tama-item-name { color: #5A33A8; }
+.tama-item.mythic.on { border: 2.5px solid #7A4FD0; background: #E9DFFF; }
+.tama-item-check {
+  position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px;
+  background: var(--t-main); color: #FFFFFF; font-size: 12px; font-weight: 900;
+  display: flex; align-items: center; justify-content: center;
+}
+.tama-item-lock { position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: var(--t-sub); }
+.tama-item-slot { position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296; }
+.tama-item.legend .tama-item-slot { color: #C8962A; }
+.tama-item.legend.on { border: 2.5px solid #C8962A; background: #FFEFC2; }
+.tama-item-name { font-size: 10px; font-weight: 900; color: var(--t-text); line-height: 1.2; }
+.tama-item-note { font-size: 8.5px; color: var(--t-sub); line-height: 1.2; }
+.tama-head-right { display: flex; align-items: center; gap: 6px; }
+
+/* ===== 2026-11-08 の変更（docs/design/Henkou.dc.html ①〜③-2） ===== */
+
+/* C-2：メインの行動は横いっぱいのピンクのボタン、あとからの記録は文字リンク */
+/* App.css のページ全体用 .main（縦並び・上下の余白）と名前が同じなので、ここで打ち消す */
+.tama-btn.main {
+  flex: none;
+  height: 56px;
+  padding: 0 16px;
+  border-radius: 28px;
+  font-size: 17px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.tama-btn.block { flex: none; width: 100%; }
+.tama-textlink {
+  align-self: center;
+  padding: 6px 10px;
+  border: 0;
+  background: none;
+  font-family: inherit;
+  color: #8A7A72;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.tama-textlink:hover { color: var(--t-text); }
+
+/* C-1：学年はただの文字 */
+.grade-text { font-size: 13px; font-weight: 800; color: #8A7A72; padding: 0 4px; }
+
+/* 戻るボタンつきの見出し */
+.tama-subhead { display: flex; align-items: center; gap: 6px; }
+.tama-subhead h1 { margin: 0; font-size: 20px; font-weight: 900; }
+
+/* ② 記録（あとから） */
+.tama-record { max-width: 520px; }
+.tama-record-form {
+  background: var(--t-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+.tama-record-label { font-size: 13px; font-weight: 800; margin-top: 4px; }
+.tama-record-label.with-hint { display: flex; justify-content: space-between; align-items: baseline; }
+.tama-subject-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.tama-subject-group { width: 58px; font-size: 11px; font-weight: 900; }
+.tama-subject-chip {
+  height: 32px;
+  padding: 0 11px;
+  border-radius: 16px;
+  border: 2px solid #DAD6CC;
+  background: #FFFFFF;
+  color: #1F2328;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+/* 色の上の白い文字は太字14px以上（C-3） */
+.tama-subject-chip.on { color: #FFFFFF; font-size: 14px; font-weight: 900; }
+.tama-minute-presets { display: flex; gap: 8px; }
+.tama-minute-presets button {
+  flex: 1;
+  height: 42px;
+  border-radius: 12px;
+  border: 2px solid #DAD6CC;
+  background: #FFFFFF;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--t-text);
+}
+.tama-minute-presets button.on { border-color: var(--t-main); background: var(--t-main-soft); color: var(--t-main-dark); font-weight: 900; }
+.tama-minute-input { display: flex; align-items: center; gap: 8px; font-size: 13px; flex-wrap: wrap; }
+.tama-minute-input label { color: #5B5F66; }
+.tama-minute-input input {
+  width: 90px;
+  height: 44px;
+  border-radius: 12px;
+  border: 2.5px solid var(--t-main);
+  padding: 0 12px;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--t-text);
+  background: #FFFFFF;
+}
+.tama-minute-input input[aria-invalid="true"] { border-color: #B03050; }
+.tama-field-err { font-size: 12px; font-weight: 800; color: #B03050; }
+.tama-textarea {
+  min-height: 104px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 2px solid #E6DCD2;
+  border-radius: 12px;
+  padding: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--t-text);
+  background: #FFFFFF;
+  resize: vertical;
+}
+
+/* 確認ダイアログ（C-1） */
+.tama-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(40, 30, 28, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+.tama-dialog { width: 100%; max-width: 360px; background: #FFFFFF; border-radius: 22px; padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.tama-dialog-msg { font-size: 14px; font-weight: 800; line-height: 1.7; color: var(--t-text); }
+.tama-dialog-actions { display: flex; gap: 8px; }
+.tama-dialog-actions .tama-btn { height: 48px; font-size: 14px; }
+
+/* メニューの「終わりの音」スイッチ（C-6） */
+.tama-switch { width: 40px; height: 24px; border-radius: 12px; background: #DAD6CC; display: flex; align-items: center; padding: 3px; box-sizing: border-box; }
+.tama-switch > span { width: 18px; height: 18px; border-radius: 9px; background: #FFFFFF; transition: transform 0.15s ease; }
+.tama-switch.on { background: var(--t-main); }
+.tama-switch.on > span { transform: translateX(16px); }
+
+/* ③・③-2 タイマー（Henkou の紺 #1C2A4E） */
+.tama-timer.navy { background: #1C2A4E; }
+.tama-timer.navy .tama-timer-kicker { color: #9FB0D6; }
+.tama-timer.navy .tama-timer-subject { background: #2A3A66; display: flex; align-items: center; gap: 6px; }
+.tama-subj-dot { display: inline-block; width: 10px; height: 10px; border-radius: 5px; margin-right: 6px; flex-shrink: 0; }
+.tama-ring.small { width: 190px; height: 190px; }
+.tama-ring-time.small { font-size: 36px; }
+.tama-ring-done { font-size: 13px; font-weight: 800; color: #F2C230; }
+.tama-chime-pill {
+  display: flex; align-items: center; gap: 8px;
+  background: #2A3A66; border-radius: 20px; padding: 6px 14px;
+  font-size: 13px; font-weight: 800; color: #FFFFFF;
+}
+.tama-ask { align-self: stretch; background: #24345E; border-radius: 22px; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+.tama-ask-title { font-size: 18px; font-weight: 900; }
+.tama-ask-sub { font-size: 12px; color: #9FB0D6; }
+.tama-ask-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.tama-ask-grid button {
+  height: 48px; border-radius: 14px; border: 0; background: #2A3A66; color: #FFFFFF;
+  font-family: inherit; font-size: 15px; font-weight: 900;
+}
+.tama-ask-grid button:hover, .tama-ask-grid button:focus-visible { background: #F2C230; color: #3A2A00; }
+.tama-ask-custom { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.tama-ask-custom label { color: #9FB0D6; }
+.tama-ask-custom input {
+  width: 74px; height: 40px; border-radius: 10px; border: 2px solid #4A5C8E; background: transparent;
+  padding: 0 10px; box-sizing: border-box; font-family: inherit; font-size: 16px; font-weight: 800; color: #FFFFFF;
+}
+.tama-ask-custom button {
+  margin-left: auto; height: 40px; padding: 0 14px; border-radius: 20px; border: 0;
+  background: #FFFFFF; color: #1C2A4E; font-family: inherit; font-weight: 900;
+}
+.tama-ask-custom button:disabled { opacity: 0.45; cursor: not-allowed; }
+.tama-ask-err { font-size: 12px; font-weight: 800; color: #F2C230; }
+.tama-timer-hint.left { align-self: stretch; text-align: left; line-height: 1.6; color: #9FB0D6; }
+.tama-timer.navy .tama-btn.outline { border-color: #4A5C8E; }
+.tama-white-card {
+  align-self: stretch; background: #FFFFFF; color: var(--t-text);
+  border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 8px;
+}
+.tama-white-card .tama-note { font-size: 11.5px; line-height: 1.6; }
+.tama-stepper { display: flex; align-items: center; gap: 10px; }
+.tama-stepper > button {
+  width: 44px; height: 44px; border-radius: 22px; border: 2px solid #E6DCD2; background: #FFFFFF;
+  font-family: inherit; font-size: 22px; font-weight: 900; color: #8A7A72; flex-shrink: 0;
+}
+.tama-stepper > button:disabled { opacity: 0.4; cursor: not-allowed; }
+.tama-stepper-box {
+  flex: 1; height: 52px; border-radius: 14px; border: 2.5px solid var(--t-main);
+  display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 14px; font-weight: 900;
+}
+.tama-stepper-box input {
+  width: 4.5ch; border: 0; background: transparent; text-align: right;
+  font-family: inherit; font-size: 26px; font-weight: 900; color: var(--t-text);
+}
+.tama-stepper-box input:focus { outline: none; }
+.tama-stepper-box:focus-within { box-shadow: 0 0 0 3px var(--t-main-soft); }
+
+/* ===== キャラとの会話 ===== */
+/* 一言の吹き出しはキャラに重ねず、上に並べる（スマホでも頭が隠れないように） */
+.tama-stage-box { height: auto; min-height: 210px; flex-direction: column; gap: 4px; padding: 12px 12px 4px; }
+.tama-greet { align-self: stretch; display: flex; align-items: flex-start; gap: 8px; }
+.tama-greet-bubble {
+  flex: 1; background: #FFFFFF; border: 2px solid; border-radius: 16px; padding: 8px 12px;
+  font-size: 13px; line-height: 1.55; box-shadow: 0 2px 8px rgba(74, 62, 58, 0.08);
+}
+.tama-greet-talk {
+  flex: none; border: none; color: #FFFFFF; font: inherit; font-size: 12px; font-weight: 900;
+  border-radius: 999px; padding: 8px 12px; cursor: pointer;
+}
+.tama-greet-talk:focus-visible, .tama-chat-close:focus-visible { outline: 2px solid #E8A35A; outline-offset: 2px; }
+
+.tama-chat-backdrop {
+  position: fixed; inset: 0; background: rgba(40, 30, 28, 0.45); z-index: 50;
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.tama-chat {
+  width: 100%; max-width: 480px; height: min(86vh, 680px); height: min(86dvh, 680px); background: var(--t-bg);
+  border-radius: 22px 22px 0 0; display: flex; flex-direction: column; padding: 12px 14px 10px; gap: 8px;
+}
+@media (min-width: 600px) {
+  .tama-chat-backdrop { align-items: center; }
+  .tama-chat { border-radius: 22px; }
+}
+.tama-chat-head { display: flex; align-items: center; gap: 10px; }
+.tama-chat-title { flex: 1; min-width: 0; }
+.tama-chat-close { border: none; background: #FFFFFF; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; color: var(--t-sub); }
+.tama-chat-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding: 4px 2px; }
+.tama-chat-empty { color: var(--t-sub); text-align: center; margin-top: 24px !important; }
+.tama-chat-msg { max-width: 82%; padding: 9px 12px; border-radius: 16px; font-size: 14px; line-height: 1.6; white-space: pre-wrap; word-break: break-word; }
+.tama-chat-msg.char { align-self: flex-start; background: #FFFFFF; border-top-left-radius: 4px; }
+.tama-chat-msg.me { align-self: flex-end; background: var(--t-main-soft); border-top-right-radius: 4px; }
+.tama-chat-msg.safety { border: 2px solid #E8A35A; }
+.tama-chat-msg.typing { color: var(--t-sub); }
+.tama-chat-error { font-size: 12px; color: #A83030; }
+.tama-chat-form { display: flex; gap: 8px; align-items: flex-end; }
+.tama-chat-form textarea {
+  flex: 1; resize: none; border: 1.5px solid var(--t-line); border-radius: 14px; padding: 8px 10px;
+  font: inherit; font-size: 14px; background: #FFFFFF; color: var(--t-text);
+}
+.tama-chat-form textarea:focus { outline: 2px solid #E8A35A; border-color: transparent; }
+.tama-chat-form .tama-btn { flex: none; width: 72px; height: 44px; }
+.tama-chat-foot { line-height: 1.5; }
+
+/* ===== 興味から学部をさがす ===== */
+.tama-explore-entry {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px; width: 100%;
+  background: #FFFFFF; border: 2px dashed var(--t-line); border-radius: 18px; padding: 12px 14px;
+  font: inherit; text-align: left; cursor: pointer; color: var(--t-text);
+}
+.tama-explore-entry:hover { border-color: var(--t-main); }
+.tama-explore-entry:focus-visible { outline: 2px solid #E8A35A; outline-offset: 2px; }
+.tama-explore-entry-title { font-size: 15px; font-weight: 900; }
+.tama-explore-entry-sub { font-size: 12px; color: var(--t-sub); }
+.tama-explore { display: flex; flex-direction: column; gap: 12px; }
+.tama-explore-form { display: flex; flex-direction: column; gap: 8px; }
+.tama-explore-form textarea {
+  resize: vertical; border: 1.5px solid var(--t-line); border-radius: 14px; padding: 10px 12px;
+  font: inherit; font-size: 14px; background: #FFFFFF; color: var(--t-text);
+}
+.tama-explore-form textarea:focus { outline: 2px solid #E8A35A; border-color: transparent; }
+.tama-explore-examples { display: flex; flex-wrap: wrap; gap: 6px; }
+.tama-explore-chip {
+  border: 1px solid var(--t-line); background: #FFFFFF; border-radius: 999px; padding: 5px 10px;
+  font: inherit; font-size: 12px; color: var(--t-text); cursor: pointer;
+}
+.tama-explore-chip:disabled { opacity: 0.5; cursor: default; }
+.tama-explore-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.tama-explore-card { display: flex; flex-direction: column; gap: 8px; }
+.tama-explore-top { display: flex; align-items: center; gap: 10px; }
+.tama-explore-rank {
+  flex: none; width: 26px; height: 26px; border-radius: 50%; background: var(--t-main-soft); color: var(--t-main-dark);
+  display: grid; place-items: center; font-weight: 900; font-size: 13px;
+}
+.tama-explore-name { flex: 1; min-width: 0; }
+.tama-explore-close { flex: none; text-align: right; line-height: 1.1; }
+.tama-explore-close strong { font-size: 22px; font-weight: 900; }
+.tama-bar.thin, .tama-bar.thin > div { height: 6px; }
+.tama-explore-reason { font-size: 14px; font-weight: 700; line-height: 1.6; }
+.tama-explore-summary { font-size: 12px; color: var(--t-sub); line-height: 1.6; }
+.tama-explore-keys { display: flex; flex-wrap: wrap; gap: 4px; }
+.tama-explore-key { font-size: 11px; background: #FBF7F2; border-radius: 6px; padding: 2px 6px; color: var(--t-sub); }
+.tama-explore-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.tama-explore-choose { margin-left: auto; flex: none; height: 38px; padding: 0 14px; font-size: 13px; }
+.tama-explore-badge { font-size: 10px; background: #FFF1C9; border-radius: 6px; padding: 2px 6px; color: #8A6A10; }
+.tama-explore-saved { font-size: 13px; font-weight: 700; color: #2E7D4F; }
+.tama-explore-safety { max-width: 100%; }
+.tama-explore-foot { line-height: 1.6; }
+
+/* G4：記録から見つける */
+.tama-discover { display: flex; flex-direction: column; gap: 8px; border: 2px solid var(--t-main-soft); }
+.tama-discover-short { background: #FFF6E6; border-radius: 10px; padding: 8px 10px; }
+.tama-explore-or { margin-top: 4px; color: var(--t-sub); }
+.tama-discover-themes { display: flex; flex-direction: column; gap: 6px; }
+.tama-discover-theme { font-size: 13px; font-weight: 800; background: var(--t-main-soft); color: var(--t-main-dark); border-radius: 999px; padding: 4px 10px; }
+.tama-discover-evidence { background: #F2F7FF; border-radius: 10px; padding: 8px 10px; }
+.tama-discover-evidence ul { margin: 4px 0 0; padding-left: 16px; font-size: 12px; line-height: 1.6; color: #4A4A5A; }
+
+/* iPhoneは16px未満の入力欄にフォーカスすると画面を拡大するので、入力欄は16pxにする */
+.tama-chat-form textarea, .tama-explore-form textarea { font-size: 16px; }
+
+
+/* ===== C-5 Sランクのヒント（押すと開く）と「ランクって？」（Henkou.dc.html ④・⑤） ===== */
+.tama-hints { display: flex; flex-direction: column; gap: 6px; }
+.tama-hints-bar { display: flex; align-items: center; gap: 8px; }
+.tama-hints-toggle {
+  flex: 1;
+  min-height: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 18px;
+  background: #FFFFFF;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--t-text, #4A3E3A);
+  text-align: left;
+}
+.tama-hints-arrow { color: #8A7A72; font-size: 12px; font-weight: 800; white-space: nowrap; }
+.tama-rank-info {
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1.5px solid #F0D0D8;
+  border-radius: 14px;
+  background: #FFFFFF;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 800;
+  color: #D0607A;
+  white-space: nowrap;
+}
+.tama-hints-list {
+  margin: 0;
+  padding: 10px 14px 12px;
+  list-style: none;
+  background: #FFFFFF;
+  border-radius: 18px;
+  border-top: 1.5px dashed #F1E6DA;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #4A3E3A;
+}
+.tama-hints-list li { display: flex; flex-wrap: wrap; column-gap: 0; }
+.tama-hints-ex { flex-basis: 100%; font-size: 11.5px; color: #8A7A72; }
+
+.tama-sheet-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(40, 30, 28, 0.45);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+.tama-sheet {
+  width: 100%;
+  max-width: 480px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  background: #FFFFFF;
+  color: #4A3E3A;
+  border-radius: 26px 26px 0 0;
+  padding: 18px 18px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.tama-sheet-grip { align-self: center; width: 40px; height: 5px; border-radius: 3px; background: #E6DCD2; }
+.tama-sheet-title { font-size: 18px; font-weight: 900; }
+.tama-sheet-lead { font-size: 13px; line-height: 1.7; }
+.tama-sheet-axes { background: #FDF8F4; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.tama-sheet-axis { font-size: 12px; font-weight: 900; }
+.tama-sheet-levels { font-size: 11px; color: #6B6358; line-height: 1.55; }
+.tama-sheet-ranks { display: flex; flex-direction: column; gap: 6px; }
+.tama-sheet-rank { display: grid; grid-template-columns: 40px 64px 1fr; gap: 6px; align-items: center; font-size: 12px; }
+.tama-sheet-badge {
+  width: 32px; height: 32px; border-radius: 16px; color: #FFFFFF;
+  font-weight: 900; font-size: 16px; display: flex; align-items: center; justify-content: center;
+}
+.tama-sheet-mult { font-weight: 900; }
+.tama-sheet p { margin: 0; }
+
+/* C-9 進級のお知らせ */
+.tama-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #FFF1C9;
+  border-radius: 14px;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.6;
+}
+.tama-notice > span { flex: 1; }
+.tama-notice-close { border: 0; background: none; font-family: inherit; font-size: 16px; color: #8A7A72; min-width: 32px; min-height: 32px; }
+.tama-season-ended { background: #FFF1C9; border-radius: 12px; padding: 8px 10px; color: #4A3E3A; }
+
+/* C-13 東京科学大学の「学院」の説明（Henkou.dc.html ⑥） */
+.tama-gakuin-note { font-size: 11.5px; line-height: 1.6; background: #FFF4E0; border-radius: 12px; padding: 8px 10px; }
+
+/* ===== C-15 記録のあとの採点（Henkou.dc.html ④） ===== */
+.tama-breakdown { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.tama-breakdown-card { background: #FFFFFF; border: 1.5px solid #F1E6DA; border-radius: 18px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.tama-breakdown-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.tama-breakdown-row { display: grid; grid-template-columns: 78px 30px 1fr; gap: 8px; align-items: start; font-size: 12px; }
+.tama-breakdown-axis { font-weight: 900; }
+.tama-breakdown-quote { color: #6B6358; line-height: 1.55; overflow-wrap: anywhere; }
+.tama-dots { display: flex; gap: 3px; padding-top: 3px; }
+.tama-dots > span { width: 11px; height: 11px; border-radius: 6px; background: #F1E6DA; }
+.tama-dots > span.on { background: #D0607A; }
+.tama-breakdown-hint { background: #FFFFFF; border: 1.5px solid #F1E6DA; border-radius: 18px; overflow: hidden; }
+.tama-breakdown-hint .tama-hints-toggle { border-radius: 0; width: 100%; }
+.tama-breakdown-hint-text { margin: 0; padding: 10px 14px 12px; font-size: 13px; line-height: 1.7; border-top: 1.5px dashed #F1E6DA; }
+.result-formula { margin: 6px 0 0; font-size: 12px; line-height: 1.6; color: #6B6358; }
+.result-formula strong { font-size: 15px; color: #4A3E3A; }
+
+/* ===== ヘルプ（≡メニュー「ヘルプ」） ===== */
+.tama-help-head { display: flex; justify-content: space-between; align-items: center; }
+.tama-help-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; background: #F6EEE6; padding: 4px; border-radius: 14px; }
+.tama-help-tab { height: 34px; border: 0; border-radius: 10px; background: none; font-family: inherit; font-size: 12px; font-weight: 800; color: #8A7A72; }
+.tama-help-tab.on { background: #FFFFFF; color: var(--t-main); box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08); }
+.tama-help-body { display: flex; flex-direction: column; gap: 10px; }
+.tama-help-box { background: #FDF8F4; border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.tama-help-box.is-legend { background: #FFF6DE; }
+.tama-help-box.is-mythic { background: #F3EEFF; }
+.tama-help-h { font-size: 13px; font-weight: 900; }
+.tama-help-text { font-size: 12px; line-height: 1.7; }
+.tama-help-formula { font-size: 12px; font-weight: 800; line-height: 1.6; color: var(--t-main-dark); }
+.tama-help-list { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; line-height: 1.6; }
+.tama-help-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.tama-help-chip { font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: #FFFFFF; border: 1.5px solid #F0D0D8; color: var(--t-main-dark); }
+.tama-help-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.tama-help-step { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; font-weight: 800; text-align: center; }
+.tama-help-num { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--t-main); color: #FFFFFF; font-size: 13px; }
+.tama-help-table { display: flex; flex-direction: column; gap: 8px; }
+.tama-help-row { display: grid; grid-template-columns: 48px 1fr; gap: 8px; align-items: center; font-size: 13px; background: #FDF8F4; border-radius: 12px; padding: 8px 10px; }
+.tama-help-bond { font-weight: 900; color: var(--t-main); }
+
+/* ===== はじめての説明（初期設定の前） ===== */
+.tama-intro-chars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.tama-intro-char { display: flex; flex-direction: column; align-items: center; gap: 0; background: #FFFFFF; border: 1.5px solid #EEE4DA; border-radius: 16px; padding: 4px 2px 8px; }
+.tama-intro-char p { font-size: 11px; font-weight: 900; }
+.tama-intro-char span { font-size: 9.5px; color: var(--t-sub); }
+.tama-intro-grades { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.tama-intro-grade { background: #FFFFFF; border: 1.5px solid #EEE4DA; border-radius: 14px; padding: 8px 4px; text-align: center; }
+.tama-intro-grade strong { display: block; font-size: 20px; font-weight: 900; color: var(--t-main); }
+.tama-intro-grade span { font-size: 11px; color: var(--t-sub); }
+
+/* ===== 冠模試の記録 ===== */
+.tama-mocks { gap: 10px; }
+.tama-white-card.light { background: #FFFFFF; border: 1.5px solid #EEE4DA; border-radius: 18px; padding: 12px; display: flex; flex-direction: column; gap: 8px; color: var(--t-text); }
+.tama-mock-series { display: flex; flex-direction: column; gap: 6px; }
+.tama-mock-series .tama-pill { height: auto; min-height: 44px; padding: 6px 12px; display: flex; justify-content: space-between; align-items: center; text-align: left; gap: 8px; }
+.tama-mock-provider { font-size: 11px; font-weight: 700; opacity: 0.75; white-space: nowrap; }
+.tama-mock-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; }
+.tama-mock-judges { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+.tama-mock-judge { height: 48px; border-radius: 14px; border: 2px solid #EEE4DA; background: #FFFFFF; font-family: inherit; font-size: 20px; font-weight: 900; }
+.tama-mock-judge.on { color: #FFFFFF; }
+.tama-mock-notice { font-size: 13px; font-weight: 800; color: #3E8A50; }
+.tama-mock-owned { display: flex; flex-wrap: wrap; gap: 6px; }
+.tama-mock-history { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.tama-mock-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.tama-mock-step { display: inline-flex; align-items: center; gap: 4px; }
+.tama-mock-arrow { color: #B0A296; font-weight: 900; }
+.tama-mock-chip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid #EEE4DA; background: #FDF8F4; border-radius: 999px; padding: 3px 10px 3px 3px; font-family: inherit; font-size: 11px; color: var(--t-text); }
+.tama-mock-badge { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #FFFFFF; font-weight: 900; font-size: 12px; }
+
+/* 親密度のゲージ（ピンク） */
+.tama-bond { margin-bottom: 4px; display: flex; flex-direction: column; gap: 4px; }
+.tama-bond-head { display: flex; justify-content: space-between; align-items: center; }
+.tama-bond-label { font-size: 13px; font-weight: 900; color: #D0507A; }
+.tama-bond-hearts { display: flex; gap: 1px; font-size: 11px; color: #F3D3DD; }
+.tama-bond-hearts .on { color: #F06A93; }
+.tama-bar.tama-bar-bond { background: #FBE6EC; }
+.tama-bar.tama-bar-bond > div { background: linear-gradient(90deg, #FF9EBB, #F06A93); }
+
+/* ===== 新学年の設定（4月1日） ===== */
+.tama-newyear { display: flex; gap: 10px; align-items: flex-start; background: linear-gradient(135deg, #FFF0F4, #FFF8E8); border: 1.5px solid #F6C9D5; border-radius: 18px; padding: 12px 14px; }
+.tama-newyear-icon { font-size: 26px; line-height: 1; }
+.tama-newyear-title { font-size: 15px; font-weight: 900; color: var(--t-main-dark); margin: 0 0 4px; }
+.tama-newyear-text { font-size: 12px; line-height: 1.7; margin: 0; }
+
+/* ===== 図鑑 ===== */
+.tama-dex-tabs { grid-template-columns: repeat(3, 1fr); }
+.tama-dex-loading { display: grid; place-items: center; padding: 40px 0; }
+.tama-dex-count { display: flex; justify-content: space-between; align-items: baseline; }
+.tama-dex-num { margin: 0; font-size: 26px; font-weight: 900; color: var(--t-main); }
+.tama-dex-of { font-size: 14px; color: #8A7A72; }
+.tama-dex-meter { height: 8px; border-radius: 999px; background: #F3E8E2; overflow: hidden; }
+.tama-dex-meter > div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #F2B8C6, #D0607A); }
+.tama-dex-grid { display: flex; flex-direction: column; gap: 6px; margin-top: 4px; }
+.tama-dex-row { display: grid; grid-template-columns: 54px repeat(3, 1fr); gap: 6px; align-items: stretch; }
+.tama-dex-row.head { align-items: end; }
+.tama-dex-gh { text-align: center; font-size: 12px; font-weight: 900; color: #8A7A72; }
+.tama-dex-uni { display: flex; align-items: center; font-size: 11px; font-weight: 900; line-height: 1.3; }
+.tama-dex-cell { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 2px 5px; border-radius: 14px; border: 1.5px solid transparent; background: #FDF8F4; font-family: inherit; color: inherit; min-width: 0; }
+.tama-dex-cell .tama-char { max-width: 100%; }
+.tama-dex-cell.is-got { background: #FFFFFF; border-color: #F2D8DF; box-shadow: 0 2px 6px rgba(208, 96, 122, 0.12); cursor: pointer; }
+.tama-dex-cell.is-now { background: #FFFFFF; border: 1.5px dashed #E88AA0; cursor: pointer; }
+.tama-dex-cell-name { font-size: 10px; font-weight: 800; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.tama-dex-cell.is-empty .tama-dex-cell-name { color: #C9B8B0; }
+.tama-dex-cell-tag { font-size: 10px; font-weight: 900; color: #FFFFFF; background: #E88AA0; border-radius: 999px; padding: 1px 7px; }
+.tama-dex-shadow { filter: brightness(0) opacity(0.12); }
+
+.tama-dex-card { background: #FFFFFF; border-radius: 24px; overflow: hidden; box-shadow: 0 4px 16px rgba(74, 58, 52, 0.08); scroll-margin-top: 12px; }
+.tama-dex-card.is-current { border: 2px dashed #F2B8C6; }
+.tama-dex-card-top { display: flex; flex-direction: column; align-items: center; padding: 14px 14px 12px; }
+.tama-dex-card-meta { align-self: stretch; display: flex; gap: 6px; align-items: center; }
+.tama-dex-year { font-size: 12px; font-weight: 900; color: #4A3A34; background: rgba(255, 255, 255, 0.8); border-radius: 999px; padding: 2px 10px; }
+.tama-dex-grade { font-size: 12px; font-weight: 900; color: var(--t-main-dark); background: #FFFFFF; border-radius: 999px; padding: 2px 10px; }
+.tama-dex-now { font-size: 11px; font-weight: 900; color: #FFFFFF; background: #E88AA0; border-radius: 999px; padding: 2px 9px; }
+.tama-dex-card-name { margin: 0; font-size: 18px; font-weight: 900; }
+.tama-dex-card-sub { margin: 2px 0 0; font-size: 12px; font-weight: 700; color: #6A5A54; text-align: center; }
+.tama-dex-hearts { margin: 6px 0 0; display: flex; gap: 2px; font-size: 13px; color: #E8DCD6; }
+.tama-dex-hearts .on { color: #E88AA0; }
+.tama-dex-pad { padding: 12px 14px 0; display: flex; flex-direction: column; gap: 10px; }
+.tama-dex-pad:last-child { padding-bottom: 14px; }
+.tama-dex-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+.tama-dex-stat { display: flex; flex-direction: column; align-items: center; background: #FDF8F4; border-radius: 14px; padding: 8px 4px; }
+.tama-dex-stat-v { font-size: 17px; font-weight: 900; }
+.tama-dex-stat-k { font-size: 11px; color: #8A7A72; font-weight: 700; }
+.tama-dex-line { display: flex; justify-content: space-between; gap: 8px; margin: 0; font-size: 13px; }
+.tama-dex-k { color: #8A7A72; font-weight: 700; }
+.tama-dex-v { font-weight: 900; }
+.tama-dex-cat { display: flex; flex-direction: column; gap: 6px; }
+.tama-dex-cat-bar { display: flex; height: 10px; border-radius: 999px; overflow: hidden; background: #F3E8E2; }
+.tama-dex-cat-legend { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: 11px; font-weight: 700; }
+.tama-dex-cat-legend i { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; }
+.tama-dex-months { display: grid; grid-template-columns: repeat(12, 1fr); gap: 3px; align-items: end; }
+.tama-dex-month { display: flex; flex-direction: column; align-items: center; gap: 2px; font-size: 9px; color: #8A7A72; font-weight: 700; }
+.tama-dex-month-bar { width: 100%; height: 44px; display: flex; align-items: flex-end; }
+.tama-dex-month-bar > div { width: 100%; min-height: 2px; border-radius: 3px 3px 1px 1px; background: #E88AA0; }
+.tama-dex-quote { margin: 0; background: #FFF6F8; border-left: 4px solid #F2B8C6; border-radius: 12px; padding: 10px 12px; }
+.tama-dex-quote p { margin: 0; font-size: 13px; line-height: 1.7; font-weight: 700; overflow-wrap: anywhere; }
+.tama-dex-quote footer { margin-top: 4px; font-size: 11px; color: #8A7A72; }
+.tama-mock-chip.static { cursor: default; }
+
+.tama-dex-path { list-style: none; margin: 0; padding: 0 0 0 4px; display: flex; flex-direction: column; }
+.tama-dex-step { position: relative; display: flex; gap: 12px; padding-bottom: 16px; }
+.tama-dex-step::before { content: ""; position: absolute; left: 6px; top: 16px; bottom: 0; width: 2px; background: #F2D8DF; }
+.tama-dex-step:last-child::before { display: none; }
+.tama-dex-dot { flex: none; width: 14px; height: 14px; border-radius: 50%; margin-top: 3px; border: 3px solid #FFFFFF; box-shadow: 0 0 0 1.5px #F2D8DF; }
+.tama-dex-step.is-current .tama-dex-dot { box-shadow: 0 0 0 3px #F6C9D5; }
+.tama-dex-step-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.tama-dex-step-head { margin: 0; display: flex; gap: 6px; align-items: center; }
+.tama-dex-step-head .tama-dex-year, .tama-dex-step-head .tama-dex-grade { background: #FDF8F4; }
+.tama-dex-step-row { display: flex; gap: 10px; align-items: center; }
+.tama-dex-step-row p { margin: 0; }
+.tama-dex-change { font-size: 11px; font-weight: 800; color: #E08A3A; }
+
+/* 右側の3列（あなた／配点／EXP倍率）：何の数字か分かるように見出しを付ける */
+.tama-week-cols { display: grid; grid-template-columns: 42px 42px 44px; gap: 2px; text-align: right; white-space: nowrap; }
+.tama-week-head { margin-bottom: -2px; }
+.tama-week-head .tama-week-cols { font-size: 10px; font-weight: 800; color: var(--t-sub); }
+.tama-week-me { font-weight: 900; color: var(--t-sub); }
+.tama-week-goal { color: var(--t-sub); }
+.tama-week-cols strong { color: var(--t-text); font-weight: 900; }
+.tama-tiny.strong { color: var(--t-main-dark); font-weight: 800; }
+.tama-shiny-mark { color: #E0A21A; }

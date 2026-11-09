@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>学習記録</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1A4A99}a:hover{color:#0F2E66}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 20px 18px; background: #FFF8E8; font-family: 'M PLUS Rounded 1c', sans-serif; color: #1F2328; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: center; gap: 10px">
+<a href="Launch.dc.html" aria-label="もどる" style="display: flex; width: 44px; height: 44px; align-items: center; justify-content: center; text-decoration: none; font-size: 22px; color: #1F2328">‹</a>
+<h1 style="margin: 0; font-size: 20px; font-weight: 800">勉強を記録</h1>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-size: 13px; font-weight: 800">教科（1つ選ぶ）</p>
+<sc-for list="{{groups}}" as="g" hint-placeholder-count="6">
+<div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap">
+<span style="width: 40px; font-size: 11px; font-weight: 700; color: {{g.c}}">{{g.n}}</span>
+<sc-for list="{{g.items}}" as="s" hint-placeholder-count="3">
+<button style="height: 34px; padding: 0 12px; border-radius: 17px; border: {{s.bd}}; background: {{s.bg}}; color: {{s.fg}}; font-family: inherit; font-size: 13px; font-weight: 700">{{s.n}}</button>
+</sc-for>
+</div>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px">
+<p style="margin: 0; font-size: 13px; font-weight: 800">時間</p>
+<div style="display: flex; gap: 8px">
+<button style="flex: 1; height: 44px; border-radius: 12px; border: 2px solid #DAD6CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700">10分</button>
+<button style="flex: 1; height: 44px; border-radius: 12px; border: 2px solid #1F2328; background: #1F2328; color: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700">20分</button>
+<button style="flex: 1; height: 44px; border-radius: 12px; border: 2px solid #DAD6CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700">30分</button>
+<button style="flex: 1; height: 44px; border-radius: 12px; border: 2px solid #DAD6CC; background: #FFFFFF; font-family: inherit; font-size: 14px; font-weight: 700">60分</button>
+</div>
+<label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5B5F66">それ以外<input type="number" value="20" min="1" max="600" step="1" inputmode="numeric" style="width: 80px; height: 36px; border-radius: 10px; border: 2px solid #DAD6CC; padding: 0 10px; font-family: inherit; font-size: 14px"> 分（1分単位で入力できる）</label>
+</div>
+
+<label style="display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 800">つまずいた単元（任意）
+<input type="text" value="力学：運動方程式の立て方" style="height: 40px; border-radius: 10px; border: 2px solid #DAD6CC; padding: 0 12px; font-family: inherit; font-size: 14px; font-weight: 400">
+</label>
+
+<div style="background: #E3EDFC; border: 2px solid #2563C9; border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #1A4A99">この記録で変わる数字</p>
+<div style="display: flex; gap: 10px; align-items: center">
+<svg width="64" height="64" viewBox="0 0 160 160" role="img" aria-label="成体のチクまる" style="flex-shrink: 0">
+<defs><radialGradient id="rc1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#FFF6E6"></stop><stop offset=".55" stop-color="#F6C88E"></stop><stop offset="1" stop-color="#D08A4E"></stop></radialGradient></defs>
+<ellipse cx="66" cy="138" rx="9" ry="5" fill="#DC9A60"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#DC9A60"></ellipse>
+<circle cx="80" cy="100" r="40" fill="url(#rc1)"></circle>
+<ellipse cx="80" cy="62" rx="19" ry="4.5" fill="#8A5A2B"></ellipse><rect x="71" y="40" width="18" height="22" rx="2" fill="#F4EAD2"></rect><path d="M68 40 L80 29 L92 40 Z" fill="#A86A34"></path><circle cx="80" cy="50" r="5.8" fill="#FFFFFF"></circle>
+<ellipse cx="65" cy="80" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse>
+<ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse>
+<ellipse cx="58" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M74 110 Q80 118 86 110 Z" fill="#E8687A"></path>
+</svg>
+<p style="margin: 0; font-size: 13px; line-height: 1.7">物理20分 × 1.4（理科）× 1.05（連続6日）＝29EXP<br>チクまる：22,600 → 22,629 EXP<br>（最終進化まで あと約100時間・8,571EXP）<br>今日の合計が53分（目安の1/4）を超えると「続けた日」に<br>理科の比率（7日）：20.0% → 22.6%</p>
+</div>
+</div>
+
+<p style="margin: 0; font-size: 12px; color: #8A7A72; line-height: 1.6">今日の目安（3.5時間）を達成した日だけ、記録のあとに「ごほうびの着替え」が開きます。ふだんはメニュー（≡）の中にあります</p>
+
+<button style="margin-top: auto; height: 54px; border-radius: 27px; border: none; background: #D0607A; color: #FFFFFF; font-family: inherit; font-size: 16px; font-weight: 800">記録してチクまるにEXPをあげる</button>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+renderVals() {
+const g = [
+['数学', '#2563C9', ['数学', '情報']],
+['理科', '#2E9E6A', ['物理', '化学', '生物', '地学']],
+['英語', '#E0558E', ['英語']],
+['国語', '#D64545', ['現代文', '古典']],
+['地歴', '#D9822B', ['日本史', '世界史', '地理', '公民']],
+['小論', '#8A63CF', ['小論文・総合問題']]
+];
+const on = '物理';
+return { groups: g.map(([n, c, items]) => ({ n, c, items: items.map(x => ({ n: x, bg: x === on ? c : '#FFFFFF', fg: x === on ? '#FFFFFF' : '#1F2328', bd: x === on ? '2px solid ' + c : '2px solid #DAD6CC' })) })) };
+}
+}
+</script>
+</body>
+</html>

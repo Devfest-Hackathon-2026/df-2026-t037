@@ -1,0 +1,16 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="たまご。中で何かが育っている、点の目のたまご">
+<defs><radialGradient id="lg1" cx="38%" cy="28%" r="80%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset=".6" stop-color="#FFF1DE"></stop><stop offset="1" stop-color="#E8C8A0"></stop></radialGradient></defs>
+<path class="twinkle" d="M24 40 L26 46 L32 48 L26 50 L24 56 L22 50 L16 48 L22 46 Z" fill="#F5C842"></path>
+<path class="twinkle" style="animation-delay: .8s" d="M136 30 L137.5 34 L141.5 35.5 L137.5 37 L136 41 L134.5 37 L130.5 35.5 L134.5 34 Z" fill="#F2A6B8"></path>
+<ellipse class="shadow" cx="80" cy="148" rx="34" ry="5.5" fill="#6A4A2A" opacity=".14"></ellipse>
+<g class="wobble">
+<path d="M80 20 C112 20 128 70 128 102 C128 130 106 146 80 146 C54 146 32 130 32 102 C32 70 48 20 80 20 Z" fill="url(#lg1)"></path>
+<circle cx="58" cy="66" r="7" fill="#9CC4EE" opacity=".55"></circle><circle cx="104" cy="58" r="5" fill="#F2A6B8" opacity=".6"></circle><circle cx="110" cy="118" r="6" fill="#A8DA8C" opacity=".55"></circle><circle cx="48" cy="124" r="4.5" fill="#F5C842" opacity=".6"></circle>
+<path d="M50 84 L60 76 L68 86 L78 74 L88 86 L98 76 L110 84" fill="none" stroke="#D8B48A" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"></path>
+<ellipse cx="62" cy="44" rx="11" ry="7" fill="#FFFFFF" opacity=".8"></ellipse>
+<g class="blink"><ellipse cx="68" cy="104" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="104" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="101.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="101.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="116" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="116" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 114 Q80 118 84 114" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>

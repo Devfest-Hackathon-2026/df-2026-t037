@@ -1,0 +1,61 @@
+// File: firestore.rules
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+    function validGrade() {
+      return request.resource.data.grade in ['高校1年生', '高校2年生', '高校3年生'];
+    }
+
+    match /users/{uid} {
+      // growthExp・stage・bond・plan・streak は、バックエンド（Admin SDK）だけが書く（totalExp と同じ扱い）
+      // 着替え（equipped・outfits・coolForm）は本人が変えられるが、勉強タイマー中（timerStartedAt あり）は変えられない
+      function outfitOnly() {
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['equipped', 'outfits', 'coolForm']);
+      }
+      function timerOnly() {
+        return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['timerStartedAt']);
+      }
+      function timerRunning() {
+        return resource.data.get('timerStartedAt', null) != null;
+      }
+
+      allow read: if isOwner(uid);
+
+      // 初回の学年登録：grade と createdAt だけ書き込める
+      allow create: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['grade', 'createdAt'])
+        && validGrade();
+
+      // 学年の変更：grade 以外（totalExp など）は変更できない
+      // 着替え：タイマー中でなければ equipped・outfits・coolForm だけ変えられる
+      // 勉強タイマー：timerStartedAt だけ変えられる
+      allow update: if (isOwner(uid)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['grade'])
+          && validGrade())
+        || (isOwner(uid) && outfitOnly() && !timerRunning())
+        || (isOwner(uid) && timerOnly());
+
+      match /study_logs/{logId} {
+        allow read: if isOwner(uid);
+        // 書き込みはCloud Run（Admin SDK）だけ。Admin SDKにはルールが適用されない
+        allow write: if false;
+      }
+
+      // 冠模試の記録（本人だけ読める。書き込みはサーバーだけ。判定からレジェンド装備を決めるため）
+      match /mocks/{mockId} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+
+      // 図鑑：シーズンが終わったキャラ（C-9。users/{uid}/dex/{年度}）。書き込みはサーバーだけ
+      match /dex/{fiscalYear} {
+        allow read: if isOwner(uid);
+        allow write: if false;
+      }
+    }
+  }
+}

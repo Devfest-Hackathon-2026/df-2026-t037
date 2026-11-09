@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>進化の例 東大</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#D0607A}a:hover{color:#A0405A}
+@keyframes squish{0%,100%{transform:scale(1,1)}50%{transform:scale(1.04,.96)}}
+@keyframes shadow{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.06)}}
+@keyframes blink{0%,95%,100%{transform:scaleY(1)}97%{transform:scaleY(.1)}}
+@keyframes sway{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@keyframes twinkle{0%,100%{opacity:.2}50%{opacity:1}}
+@media (prefers-reduced-motion: no-preference){
+.squish{animation:squish 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.shadow{animation:shadow 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+.blink{animation:blink 4s linear infinite;transform-box:fill-box;transform-origin:center}
+.sway{animation:sway 2s ease-in-out infinite;transform-box:fill-box;transform-origin:50% 100%}
+.twinkle{animation:twinkle 1.6s ease-in-out infinite}
+}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1240px; box-sizing: border-box; padding: 40px; background: #FDF8F4; font-family: 'M PLUS Rounded 1c', sans-serif; color: #4A3E3A; display: flex; flex-direction: column; gap: 20px">
+<div>
+<p style="margin: 0; font-size: 14px; font-weight: 800; color: #D0607A">進化の例｜東京大学のギンまる</p>
+<h1 style="margin: 2px 0 0; font-size: 32px; font-weight: 900">たねから育つ2回の進化と、6つの科類の違い</h1>
+</div>
+
+<div style="background: #FFFFFF; border-radius: 26px; padding: 20px 26px; display: flex; align-items: center; justify-content: space-around">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<div style="width: 250px; height: 250px; border-radius: 125px; background: #EEF5FC; display: flex; align-items: center; justify-content: center">
+<svg width="210" height="210" viewBox="0 0 160 160" role="img" aria-label="ギンまめ。銀杏のふたばが出た小さな豆のようなキャラ">
+<defs><radialGradient id="b1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F0F6FD"></stop><stop offset=".55" stop-color="#B4D2F2"></stop><stop offset="1" stop-color="#7AA4D6"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="140" rx="30" ry="5" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<g class="sway"><path d="M80 86 Q80 78 80 74" stroke="#7AAE5A" stroke-width="2.5" stroke-linecap="round"></path><ellipse cx="73" cy="72" rx="7" ry="4" fill="#9ED07A" transform="rotate(-25 73 72)"></ellipse><ellipse cx="87" cy="72" rx="7" ry="4" fill="#9ED07A" transform="rotate(25 87 72)"></ellipse></g>
+<ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#b1)"></ellipse>
+<ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 20px; font-weight: 900">ギンまめ</p>
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #8A7A72">幼体｜0EXP〜｜豆とふたば</p>
+</div>
+<p style="margin: 0; font-size: 14px; font-weight: 800; color: #B0A49A; text-align: center; line-height: 1.6">{{a1h}}<br>{{a1e}}<br>（高3・4月に開始）<br>▶</p>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<div style="width: 250px; height: 250px; border-radius: 125px; background: #EEF5FC; display: flex; align-items: center; justify-content: center">
+<svg width="220" height="220" viewBox="0 0 160 160" role="img" aria-label="成体のギンまる。小さな銀杏の葉と短い手足">
+<defs><radialGradient id="b2" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#EAF3FC"></stop><stop offset=".55" stop-color="#A6CAF0"></stop><stop offset="1" stop-color="#6A98CE"></stop></radialGradient><linearGradient id="b2l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#E8F09A"></stop><stop offset="1" stop-color="#C8B42A"></stop></linearGradient></defs>
+<ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="66" cy="138" rx="9" ry="5" fill="#7AA6D8"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#7AA6D8"></ellipse>
+<g class="sway"><path d="M80 62 Q79 56 80 52" stroke="#A8740C" stroke-width="2.2" stroke-linecap="round"></path><path d="M80 52 L70 40 Q75 35 80 39 Q85 35 90 40 Z" fill="url(#b2l)"></path></g>
+<circle cx="80" cy="100" r="40" fill="url(#b2)"></circle>
+<ellipse cx="42" cy="106" rx="6.5" ry="9" fill="#8CB6E4" transform="rotate(20 42 106)"></ellipse><ellipse cx="118" cy="106" rx="6.5" ry="9" fill="#8CB6E4" transform="rotate(-20 118 106)"></ellipse>
+<ellipse cx="65" cy="78" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
+<circle cx="66.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle><circle cx="90.6" cy="99.6" r="1.6" fill="#FFFFFF"></circle>
+<ellipse cx="58" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="102" cy="114" rx="6.5" ry="3.8" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 112 Q80 116 84 112" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 20px; font-weight: 900">ギンまる</p>
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #8A7A72">成体｜1回目の進化後｜手足と若葉</p>
+</div>
+<p style="margin: 0; font-size: 14px; font-weight: 800; color: #B0A49A; text-align: center; line-height: 1.6">{{a2h}}<br>{{a2e}}<br>（高3・4月に開始）<br>▶</p>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px">
+<div style="width: 270px; height: 270px; border-radius: 135px; background: #E6F0FB; border: 3px solid #F2D06A; display: flex; align-items: center; justify-content: center">
+<svg width="230" height="230" viewBox="0 0 160 160" role="img" aria-label="最終進化のギンまる。大きな金色の銀杏の葉と光の粒">
+<defs><radialGradient id="b3" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#E6F1FC"></stop><stop offset=".55" stop-color="#9CC4EE"></stop><stop offset="1" stop-color="#5F8FC8"></stop></radialGradient><linearGradient id="b3l" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFE48A"></stop><stop offset="1" stop-color="#E0A21A"></stop></linearGradient></defs>
+<path class="twinkle" d="M24 46 L26 52 L32 54 L26 56 L24 62 L22 56 L16 54 L22 52 Z" fill="#F5C842"></path>
+<path class="twinkle" style="animation-delay: .8s" d="M136 40 L137.5 44 L141.5 45.5 L137.5 47 L136 51 L134.5 47 L130.5 45.5 L134.5 44 Z" fill="#F5C842"></path>
+<ellipse class="shadow" cx="80" cy="148" rx="42" ry="6" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#6F9CD2"></ellipse>
+<g class="sway"><path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="url(#b3l)"></path></g>
+<circle cx="80" cy="92" r="50" fill="url(#b3)"></circle>
+<ellipse cx="31" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="11" fill="#86B2E2" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M75 106 Q77.5 109 80 106 Q82.5 109 85 106" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 20px; font-weight: 900; color: #D0607A">ギンまる（金の葉）</p>
+<p style="margin: 0; font-size: 13px; font-weight: 800; color: #8A7A72">最終進化｜金の銀杏と光の粒</p>
+</div>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<h2 style="margin: 0; font-size: 22px; font-weight: 900">6つの科類：リボンの色と胸のピンで分ける</h2>
+<p style="margin: 0; font-size: 12px; color: #8A7A72">ピン＝その科類から主に進む学部の学問のモチーフ</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 14px">
+<sc-for list="{{kr}}" as="k" hint-placeholder-count="6">
+<div style="background: #FFFFFF; border-radius: 22px; padding: 12px; display: flex; flex-direction: column; align-items: center; gap: 4px">
+<div style="width: 150px; height: 150px; border-radius: 75px; background: {{k.bg}}; display: flex; align-items: center; justify-content: center">
+<svg width="140" height="140" viewBox="0 0 160 160" role="img" aria-label="{{k.alt}}">
+<g class="squish">
+<path d="M80 44 Q78 36 80 30" fill="none" stroke="#A8740C" stroke-width="2.5" stroke-linecap="round"></path><path d="M80 30 L64 10 Q72 2 80 8 Q88 2 96 10 Z" fill="#F2C230"></path>
+<circle cx="80" cy="92" r="50" fill="#9CC4EE"></circle>
+<circle cx="80" cy="92" r="50" fill="#FFFFFF" opacity=".18"></circle>
+<ellipse cx="62" cy="64" rx="15" ry="9" fill="#FFFFFF" opacity=".6"></ellipse>
+<path d="M80 40 L67 33 L67 47 Z M80 40 L93 33 L93 47 Z" fill="{{k.rc}}"></path><circle cx="80" cy="40" r="3.2" fill="{{k.rd}}"></circle>
+<g class="blink"><ellipse cx="66" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="94" cy="94" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="64.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle><circle cx="92.5" cy="91.5" r="1.8" fill="#FFFFFF"></circle>
+<ellipse cx="55" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="105" cy="108" rx="7.5" ry="4.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M76 106 Q80 110 84 106" fill="none" stroke="#2B2632" stroke-width="2" stroke-linecap="round"></path>
+<circle cx="106" cy="124" r="13" fill="#FFFFFF"></circle>
+<g opacity="{{k.o1}}" stroke="#B8862B" stroke-width="1.6" fill="none" stroke-linecap="round"><path d="M106 116 L106 132 M98 119 L114 119"></path><path d="M98 119 L95 126 L101 126 Z M114 119 L111 126 L117 126 Z" fill="#F2C230"></path></g>
+<g opacity="{{k.o2}}"><rect x="99" y="124" width="4" height="7" fill="#3FAE7A"></rect><rect x="104.5" y="120" width="4" height="11" fill="#3FAE7A"></rect><rect x="110" y="116" width="4" height="15" fill="#3FAE7A"></rect></g>
+<g opacity="{{k.o3}}"><rect x="101" y="115" width="10" height="17" rx="1.5" fill="#FFF6EC" stroke="#D9C8B0" stroke-width="1"></rect><path d="M106 115 L106 132" stroke="#F29AB4" stroke-width="2.4"></path></g>
+<g opacity="{{k.o4}}"><path d="M98 131 L114 131 L98 115 Z" fill="#5DB2EA"></path><path d="M101.5 128 L107 128 L101.5 122.5 Z" fill="#FFFFFF"></path></g>
+<g opacity="{{k.o5}}"><path d="M103 115 L109 115 L109 120 L114 130 Q114 132 112 132 L100 132 Q98 132 98 130 L103 120 Z" fill="#E8F4FA" stroke="#9AB4C4" stroke-width="1"></path><path d="M100.5 126 L111.5 126 L114 130 Q114 132 112 132 L100 132 Q98 132 98 130 Z" fill="#8CCB5A"></path></g>
+<g opacity="{{k.o6}}" fill="none" stroke="#6A7480" stroke-width="1.8" stroke-linecap="round"><path d="M100 115 L100 121 Q100 127 106 127 Q112 127 112 121 L112 115"></path><path d="M106 127 L106 130"></path><circle cx="106" cy="131.5" r="2.4" fill="#F28C6B" stroke="none"></circle></g>
+</g>
+</svg>
+</div>
+<p style="margin: 4px 0 0; font-size: 18px; font-weight: 900">{{k.n}}</p>
+<p style="margin: 0; font-size: 12px; font-weight: 800; color: {{k.rd}}">{{k.look}}</p>
+<p style="margin: 0; font-size: 11px; color: #8A7A72; text-align: center; line-height: 1.5">{{k.why}}</p>
+<p style="margin: 4px 0 0; font-size: 13px; font-weight: 900">最終進化まで {{k.h}}</p>
+<p style="margin: 0; font-size: 11px; font-weight: 800">{{k.e}}</p>
+<p style="margin: 0; font-size: 11px; color: #8A7A72">合格最低点 {{k.m}}｜学部補正 ×{{k.u}}</p>
+</div>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px">
+<div style="background: #FFFFFF; border-radius: 22px; padding: 14px 18px; font-size: 13px; line-height: 1.75">
+<p style="margin: 0; font-size: 16px; font-weight: 900">文科一〜三類（2次の配点が共通）</p>
+国語・地歴 ×1.55 ／ 英語 ×1.27 ／ 数学 ×1.18（配点が同じなので倍率は共通、平均倍率1.41）<br>学部補正＝5科目1.05×大学内補正。大学内補正＝その科類の合格最低点÷6科類の平均（321.05点）
+</div>
+<div style="background: #FFFFFF; border-radius: 22px; padding: 14px 18px; font-size: 13px; line-height: 1.75">
+<p style="margin: 0; font-size: 16px; font-weight: 900">理科一〜三類（2次の配点が共通）</p>
+数学・理科・英語 ×1.27 ／ 国語 ×1.18（配点が同じなので倍率は共通、平均倍率1.25）<br>文科と同じ式。勉強時間は文科とほぼ同じで、EXPは倍率のぶんだけ数字が小さい。合格最低点は2026年度・550点満点（河合塾Kei-Net）
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1240}}'>
+class Component extends DCLogic {
+renderVals() {
+const d = [
+['文科一類', '紺のリボン・天秤', '法学・政治学の天秤', '#2F4A7A', '#1E3360', '#E8ECF6', 1, 325.01],
+['文科二類', '緑のリボン・グラフ', '経済学の棒グラフ', '#3FAE7A', '#24804F', '#E8F6EE', 2, 330.47],
+['文科三類', '桜のリボン・しおり', '文学・教育学の本', '#F29AB4', '#C8507A', '#FCEAF0', 3, 316.32],
+['理科一類', '水色のリボン・三角定規', '工学・理学の製図', '#5DB2EA', '#2E7CB8', '#E3F1FC', 4, 303.39],
+['理科二類', '若草のリボン・フラスコ', '農学・薬学・生物の実験', '#8CCB5A', '#4E8E28', '#EEF7E4', 5, 305.0],
+['理科三類', '珊瑚色のリボン・聴診器', '医学の聴診器', '#F28C6B', '#C25A3A', '#FDEEE8', 6, 346.09]
+];
+const mean = d.reduce((a, x) => a + x[7], 0) / d.length;
+const h1 = 8 * 30, h2 = 8 * Math.ceil(0.45 * 330), C = 1.15;
+const r10 = v => Math.round(v / 10) * 10, r100 = v => Math.round(v / 100) * 100;
+const kr = d.map(([n, look, why, rc, rd, bg, i, ms]) => { const k = 1.05 * ms / mean, avg = i <= 3 ? 1.4078 : 1.2511; return { n, look, why, rc, rd, bg, k, avg, m: ms.toFixed(2), u: k.toFixed(3), h: '約' + r10(h2 * k) + '時間', e: r100(h1 * k * 60 * avg * C).toLocaleString() + ' / ' + r100(h2 * k * 60 * avg * C).toLocaleString() + 'EXP', alt: n + 'のギンまる。' + look, o1: i === 1 ? 1 : 0, o2: i === 2 ? 1 : 0, o3: i === 3 ? 1 : 0, o4: i === 4 ? 1 : 0, o5: i === 5 ? 1 : 0, o6: i === 6 ? 1 : 0 }; });
+const rng = (h, f) => { const v = kr.map(x => f(x, h)); return [Math.min(...v), Math.max(...v)]; };
+const hr = h => rng(h, (x, hh) => r10(hh * x.k)), er = h => rng(h, (x, hh) => r100(hh * x.k * 60 * x.avg * C));
+const [a, b] = hr(h1), [c, e] = er(h1), [f, g] = hr(h2), [j, l] = er(h2);
+return { kr, a1h: '勉強' + a + '〜' + b + '時間', a1e: c.toLocaleString() + '〜' + e.toLocaleString() + 'EXP', a2h: '勉強' + f + '〜' + g + '時間', a2e: j.toLocaleString() + '〜' + l.toLocaleString() + 'EXP' };
+}
+}
+</script>
+</body>
+</html>

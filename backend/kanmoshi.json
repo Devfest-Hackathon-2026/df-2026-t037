@@ -1,0 +1,152 @@
+{
+  "note": "志望大学の冠模試（大学別模試）。2026年度の実施予定（河合塾・駿台・代ゼミ・東進）を、日程まとめの2サイトで照合して作成。年度ごとに見直すこと。frontend/src/game/kanmoshi.json と backend/kanmoshi.json は同じ内容",
+  "sources": [
+    "https://www.owl-edinfo.com/2027-university-entrance-exam-mocktest-schedule/",
+    "https://bunkeijukentaisaku.com/2026/03/17/"
+  ],
+  "judges": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E"
+  ],
+  "universities": {
+    "todai": [
+      {
+        "id": "kawai-todai-open",
+        "name": "東大入試オープン",
+        "provider": "河合塾",
+        "rounds": 2
+      },
+      {
+        "id": "sundai-todai-jissen",
+        "name": "東大入試実戦模試",
+        "provider": "駿台・Z会",
+        "rounds": 2
+      },
+      {
+        "id": "yozemi-todai-pre",
+        "name": "東大入試プレ",
+        "provider": "代ゼミ",
+        "rounds": 2
+      },
+      {
+        "id": "toshin-todai-honban",
+        "name": "東大本番レベル模試",
+        "provider": "東進",
+        "rounds": 4
+      }
+    ],
+    "kyoto": [
+      {
+        "id": "kawai-kyoto-open",
+        "name": "京大入試オープン",
+        "provider": "河合塾",
+        "rounds": 2
+      },
+      {
+        "id": "sundai-kyoto-jissen",
+        "name": "京大入試実戦模試",
+        "provider": "駿台・Z会",
+        "rounds": 2
+      },
+      {
+        "id": "yozemi-kyoto-pre",
+        "name": "京大入試プレ",
+        "provider": "代ゼミ",
+        "rounds": 2
+      },
+      {
+        "id": "toshin-kyoto-honban",
+        "name": "京大本番レベル模試",
+        "provider": "東進",
+        "rounds": 4
+      }
+    ],
+    "osaka": [
+      {
+        "id": "kawai-osaka-open",
+        "name": "阪大入試オープン",
+        "provider": "河合塾",
+        "rounds": 1
+      },
+      {
+        "id": "sundai-osaka-jissen",
+        "name": "阪大入試実戦模試",
+        "provider": "駿台",
+        "rounds": 1
+      },
+      {
+        "id": "yozemi-osaka-pre",
+        "name": "阪大入試プレ",
+        "provider": "代ゼミ",
+        "rounds": 1
+      },
+      {
+        "id": "toshin-osaka-honban",
+        "name": "阪大本番レベル模試",
+        "provider": "東進",
+        "rounds": 3
+      }
+    ],
+    "hitotsu": [
+      {
+        "id": "kawai-hitotsu-open",
+        "name": "一橋大入試オープン",
+        "provider": "河合塾",
+        "rounds": 1
+      },
+      {
+        "id": "toshin-hitotsu-honban",
+        "name": "一橋大本番レベル模試",
+        "provider": "東進",
+        "rounds": 3
+      }
+    ],
+    "kagaku": [
+      {
+        "id": "kawai-kagaku-open",
+        "name": "東京科学大入試オープン",
+        "provider": "河合塾",
+        "rounds": 1
+      },
+      {
+        "id": "toshin-kagaku-honban",
+        "name": "東京科学大本番レベル模試",
+        "provider": "東進",
+        "rounds": 3
+      }
+    ],
+    "waseda": [
+      {
+        "id": "yozemi-waseda-pre",
+        "name": "早大入試プレ",
+        "provider": "代ゼミ・駿台",
+        "rounds": 1
+      },
+      {
+        "id": "toshin-sokei-level",
+        "name": "早大・慶大レベル模試",
+        "provider": "東進",
+        "rounds": 4
+      }
+    ],
+    "keio": [
+      {
+        "id": "yozemi-keio-pre",
+        "name": "慶大入試プレ",
+        "provider": "代ゼミ・駿台",
+        "rounds": 1
+      },
+      {
+        "id": "toshin-sokei-level",
+        "name": "早大・慶大レベル模試",
+        "provider": "東進",
+        "rounds": 4
+      }
+    ],
+    "tufs": [],
+    "chiba": []
+  }
+}

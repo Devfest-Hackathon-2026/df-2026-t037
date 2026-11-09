@@ -1,0 +1,15 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="ペンまめ。頭に白い羽がひと房ある紺色の豆">
+<defs><radialGradient id="k4a" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#9CB0E2"></stop><stop offset=".55" stop-color="#5068A8"></stop><stop offset="1" stop-color="#2A3A70"></stop></radialGradient><radialGradient id="k4aw" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset="1" stop-color="#D6DCEA"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="142" rx="30" ry="5" fill="#1E2D5E" opacity=".16"></ellipse>
+<g class="squish">
+<ellipse cx="70" cy="140" rx="6.5" ry="3.8" fill="#F0B848"></ellipse><ellipse cx="90" cy="140" rx="6.5" ry="3.8" fill="#F0B848"></ellipse>
+<ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#k4a)"></ellipse>
+<ellipse cx="80" cy="121" rx="22" ry="18" fill="url(#k4aw)"></ellipse>
+<path d="M78 85 Q73 75 80 73 Q78 79 85 80" fill="none" stroke="#FFFFFF" stroke-width="2.6" stroke-linecap="round"></path>
+<ellipse cx="68" cy="96" rx="8" ry="4.5" fill="#FFFFFF" opacity=".35"></ellipse>
+<g class="blink"><ellipse cx="71" cy="112" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="89" cy="112" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="69.8" cy="110" r="1.4" fill="#FFFFFF"></circle><circle cx="87.8" cy="110" r="1.4" fill="#FFFFFF"></circle>
+<path d="M77 119 L83 119 L80 123 Z" fill="#F0B848"></path>
+<ellipse cx="64" cy="121" rx="5" ry="3" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="96" cy="121" rx="5" ry="3" fill="#FF8FA3" opacity=".5"></ellipse>
+</g>
+</svg>

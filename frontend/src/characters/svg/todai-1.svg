@@ -1,0 +1,13 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="ギンまめ。銀杏のふたばが出た小さな豆のようなキャラ">
+<defs><radialGradient id="b1" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#F0F6FD"></stop><stop offset=".55" stop-color="#B4D2F2"></stop><stop offset="1" stop-color="#7AA4D6"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="140" rx="30" ry="5" fill="#3A4A6A" opacity=".14"></ellipse>
+<g class="squish">
+<g class="sway"><path d="M80 86 Q80 78 80 74" stroke="#7AAE5A" stroke-width="2.5" stroke-linecap="round"></path><ellipse cx="73" cy="72" rx="7" ry="4" fill="#9ED07A" transform="rotate(-25 73 72)"></ellipse><ellipse cx="87" cy="72" rx="7" ry="4" fill="#9ED07A" transform="rotate(25 87 72)"></ellipse></g>
+<ellipse cx="80" cy="112" rx="32" ry="29" fill="url(#b1)"></ellipse>
+<ellipse cx="68" cy="96" rx="9" ry="5" fill="#FFFFFF" opacity=".65"></ellipse>
+<g class="blink"><ellipse cx="70" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse><ellipse cx="90" cy="114" rx="3.6" ry="5" fill="#2B2632"></ellipse></g>
+<circle cx="68.8" cy="112" r="1.4" fill="#FFFFFF"></circle><circle cx="88.8" cy="112" r="1.4" fill="#FFFFFF"></circle>
+<ellipse cx="62" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="98" cy="124" rx="5.5" ry="3.2" fill="#FF8FA3" opacity=".5"></ellipse>
+<path d="M77 123 Q80 126 83 123" fill="none" stroke="#2B2632" stroke-width="1.8" stroke-linecap="round"></path>
+</g>
+</svg>

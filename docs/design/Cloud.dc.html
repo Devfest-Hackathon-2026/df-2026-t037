@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Google Cloudでの作り方</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#1A4A99}a:hover{color:#0F2E66}
+code{font-family:ui-monospace,Menlo,monospace;font-size:12px}
+</style>
+</helmet>
+<div style="width: 1280px; height: 1240px; box-sizing: border-box; padding: 48px 56px; background: #F6F4EE; font-family: 'M PLUS Rounded 1c', sans-serif; color: #1F2328; display: flex; flex-direction: column; gap: 22px">
+<div>
+<p style="margin: 0 0 6px; font-size: 15px; font-weight: 700; color: #5B5F66">Google Cloud／Firebaseでの構成</p>
+<h1 style="margin: 0; font-size: 32px; font-weight: 800">数字は全部サーバーのコードで計算し、Geminiは「言い方」だけを作る</h1>
+</div>
+
+<div style="display: flex; align-items: stretch; gap: 10px">
+<div style="flex: 1; background: #FFFFFF; border: 2px solid #1F2328; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #5B5F66">画面</p>
+<p style="margin: 0; font-size: 17px; font-weight: 800">Firebase Hosting</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6">React（Vite）のWebアプリ。モンスターはSVGのパーツ合成で描く（画像生成は使わない）</p>
+</div>
+<p style="margin: 0; align-self: center; font-size: 22px; color: #5B5F66">→</p>
+<div style="flex: 1; background: #FFFFFF; border: 2px solid #1F2328; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #5B5F66">ログイン</p>
+<p style="margin: 0; font-size: 17px; font-weight: 800">Firebase Authentication</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6">Googleログイン。uidでデータを分ける</p>
+</div>
+<p style="margin: 0; align-self: center; font-size: 22px; color: #5B5F66">→</p>
+<div style="flex: 1; background: #E3EDFC; border: 2px solid #2563C9; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #1A4A99">データ</p>
+<p style="margin: 0; font-size: 17px; font-weight: 800">Cloud Firestore</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6">記録・集計値・学部の配点・今日の提案を保存</p>
+</div>
+<p style="margin: 0; align-self: center; font-size: 22px; color: #5B5F66">→</p>
+<div style="flex: 1; background: #E3EDFC; border: 2px solid #2563C9; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #1A4A99">計算</p>
+<p style="margin: 0; font-size: 17px; font-weight: 800">Cloud Run functions</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6">記録トリガーで集計／起動時に提案を返すAPI</p>
+</div>
+<p style="margin: 0; align-self: center; font-size: 22px; color: #5B5F66">→</p>
+<div style="flex: 1; background: #EEE8FA; border: 2px solid #6B46B8; border-radius: 16px; padding: 14px 16px; display: flex; flex-direction: column; gap: 6px">
+<p style="margin: 0; font-size: 12px; font-weight: 700; color: #4C2F8A">文章</p>
+<p style="margin: 0; font-size: 17px; font-weight: 800">Vertex AI Gemini</p>
+<p style="margin: 0; font-size: 13px; line-height: 1.6">計算済みの数字を渡し、モンスターの口調で1〜2文に</p>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
+<div style="background: #FFFFFF; border: 2px solid #1F2328; border-radius: 16px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">Firestoreのデータ設計</h2>
+<pre style="margin: 0; font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.65; white-space: pre-wrap">universities/{id}            ← 8件（キャラと装備）
+  character: "chikumaru"
+  stages: ["chiku-1", "chiku-2", "chiku-3"]
+  items: ["labcoat", "goggles"]   ← 親密度3・5の装備
+
+faculties/{facultyId}        ← 10件（色・小物・数字）
+  universityId: "science-tokyo"   name: "工学院"
+  weights: {math:40, sci:40, eng:20, jpsoc:0, essay:0}
+  subjects: 4   facultyFactor: 1.00   avgMult: 1.36
+  ribbon: "#F2A65A"   pin: "wrench"
+  source: "Kei-Net 2027年度入試"
+
+users/{uid}
+  targetFacultyId: "science-tokyo-eng"   examDate: "2028-02-25"
+  plan: {first: 8800, final: 44800, bond10: 115200}  ← 登録時に計算
+  exp: 14700   stage: 2   bond: 0
+  closet: ["goggles", "muffler", "ginkgo", ...]  ← 全シーズン共通のクローゼット
+  equipped: {head: "goggles", neck: "muffler", chest: "ginkgo",
+             hand: "compass", back: null, effect: "sparkle"}
+  outfits: [3つまでのコーデ]   coolForm: false
+  timerStartedAt: null   ← タイマー中は時刻が入り、着替えロック
+  last7: {math:300, sci:120, eng:120, jpsoc:60, essay:0}
+  streak: 6   restTicketWeek: "2026-W45"   pace: 1.0
+  grade: "高2"   ikkan: false   season: {start: "2026-09-01", end: "2027-03-31"}
+
+users/{uid}/dex/{seasonId}   ← 進級で移す図鑑
+  grade: "高1"  character: "ginmaru"  stage: 3  bond: 10  hours: 380
+
+users/{uid}/exams/{id}   ← 模試（レジェンド装備の判定用）
+  name: "第2回全国模試"  judge: "B"  dev: 66.2  topPct: {math: 3.1}
+
+users/{uid}/logs/{logId}
+  subject: "物理"  category: "sci"  minutes: 20  exp: 28
+  stuckUnit: "力学：運動方程式"  studiedOn: "2026-11-07"
+
+users/{uid}/suggestions/{yyyy-mm-dd}
+  category: "sci"  minutes: 20  multiplier: 1.4
+  text: "おかえり！…"   ← Geminiの出力をキャッシュ</pre>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 16px">
+<div style="background: #FFFFFF; border: 2px solid #1F2328; border-radius: 16px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">関数1：onLogCreated（Firestoreトリガー）</h2>
+<ol style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.75">
+<li>EXP＝分数×(1＋weights[category]÷100)×連続ボーナス（3日×1.05・7日×1.10・14日×1.15・30日×1.20）。その日の合計が学年の目安の1/4を超えたらstreak＋1（例：物理20分×1.4×1.05＝29）</li>
+<li>users.exp に加算し、last7も更新（トランザクション）</li>
+<li>exp≧plan.firstでstage2、≧plan.finalでstage3（最終進化）。上がった瞬間にevolvedAtを書き、画面で進化演出</li>
+<li>bond＝floor((exp−plan.final)÷((plan.bond10−plan.final)÷10))（最大10）。3・5・7・10でunlockedに装備・かっこいい姿を追加</li>
+<li>上限なし：教科ごと累計3000分で★、累計50000EXPごとにメダル、月に標準ペースの半分で季節装備。親密度10のあとは2000EXPごとにおみやげ</li>
+</ol>
+</div>
+<div style="background: #FFFFFF; border: 2px solid #1F2328; border-radius: 16px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 800">関数2：getLaunchSuggestion（アプリ起動時に呼ぶ）</h2>
+<ol style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.75">
+<li>suggestions/今日 があれば、それを返して終わり（Geminiを呼ぶのは1日1回まで）</li>
+<li>不足カテゴリ＝weights−last7比率 が最大のもの。分数＝(last7合計÷7)×不足分、5分単位に切上げ</li>
+<li>その教科のEXP倍率（1＋配点比率）と、最終進化までの残りEXP÷直近7日の1日平均EXP＝「あと何日」も計算</li>
+<li>この数字と昨日の記録をGeminiに渡し、JSON（text 1〜2文）で受け取る。数字はプロンプトに埋めて、Geminiには計算させない</li>
+</ol>
+</div>
+</div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div style="background: #FFFFFF; border: 2px solid #1F2328; border-radius: 16px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 800">セキュリティルール</h2>
+<ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7">
+<li>logsは本人のuidだけ作成可。minutesは5〜600の整数、categoryは5種のどれか</li>
+<li>usersのexp・stage・bond・unlockedは関数だけが書ける（ズルで進化できない）。equippedとcoolFormは本人が変えられるが、timerStartedAtがあるあいだ（勉強タイマー中）は変更不可</li>
+<li>facultiesは全員読み取りのみ</li>
+</ul>
+</div>
+<div style="background: #FFFFFF; border: 2px solid #1F2328; border-radius: 16px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 800">モンスターの描き方</h2>
+<ul style="margin: 0; padding-left: 18px; font-size: 13px; line-height: 1.7">
+<li>line[stage]の体のSVGに、装備のSVGを重ねる。かっこいい姿は縁の色と光の粒を足すだけ</li>
+<li>歯車の歯数・アンテナの長さ・絵の具の大きさは、usersの数値からその場で計算</li>
+<li>動きはCSSアニメーション（ふわふわ・まばたき＋学部ごとの1つ）。歯車や翼の速さは今日の学習分数をCSS変数で渡して変える</li>
+</ul>
+</div>
+<div style="background: #FFFFFF; border: 2px solid #1F2328; border-radius: 16px; padding: 16px 20px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 17px; font-weight: 800">作る順番</h2>
+<ol style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.7">
+<li>Firebaseプロジェクト作成、Hosting＋Authでログインまで。初期設定と毎年4月1日（進級）に、学年の目安（高1 2.5h・高2 3.5h、高3は毎日8h、高1・2の長期休み×1.5）でシーズンの10%（最长30日）・45%・85%までの時間を出し、×60×avgMult×facultyFactor×1.15×paceでplanを保存。3月31日にキャラをdexへ移す。毎朝の定期実行で、前日未記録ならおやすみ券かstreak半分</li>
+<li>facultiesの11件を投入、記録画面からlogsを書く</li>
+<li>onLogCreatedで集計と進化（ここまでで動くデモになる）</li>
+<li>getLaunchSuggestionとGemini。模試の成績表の写真をGeminiで読み取るverifyExam（判定・偏差値・順位だけ保存し、写真は削除）、最後に見た目の調整</li>
+</ol>
+</div>
+</div>
+
+<p style="margin: 0; font-size: 12px; color: #5B5F66; line-height: 1.6">関数のサービスアカウントにだけVertex AIの利用権限（Vertex AI User）を付け、ブラウザにAPIキーは置かない。チャット履歴を3か月で消す要件は、Firestoreの有効期限（TTL）ポリシーでexpireAtを設定すれば自動削除できる。</p>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1240}}'>
+class Component extends DCLogic {
+renderVals() {
+return {};
+}
+}
+</script>
+</body>
+</html>

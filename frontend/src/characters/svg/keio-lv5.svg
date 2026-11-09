@@ -1,0 +1,20 @@
+<svg width="100%" height="100%" viewBox="0 0 160 160" role="img" aria-label="ペンまる。赤い蝶ネクタイをつけている">
+<defs><radialGradient id="q4-keio-lv5" cx="38%" cy="30%" r="78%"><stop offset="0" stop-color="#8EA4DA"></stop><stop offset=".55" stop-color="#3E5698"></stop><stop offset="1" stop-color="#1E2D5E"></stop></radialGradient><radialGradient id="q4w-keio-lv5" cx="45%" cy="35%" r="70%"><stop offset="0" stop-color="#FFFFFF"></stop><stop offset="1" stop-color="#D6DCEA"></stop></radialGradient></defs>
+<ellipse class="shadow" cx="80" cy="150" rx="44" ry="6" fill="#1E2D5E" opacity=".16"></ellipse>
+<g class="squish">
+<path d="M58 122 L44 154 L72 140 Z" fill="#16224A"></path><path d="M102 122 L116 154 L88 140 Z" fill="#16224A"></path>
+<ellipse cx="62" cy="140" rx="11" ry="6" fill="#F0B848"></ellipse><ellipse cx="98" cy="140" rx="11" ry="6" fill="#F0B848"></ellipse>
+<circle cx="80" cy="92" r="50" fill="url(#q4-keio-lv5)"></circle>
+<ellipse cx="80" cy="100" rx="36" ry="38" fill="url(#q4w-keio-lv5)"></ellipse>
+<ellipse cx="31" cy="100" rx="8" ry="12" fill="#34497E" transform="rotate(20 31 100)"></ellipse><ellipse cx="129" cy="100" rx="8" ry="12" fill="#34497E" transform="rotate(-20 129 100)"></ellipse>
+<ellipse cx="58" cy="62" rx="12" ry="6.5" fill="#FFFFFF" opacity=".35"></ellipse>
+<g transform="rotate(-6 80 46)"><ellipse cx="80" cy="47" rx="27" ry="7" fill="#1A1A26"></ellipse><path d="M66 46 L67 16 Q80 12 93 16 L94 46 Q80 50 66 46 Z" fill="#22222E"></path><ellipse cx="80" cy="16" rx="13" ry="3.4" fill="#2E2E3C"></ellipse><path d="M66.4 37 Q80 41 93.6 37 L93.8 43 Q80 47 66.2 43 Z" fill="#F0B848"></path><path d="M70 19 L70.6 35" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" opacity=".16"></path><path d="M55 47 Q80 55 105 47" stroke="#0E0E16" stroke-width="2" fill="none" opacity=".5"></path></g>
+<g class="blink"><ellipse cx="68" cy="88" rx="4.6" ry="6.6" fill="#2B2632"></ellipse><ellipse cx="92" cy="88" rx="4.6" ry="6.6" fill="#2B2632"></ellipse></g>
+<circle cx="66.5" cy="85.5" r="1.8" fill="#FFFFFF"></circle><circle cx="90.5" cy="85.5" r="1.8" fill="#FFFFFF"></circle>
+<path d="M76 96 L84 96 L80 101 Z" fill="#F0B848"></path>
+<ellipse cx="57" cy="100" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse><ellipse cx="103" cy="100" rx="7" ry="4" fill="#FF8FA3" opacity=".5"></ellipse>
+<g class="pen-badge"><circle cx="80" cy="126" r="10" fill="#F0C858"></circle><path d="M75 121 L85 131 M85 121 L75 131" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round"></path></g>
+<path d="M80 111 L68 104 L68 118 Z M80 111 L92 104 L92 118 Z" fill="#D8404A"></path><circle cx="80" cy="111" r="3.2" fill="#A82A34"></circle>
+
+</g>
+</svg>
