@@ -145,9 +145,23 @@ const fit = (layer, stage) => {
 
 // ===== 学年の小物（高1はそのまま・高2は学年章のバッジ・高3は必勝の鉢巻） =====
 // 図鑑で「同じキャラでも学年で見た目がちがう」ことが分かるように、着替えとは別に重ねる
-// 東大の銀杏バッジ（60,126）をつけた絵は、学年章はその左に小さくずらす
-const BADGE_AT = { 'todai-equip': 'translate(41 117) scale(.82)', 'todai-lv5': 'translate(41 117) scale(.82)' };
-const gradeBadge = (at = 'translate(52 116)') =>
+// 高2の学年章は額につける（最終進化の体の座標。進化前は fit() で体に合わせて縮む）。
+// 帽子・ライト・ゴーグルなど頭の装備とぶつかる絵だけ、位置をずらす（キー：{大学}-{絵の種類}）
+const BADGE_HOME = 'translate(80 66) scale(.95)';
+const BADGE_AT = {
+  // 千葉工大：頭のライトの左どなり（ヘルメットのときはヘルメットの正面の左）
+  'chiba-3': 'translate(54 72) scale(.9)', 'chiba-lv5': 'translate(54 72) scale(.9)',
+  'chiba-lv3': 'translate(56 50) scale(.9)', 'chiba-equip': 'translate(56 50) scale(.9)',
+  // 科学大：実験ゴーグルのときは、ゴーグルの上（帽子のつばの下）
+  'kagaku-lv5': 'translate(80 51) scale(.8)', 'kagaku-equip': 'translate(80 51) scale(.8)',
+  // 早稲田：角帽の正面（帽章のように）
+  'waseda-3': 'translate(80 49) scale(.85)', 'waseda-lv3': 'translate(80 49) scale(.85)',
+  'waseda-lv5': 'translate(80 49) scale(.85)', 'waseda-equip': 'translate(80 49) scale(.85)',
+  // 阪大：ワニのフードの正面
+  'osaka-3': 'translate(80 52) scale(.9)', 'osaka-lv3': 'translate(80 52) scale(.9)',
+  'osaka-lv5': 'translate(80 52) scale(.9)', 'osaka-equip': 'translate(80 52) scale(.9)',
+};
+const gradeBadge = (at = BADGE_HOME) =>
   `<g class="grade-badge" transform="${at}">` +
   `<path d="M0 -9 L8 -5 L8 3 Q8 8 0 11 Q-8 8 -8 3 L-8 -5 Z" fill="#3D5A99" stroke="#F5C33B" stroke-width="1.8" stroke-linejoin="round"></path>` +
   `<text x="0" y="4.6" font-size="10" font-weight="900" text-anchor="middle" fill="#FFFFFF" font-family="'M PLUS Rounded 1c', sans-serif">Ⅱ</text>` +
