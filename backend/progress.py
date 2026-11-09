@@ -279,6 +279,67 @@ def season_rollover(user: dict, today: date) -> dict | None:
     return {"kind": "promoted", "updates": updates, "dex": dex, "dexId": dex_id}
 
 
+# ===== 図鑑（思い出カード・進路の軌跡）に残す1年のまとめ =====
+RANK_ORDER = {"S": 3, "A": 2, "B": 1, "C": 0}
+
+
+def season_stats(logs: list[dict], season_id: int) -> dict:
+    """シーズンの勉強の記録（study_logs の中身）から、図鑑に残すまとめを作る。
+    seasonId が同じ記録だけを数える（seasonId のない前の記録はシーズン0とみなす）"""
+    mine = [l for l in logs if int(l.get("seasonId") or 0) == season_id]
+    minutes = 0
+    by_category: dict[str, int] = {}
+    by_subject: dict[str, int] = {}
+    monthly: dict[str, int] = {}
+    ranks = {"S": 0, "A": 0, "B": 0, "C": 0}
+    days: set[date] = set()
+    best = None
+    for l in mine:
+        m = int(l.get("minutes") or 0)
+        minutes += m
+        cat = l.get("category") or SUBJECT_CATEGORY.get(l.get("subject")) or "other"
+        by_category[cat] = by_category.get(cat, 0) + m
+        subj = l.get("subject") or "その他"
+        by_subject[subj] = by_subject.get(subj, 0) + m
+        rank = l.get("rank") if l.get("rank") in ranks else None
+        if rank:
+            ranks[rank] += 1
+        at = l.get("createdAt")
+        day = at.astimezone(JST).date() if isinstance(at, datetime) else None
+        if day:
+            days.add(day)
+            key = f"{day.year}-{day.month:02d}"
+            monthly[key] = monthly.get(key, 0) + m
+        # いちばんよかった振り返り：ランクが高い → 採点の点が高い → 長い時間 の順
+        if rank and l.get("reflection"):
+            score = (RANK_ORDER[rank], int(l.get("total") or 0), m)
+            if best is None or score > best[0]:
+                best = (score, {
+                    "text": str(l["reflection"])[:140],
+                    "subject": subj,
+                    "rank": rank,
+                    "date": day.isoformat() if day else None,
+                })
+    # いちばん長く続いた「勉強した日」の連続
+    best_run, run, prev = 0, 0, None
+    for d in sorted(days):
+        run = run + 1 if prev and (d - prev).days == 1 else 1
+        best_run = max(best_run, run)
+        prev = d
+    top_subject = max(by_subject.items(), key=lambda x: x[1])[0] if by_subject else None
+    return {
+        "minutes": minutes,
+        "logs": len(mine),
+        "days": len(days),
+        "bestRun": best_run,
+        "ranks": ranks,
+        "byCategory": by_category,
+        "topSubject": top_subject,
+        "monthly": monthly,
+        "bestReflection": best[1] if best else None,
+    }
+
+
 # ===== C-15 採点に失敗したときの「判定はあとで」 =====
 # 採点（review_rank.judge）に失敗したら、仮に×1.0（Cランクのボーナス）で記録だけ保存し、rankPending を付ける。
 # あとで判定が出たら、その差分だけ totalExp と育成EXPを足す

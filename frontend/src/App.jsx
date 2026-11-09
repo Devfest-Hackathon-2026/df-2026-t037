@@ -19,6 +19,7 @@ import { RankBreakdown, RankHints } from "./screens/RankHelp";
 import { streakBonus } from "./game/rules";
 import Explore from "./screens/Explore";
 import Mocks from "./screens/Mocks";
+import Dex from "./screens/Dex";
 import StudyTime from "./screens/StudyTime";
 import { CATEGORIES, SUBJECT_GROUPS, SUBJECT_LIST, categoryOfLog, inSeason } from "./game/subjects";
 import { SUBJECT_COLORS, colorOfSubject } from "./game/subjectColors";
@@ -232,6 +233,18 @@ export default function App() {
   // 初期設定（学年・受験日・ペース・志望学部）がまだなら、まず初期設定へ。
   // 学年などの変更も同じ画面から POST /plan を通して保存する（plan を計算し直すため）
   const needSetup = !(profile?.plan && profile?.targetFacultyId);
+  // 4月1日に進級したら「新学年の設定」に答えるまでホームに進めない（前の年の設定が入った状態で開く）
+  if (!needSetup && profile?.newYearSetupPending && !profile?.seasonEnded) {
+    return (
+      <SetupFlow
+        profile={profile}
+        defaultNickname={user.isAnonymous ? "" : user.displayName || ""}
+        closable={false}
+        newYear
+        onClose={() => setSetupEditing(false)}
+      />
+    );
+  }
   if (needSetup || setupEditing) {
     return (
       <SetupFlow
@@ -271,6 +284,10 @@ export default function App() {
 
   if (screen === "explore") {
     return <Explore profile={profile} onBack={() => setScreen("home")} />;
+  }
+
+  if (screen === "dex") {
+    return <Dex uid={user.uid} profile={profile} onBack={() => setScreen("home")} />;
   }
 
   if (screen === "mocks") {
@@ -359,6 +376,7 @@ export default function App() {
               onKisekae={() => setScreen("kisekae")}
               onExplore={() => setScreen("explore")}
               onMocks={() => setScreen("mocks")}
+              onDex={() => setScreen("dex")}
             />
           }
         />

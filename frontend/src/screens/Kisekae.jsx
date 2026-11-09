@@ -101,7 +101,7 @@ export default function Kisekae({ uid, profile, onBack }) {
       )}
 
       <div className="tama-kise-stage">
-        {uni && <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={150} faculty={faculty} wear={equipped} />}
+        {uni && <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={150} faculty={faculty} wear={equipped} grade={profile?.grade} />}
         <div className="tama-kise-tools">
           <button type="button" onClick={removeAll} disabled={locked}><span>ぜんぶ外す</span></button>
           <button type="button" onClick={omakase} disabled={locked}><span>おまかせ</span></button>

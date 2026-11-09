@@ -90,3 +90,10 @@
   .tama-char .wear-bloom-in { animation:wearBloom 2.6s ease-in-out infinite;transform-box:fill-box;transform-origin:center }
   .tama-char .wear-fall { animation-duration:3.4s }
 }
+/* 学年の小物：高3の鉢巻のはしが風になびく */
+@keyframes hachiTail{0%,100%{transform:rotate(0)}50%{transform:rotate(-12deg)}}
+@keyframes hachiTail2{0%,100%{transform:rotate(0)}50%{transform:rotate(10deg)}}
+@media (prefers-reduced-motion: no-preference) {
+  .tama-char .hachi-tail { animation:hachiTail 1.3s ease-in-out infinite;transform-box:fill-box;transform-origin:0% 50% }
+  .tama-char .hachi-tail2 { animation:hachiTail2 1.3s ease-in-out infinite .2s;transform-box:fill-box;transform-origin:0% 0% }
+}

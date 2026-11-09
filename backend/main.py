@@ -419,10 +419,23 @@ def _apply_rollover(txn, user_ref, user: dict) -> tuple[dict, dict, str | None]:
     roll = progress.season_rollover(user, progress.today_jst())
     if not roll:
         return user, {}, None
+    updates = dict(roll["updates"])
     if roll["dex"] is not None:
+        # 図鑑の思い出カード・進路の軌跡に出す1年のまとめ（読み込みは書き込みより先にする）
+        dex = dict(roll["dex"])
+        start = progress._parse_date(dex.get("seasonStart"))
+        logs_q = user_ref.collection("study_logs")
+        if start:
+            since = datetime(start.year, start.month, start.day, tzinfo=progress.JST)
+            logs_q = logs_q.where(filter=firestore.FieldFilter("createdAt", ">=", since))
+        logs = [d.to_dict() or {} for d in logs_q.stream(transaction=txn)]
+        dex["stats"] = progress.season_stats(logs, int(user.get("seasonId") or 0))
         dex_ref = user_ref.collection("dex").document(roll["dexId"])
-        txn.set(dex_ref, {**roll["dex"], "savedAt": firestore.SERVER_TIMESTAMP}, merge=True)
-    return {**user, **roll["updates"]}, roll["updates"], roll["kind"]
+        txn.set(dex_ref, {**dex, "savedAt": firestore.SERVER_TIMESTAMP}, merge=True)
+    if roll["kind"] in ("promoted", "label"):
+        # 4月の「新学年の設定」（学年・ペース・志望校）を答えるまでホームに進めない
+        updates["newYearSetupPending"] = True
+    return {**user, **updates}, updates, roll["kind"]
 
 
 @firestore.transactional
@@ -622,6 +635,8 @@ def _commit_plan(txn, user_ref, data: PlanRequest, plan: dict) -> dict:
         # 進級（C-9）で使う：このシーズンを始めたときの学年と、シーズンが終わったか
         "seasonStartGrade": data.grade,
         "seasonEnded": False,
+        # 4月の「新学年の設定」はこれで答えたことになる
+        "newYearSetupPending": False,
     }
     if not snap.exists:
         updates["createdAt"] = firestore.SERVER_TIMESTAMP

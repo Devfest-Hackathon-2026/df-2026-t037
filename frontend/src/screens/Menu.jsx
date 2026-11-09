@@ -5,7 +5,7 @@ import { isChimeOn, setChimeOn } from "../lib/chime";
 import HelpSheet from "./Help";
 import "./tama.css";
 
-export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, onMocks, dark = false }) {
+export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, onMocks, onDex, dark = false }) {
   const [open, setOpen] = useState(false);
   const [chime, setChime] = useState(() => isChimeOn());
   const [helpOpen, setHelpOpen] = useState(false);
@@ -43,10 +43,12 @@ export default function Menu({ timerRunning, onSettings, onKisekae, onExplore, o
       </button>
       {open && (
         <div className="tama-menu-pop" role="menu">
-          <button type="button" role="menuitem" className="tama-menu-item" disabled>
-            <span>図鑑</span>
-            <span className="tama-menu-sub">じゅんび中</span>
-          </button>
+          {onDex && (
+            <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onDex)}>
+              <span>図鑑</span>
+              <span className="tama-menu-sub">思い出・進路の軌跡</span>
+            </button>
+          )}
           {onExplore && (
             <button type="button" role="menuitem" className="tama-menu-item" onClick={pick(onExplore)}>
               <span>興味から学部をさがす</span>
