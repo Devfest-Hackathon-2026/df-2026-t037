@@ -70,11 +70,15 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
       </div>
 
       <div className="tama-goal">
+        {/* 最終進化までは進化のゲージ。最終進化のあとは、同じ場所が親密度のピンクのゲージになる */}
+        {stage === 3 && <BondGauge exp={exp} plan={plan} />}
         {goal ? (
           <>
-            <div className="tama-bar">
-              <div style={{ width: `${Math.min(100, (exp / goal.target) * 100)}%` }} />
-            </div>
+            {stage !== 3 && (
+              <div className="tama-bar">
+                <div style={{ width: `${Math.min(100, (exp / goal.target) * 100)}%` }} />
+              </div>
+            )}
             <p className="tama-note">
               <span>{`${comma(exp)} / ${comma(goal.target)} EXP｜${goal.label} `}</span>
               <strong className="tama-togo">{`あと約${togo.hours}時間`}</strong>
@@ -86,11 +90,9 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
           </>
         ) : (
           <>
-            <div className="tama-bar"><div style={{ width: "100%" }} /></div>
             <p className="tama-note"><strong className="tama-togo">大のなかよし！</strong><span>{`（${comma(exp)} EXP）`}</span></p>
           </>
         )}
-        <BondGauge exp={exp} bond={bond} plan={plan} stage={stage} />
         <p className="tama-season">
           <span>
             {`${grade}シーズン${seasonLeft != null ? ` 残り${seasonLeft}日` : ""}｜今の目安 1日${hoursLabel(daily)}時間`}
@@ -130,15 +132,14 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
   );
 }
 
-/** 親密度のゲージ（ピンク）。最終進化のあと、育成EXPが「(親密度10の必要EXP−最終進化の必要EXP)÷10」たまるごとに1つ上がる（rules.js の bondOf と同じ） */
-function BondGauge({ exp, bond, plan, stage }) {
+/** 親密度のゲージ（ピンク・最終進化のあとだけ）。育成EXPが「(親密度10の必要EXP−最終進化の必要EXP)÷10」たまるごとに1つ上がる（rules.js の bondOf と同じ） */
+function BondGauge({ exp, plan }) {
   const final = plan?.exp?.final;
   const bond10 = plan?.exp?.bond10;
   if (!final || !bond10) return null;
   const step = (bond10 - final) / 10;
-  // 表示は育成EXPから計算した値にそろえる（上の「親密度◯まで あと…」と同じ式）
-  const level = stage === 3 ? bondOf(exp, plan) : Math.max(0, Math.min(10, bond || 0));
-  const into = stage === 3 ? exp - final - level * step : 0;
+  const level = bondOf(exp, plan);
+  const into = exp - final - level * step;
   const pct = level >= 10 ? 100 : Math.max(0, Math.min(100, (into / step) * 100));
   const nextKey = Object.keys(BOND_UNLOCKS).map(Number).find((k) => k > level);
   return (
@@ -154,15 +155,9 @@ function BondGauge({ exp, bond, plan, stage }) {
       <div className="tama-bar tama-bar-bond" role="progressbar" aria-label="次の親密度まで" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100}>
         <div style={{ width: `${pct}%` }} />
       </div>
-      <p className="tama-tiny">
-        <span>
-          {stage < 3
-            ? "最終進化すると、親密度が上がりはじめます"
-            : level >= 10
-              ? "大のなかよし！ シーズンの終わりに図鑑へ"
-              : `次の親密度まで あと${Math.max(0, Math.ceil(step - into)).toLocaleString("ja-JP")}EXP${nextKey ? `｜親密度${nextKey}で「${BOND_UNLOCKS[nextKey]}」` : ""}`}
-        </span>
-      </p>
+      {nextKey && level < 10 && (
+        <p className="tama-tiny"><span>{`親密度${nextKey}で「${BOND_UNLOCKS[nextKey]}」`}</span></p>
+      )}
     </div>
   );
 }

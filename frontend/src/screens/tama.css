@@ -926,7 +926,7 @@
 .tama-mock-badge { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #FFFFFF; font-weight: 900; font-size: 12px; }
 
 /* 親密度のゲージ（ピンク） */
-.tama-bond { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.tama-bond { margin-bottom: 4px; display: flex; flex-direction: column; gap: 4px; }
 .tama-bond-head { display: flex; justify-content: space-between; align-items: center; }
 .tama-bond-label { font-size: 13px; font-weight: 900; color: #D0507A; }
 .tama-bond-hearts { display: flex; gap: 1px; font-size: 11px; color: #F3D3DD; }
