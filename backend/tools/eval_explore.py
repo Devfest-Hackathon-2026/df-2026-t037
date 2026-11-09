@@ -174,18 +174,35 @@ def main(report_only: bool):
             return lambda q: {f: 2 * dot(q, U[f]) - cal[f][2] for f in ids}
         raise ValueError(name)
 
-    variants = ["raw", "hub1", "hub2", "hub4", "center",
-                "mean@single", "mean@agg", "z@single", "z@agg", "csls@single", "csls@agg"]
+    variants = ["raw", "hub0.5", "hub1", "hub2", "hub4", "center",
+                "mean@single", "mean@agg", "z@single", "z@agg", "csls@single", "csls@agg",
+                "flat", "maxlog", "rrf"]   # 最後の3つは「記録の足し合わせ方」の比較（言葉で探すは raw と同じ）
+
+    def fuse_logs(v, case):
+        """複数の振り返りを1つの質問にまとめる方法を変えて比べる"""
+        logs = single[case["id"]][1:]
+        if v == "flat":     # ランク・時間の重みなしの平均
+            q = unit([sum(x) for x in zip(*logs)])
+            return {f: dot(q, U[f]) for f in ids}
+        if v == "maxlog":   # 振り返りのうち、いちばん近かったものの値
+            return {f: max(dot(q, U[f]) for q in logs) for f in ids}
+        # rrf：振り返りごとの順位を、順位の逆数で足し合わせる
+        sc = {f: 0.0 for f in ids}
+        for q in logs:
+            order = sorted(ids, key=lambda f: dot(q, U[f]), reverse=True)
+            for r, f in enumerate(order, 1):
+                sc[f] += 1.0 / (10 + r)
+        return sc
 
     results = {}
     detail = {}
     for v in variants:
         rows = {"logs": [], "interest": []}
         for c in CASES:
-            fn = scorer(v, c["id"])
+            fn = scorer("raw" if v in ("flat", "maxlog", "rrf") else v, c["id"])
             exp = set(c["expect"])
             for kind, q in (("logs", agg[c["id"]]), ("interest", unit(vecs[c["interest"]]))):
-                t5 = top5(fn(q))
+                t5 = top5(fuse_logs(v, c) if (kind == "logs" and v in ("flat", "maxlog", "rrf")) else fn(q))
                 p = sum(1 for f in t5 if f in exp) / 5
                 h1 = 1.0 if t5[0] in exp else 0.0
                 fp = sum(1 for f in t5 if f in top_hubs and f not in exp)
@@ -209,10 +226,19 @@ def main(report_only: bool):
     print(f"\n総合P@5が最も高い方式：{best[1]}（{best[0]:.3f}）")
 
     nm = lambda f: explore.PROFILES[f]["university"] + explore.PROFILES[f]["faculty"]
-    for cid in ("mixed-science-english", "mixed-humanities-english", "space-physics", "pharmacy"):
-        print(f"\n--- {cid}（記録から）---")
-        for v in ("raw", "hub1", best[1]):
-            print(f"{v:>12}: " + " / ".join(nm(f).replace("大学", "").replace("義塾", "") for f in detail[(v, cid, 'logs')]))
+    short = lambda f: nm(f).replace("大学", "").replace("義塾", "")
+    cmp_v = best[1] if best[1] != "raw" else "csls@agg"
+
+    # 問題ごとの詳細：raw と、最高の方式で、上位5件が「出ていておかしくない学部」に入っているか（○×）
+    print(f"\n=== 問題ごとの詳細（記録から）  左：raw / 右：{cmp_v} ===")
+    for c in CASES:
+        exp = set(c["expect"])
+        a, b = detail[("raw", c["id"], "logs")], detail[(cmp_v, c["id"], "logs")]
+        pa, pb = sum(f in exp for f in a), sum(f in exp for f in b)
+        print(f"\n[{c['id']}] raw {pa}/5  {cmp_v} {pb}/5")
+        print("   raw : " + " / ".join(("○" if f in exp else "×") + short(f) for f in a))
+        if cmp_v:
+            print(f"   {cmp_v[:4]}: " + " / ".join(("○" if f in exp else "×") + short(f) for f in b))
 
     # 本番用の補正値を、全問から作って保存する（best が mean/z/csls のときに explore.py が使う）
     refs_single = [q for cid in single for q in single[cid]]

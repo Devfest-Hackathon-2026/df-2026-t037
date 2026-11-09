@@ -53,26 +53,30 @@ def _norm(v: list[float]) -> float:
     return math.sqrt(sum(x * x for x in v)) or 1.0
 
 
-# 中心化：全学部のベクトルの平均を引いてから比べる。
+_DOC_NORMS = {fid: _norm(v) for fid, v in VECTORS.items()}
+
+# 「近くなりやすさ」の補正（ハブネス対策）。
 # 紹介文が広く書かれた学部（例：国際教養学部）は、どんな文にも「少し近い」ので上位に出やすい。
-# 平均を引くと、全学部に共通する成分が消え、その学部ならではの近さで順位が付く
-_DIM = len(next(iter(VECTORS.values()))) if VECTORS else 0
-_MEAN = [sum(v[i] for v in VECTORS.values()) / len(VECTORS) for i in range(_DIM)] if VECTORS else []
-_CENTERED = {fid: [a - m for a, m in zip(v, _MEAN)] for fid, v in VECTORS.items()}
-_CENTERED_NORMS = {fid: _norm(v) for fid, v in _CENTERED.items()}
-
-
-def _center(v: list[float]) -> list[float]:
-    return [a - m for a, m in zip(v, _MEAN)] if len(v) == len(_MEAN) else list(v)
+# 各学部が「ほかの学部の平均にどれだけ近いか」を求め、その分だけ近さから引く。
+# 学部だけで決まる値なので、質問の長さや書き方（複数の振り返りを足したベクトルなど）には左右されない
+# 30問の評価（tools/eval_explore.py）で、学部どうしの近さによる補正は逆効果だった（強さ1で P@5 0.69→0.60、4で0.25）。
+# いまは 0（補正なし）。補正をかけるなら、質問の実データから作る方式（faculty_calibration.json）を使う
+HUB_STRENGTH = 0.0
+_UNIT = {fid: [x / _DOC_NORMS[fid] for x in v] for fid, v in VECTORS.items()}
+_DIM = len(next(iter(_UNIT.values()))) if _UNIT else 0
+_MEAN_UNIT = [sum(u[i] for u in _UNIT.values()) / len(_UNIT) for i in range(_DIM)] if _UNIT else []
+_HUB = {fid: sum(a * b for a, b in zip(u, _MEAN_UNIT)) for fid, u in _UNIT.items()}
+_HUB_AVG = sum(_HUB.values()) / len(_HUB) if _HUB else 0.0
+HUB_PENALTY = {fid: HUB_STRENGTH * (h - _HUB_AVG) for fid, h in _HUB.items()}
 
 
 def similarity(query_vec: list[float], fid: str) -> float:
-    """質問のベクトルと学部 fid の近さ（中心化したコサイン類似度）。rank と根拠の選び方で同じ尺度を使う"""
-    q = _center(query_vec)
-    d = _CENTERED.get(fid)
-    if not d or len(q) != len(d):
+    """質問のベクトルと学部 fid の近さ（コサイン類似度 − 近くなりやすさの補正）。rank と同じ尺度"""
+    u = _UNIT.get(fid)
+    if not u or len(query_vec) != len(u):
         return 0.0
-    return sum(a * b for a, b in zip(q, d)) / (_norm(q) * _CENTERED_NORMS[fid])
+    qn = _norm(query_vec)
+    return sum(a * b for a, b in zip(query_vec, u)) / qn - HUB_PENALTY[fid]
 
 
 def embed_query(text: str, project_id: str, token: str) -> list[float]:
@@ -90,12 +94,7 @@ def embed_query(text: str, project_id: str, token: str) -> list[float]:
 
 def rank(query_vec: list[float]) -> list[tuple[str, float]]:
     """(学部ID, 近さ0〜1) を近い順に。同じ大学は最大 PER_UNIVERSITY_MAX 件"""
-    q = _center(query_vec)
-    qn = _norm(q)
-    scored = []
-    for fid, v in _CENTERED.items():
-        sim = sum(a * b for a, b in zip(q, v)) / (qn * _CENTERED_NORMS[fid])
-        scored.append((fid, sim))
+    scored = [(fid, similarity(query_vec, fid)) for fid in VECTORS]
     scored.sort(key=lambda x: x[1], reverse=True)
     picked, per_uni = [], {}
     for fid, sim in scored:
