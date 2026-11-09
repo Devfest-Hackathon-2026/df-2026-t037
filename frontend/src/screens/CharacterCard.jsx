@@ -108,7 +108,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
           onTalk={() => setChatOpen(true)}
           onGreeting={setGreeting}
         />
-        <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} faculty={faculty} wear={worn} />
+        <Character uni={uni.id} stage={stage} variant={showEquip ? "equip" : "normal"} size={200} faculty={faculty} wear={worn} grade={profile?.grade} />
       </div>
 
       {chatOpen && (
