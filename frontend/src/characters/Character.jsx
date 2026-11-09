@@ -3,6 +3,7 @@
 // uni は universities.js の id（todai / kagaku / chiba / keio / hitotsu / tufs / waseda / kyoto / osaka）
 import './characters.css';
 import { withWear } from './wear';
+import SHINY from '../game/shiny.json';
 
 const files = import.meta.glob('./svg/*.svg', { query: '?raw', import: 'default', eager: true });
 const pinFiles = import.meta.glob('./pins/*.svg', { query: '?raw', import: 'default', eager: true });
@@ -14,6 +15,30 @@ const PIN_ALIAS = { scale: 'tenbin', bars: 'graph', bookmark: 'shiori', ruler: '
 // リボンの位置（docs/design/Gakubu.dc.html）。千葉工大だけ頭の形がちがうので位置をずらす
 const RIBBON_AT = { chiba: 'translate(58 47) rotate(-25) scale(.9)' };
 const RIBBON_DEFAULT = 'translate(46 56) rotate(-40) scale(.9)';
+
+// がっつりペースの色違い（D-2・C-24）。色は docs/data/shiny.json と同じ（game/shiny.json に写したもの）
+
+/** 最終進化の絵の体（最初の radialGradient の3色）と手足（limbs の色の fill）を色違いの色にする */
+function shinyColors(svg, uni) {
+  const c = SHINY.colors?.[uni];
+  if (!c) return svg;
+  let out = svg.replace(/<radialGradient\b[\s\S]*?<\/radialGradient>/, (grad) => {
+    let i = 0;
+    return grad.replace(/stop-color="[^"]*"/g, (m) => (i < c.body.length ? `stop-color="${c.body[i++]}"` : m));
+  });
+  for (const [from, to] of Object.entries(c.limbs || {})) {
+    out = out.replace(new RegExp(`fill="${from}"`, 'gi'), `fill="${to}"`);
+  }
+  // ふつうの色の同じキャラと同じページに出ても色がまざらないよう、グラデーションの id を変える
+  return out.replace(/id="([^"]+)"/g, 'id="$1-shiny"').replace(/url\(#([^)]+)\)/g, 'url(#$1-shiny)');
+}
+
+/** 色違いのまわりの光の粒（2つ） */
+const SHINY_SPARKLES =
+  `<g class="shiny-sparkles">` +
+  `<path class="twinkle" d="M24 58 l2.2 5 5 2.2 -5 2.2 -2.2 5 -2.2 -5 -5 -2.2 5 -2.2z" fill="#FFF6C8" stroke="#E8B830" stroke-width="1" stroke-linejoin="round"></path>` +
+  `<path class="twinkle" style="animation-delay:.9s" d="M138 104 l1.7 3.8 3.8 1.7 -3.8 1.7 -1.7 3.8 -1.7 -3.8 -3.8 -1.7 3.8 -1.7z" fill="#FFF6C8" stroke="#E8B830" stroke-width="1" stroke-linejoin="round"></path>` +
+  `</g>`;
 
 const isColor = (c) => typeof c === 'string' && /^#[0-9A-Fa-f]{3,8}$/.test(c);
 
@@ -46,12 +71,14 @@ function withFacultyMarks(svg, uni, ribbon) {
 }
 
 /** キャラの絵のSVG文字列（図鑑の「画像で保存」でも使う）。絵がなければ '' */
-export function characterSvg({ uni, stage, variant = 'normal', faculty = null, wear = null, grade = null }) {
+export function characterSvg({ uni, stage, variant = 'normal', faculty = null, wear = null, grade = null, shiny = false }) {
   // 大学の装備は最終進化だけ：両方 → {uni}-equip、片方 → {uni}-lv3 / {uni}-lv5
   const name = ['equip', 'lv3', 'lv5'].includes(variant) && stage === 3 && svgOf(`${uni}-${variant}`) ? `${uni}-${variant}` : `${uni}-${stage}`;
-  const base = svgOf(name);
-  if (!base) return '';
-  const worn = wear || grade ? withWear(base, wear, stage, grade, { uni, variant: name.slice(uni.length + 1) }) : base;
+  const raw = svgOf(name);
+  if (!raw) return '';
+  // 色違いは最終進化だけ（装備つき・片方だけの絵もふくむ）
+  const base = shiny && stage === 3 ? shinyColors(raw, uni).replace(/<\/svg>\s*$/, `${SHINY_SPARKLES}</svg>`) : raw;
+  const worn = wear || grade ? withWear(base, wear, stage, grade, { uni, variant: name.slice(uni.length + 1), shiny: Boolean(shiny && stage === 3) }) : base;
   return stage === 3 ? withFacultyMarks(worn, uni, faculty?.ribbon) : worn;
 }
 
@@ -59,8 +86,8 @@ export function characterSvg({ uni, stage, variant = 'normal', faculty = null, w
  * wear：着替えの装備（{ head, neck, chest, hand, back, effect }）。レジェンド・ミシック・メダル・エフェクトを絵に重ねる。
  * grade：学年（"高校2年生" ならバッジ、"高校3年生" なら必勝の鉢巻をつける）
  */
-export function Character({ uni, stage, variant = 'normal', size = 160, still = false, faculty = null, wear = null, grade = null, className = '' }) {
-  const svg = characterSvg({ uni, stage, variant, faculty, wear, grade });
+export function Character({ uni, stage, variant = 'normal', size = 160, still = false, faculty = null, wear = null, grade = null, shiny = false, className = '' }) {
+  const svg = characterSvg({ uni, stage, variant, faculty, wear, grade, shiny });
   if (!svg) return null;
   return (
     <div

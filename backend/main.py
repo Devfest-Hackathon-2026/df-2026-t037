@@ -417,6 +417,8 @@ def _commit_log(txn, user_ref, log_ref, log: dict, data: AdviseRequest, rank: st
         new_exp = old_exp + gained
         stage, bond = progress.stage_and_bond(new_exp, plan)
         updates.update({"growthExp": new_exp, "stage": stage, "bond": bond})
+        # がっつりペースで最終進化したら色違い（D-2）
+        updates.update(progress.shiny_updates(user, old_stage, stage))
         # old_* は画面が「親密度が上がった」「新しい着替えが解放された」を知らせるために使う
         growth.update({"growth_exp": gained, "growth_total": new_exp, "stage": stage,
                        "bond": bond, "evolved": stage > old_stage,
@@ -639,9 +641,11 @@ def _commit_plan(txn, user_ref, data: PlanRequest, plan: dict) -> dict:
         # 志望校やペースだけを変えたときは、育成EXPを0に戻さず進み具合（%）を保つ（C-18）
         growth_exp = progress.rescale_growth(int(user.get("growthExp") or 0), user.get("plan"), plan)
     stage, bond = progress.stage_and_bond(growth_exp, plan)
+    old_stage = 1 if reset else int(user.get("stage") or 1)
 
     updates = {
         **reset,
+        **progress.shiny_updates({**user, **reset}, old_stage, stage, data.pace),
         "grade": data.grade,
         "examDate": data.examDate.isoformat(),
         "pace": data.pace,

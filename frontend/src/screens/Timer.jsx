@@ -123,7 +123,7 @@ export default function Timer({ uid, profile, subjects, onRecorded, onClose, onS
     </button>
   );
 
-  const buddy = (size) => uni && <Character uni={uni.id} stage={stage} variant={equip} size={size} faculty={faculty} wear={worn} grade={profile?.grade} />;
+  const buddy = (size) => uni && <Character uni={uni.id} stage={stage} variant={equip} size={size} faculty={faculty} wear={worn} grade={profile?.grade} shiny={stage === 3 && profile?.shiny === true} />;
   const subjectTag = (
     <span className="tama-subj-dot" style={{ background: colorOfSubject(local.subject, SUBJECT_CATEGORY[local.subject]) }} />
   );
