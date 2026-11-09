@@ -245,13 +245,6 @@ export default function Explore({ profile, onBack }) {
                       ))}
                     </div>
                     <div className="tama-explore-actions">
-                      {r.sourceUrl ? (
-                        <a href={r.sourceUrl} target="_blank" rel="noopener noreferrer" className="tama-textlink">
-                          <span>公式ページで確かめる ↗</span>
-                        </a>
-                      ) : (
-                        <span className="tama-tiny"><span>出典を確認中</span></span>
-                      )}
                       {!r.reviewed && <span className="tama-explore-badge"><span>チーム確認中</span></span>}
                       <button
                         type="button"
