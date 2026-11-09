@@ -508,19 +508,23 @@ def _target_university(user: dict) -> str | None:
 
 @firestore.transactional
 def _commit_mocks(txn, user_ref, set_ref=None, set_data=None, delete_ref=None) -> dict:
-    """模試の記録を1件書く（または消す）→ すべての記録から入手を計算し直し、users/{uid}.legends に書く"""
+    """模試の記録を1件書く（または消す）→ すべての記録から入手を計算し直し、users/{uid}.legends に書く
+    Firestore のトランザクションは「読む → 書く」の順でないとエラーになるので、読み込みを先にすべて済ませる"""
     mocks = [d.to_dict() or {} for d in user_ref.collection("mocks").stream(transaction=txn)]
-    if set_ref is not None:
-        mocks = [m for m in mocks if m.get("id") != set_ref.id] + [set_data]
-        txn.set(set_ref, {**set_data, "updatedAt": firestore.SERVER_TIMESTAMP})
-    if delete_ref is not None:
-        mocks = [m for m in mocks if m.get("id") != delete_ref.id]
-        txn.delete(delete_ref)
-    unlocks = progress.mock_unlocks(mocks)
     snap = user_ref.get(transaction=txn)
     before = ((snap.to_dict() or {}).get("legends") or {}) if snap.exists else {}
-    txn.set(user_ref, {"legends": unlocks}, merge=True)
+    if set_ref is not None:
+        mocks = [m for m in mocks if m.get("id") != set_ref.id] + [set_data]
+    if delete_ref is not None:
+        mocks = [m for m in mocks if m.get("id") != delete_ref.id]
+    unlocks = progress.mock_unlocks(mocks)
     new = [k for k, v in unlocks.items() if v and not before.get(k)]
+    # ここから書き込み
+    if set_ref is not None:
+        txn.set(set_ref, {**set_data, "updatedAt": firestore.SERVER_TIMESTAMP})
+    if delete_ref is not None:
+        txn.delete(delete_ref)
+    txn.set(user_ref, {"legends": unlocks}, merge=True)
     return {"legends": unlocks, "newlyUnlocked": new}
 
 
