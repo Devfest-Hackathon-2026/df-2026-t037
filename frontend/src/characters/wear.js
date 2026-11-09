@@ -135,19 +135,27 @@ export function wearLayers(equipped) {
   return { back: back.join(''), front: front.join('') };
 }
 
-/** SVG文字列に重ねる（後ろは体のグループの前、前は </svg> の直前） */
-export function withWear(svg, equipped) {
+// 進化の段階ごとの体の中心と大きさ（たまご・1回目の進化は体が小さく下にある）。
+// 絵は最終進化（中心 80,92・半径50）で描いてあるので、段階に合わせて縮めて動かす
+const BODY = { 1: { cx: 80, cy: 112, k: 0.64 }, 2: { cx: 80, cy: 100, k: 0.8 }, 3: { cx: 80, cy: 92, k: 1 } };
+const fit = (layer, stage) => {
+  const b = BODY[stage] || BODY[3];
+  return b.k === 1 ? layer : `<g transform="translate(${b.cx} ${b.cy}) scale(${b.k}) translate(-80 -92)">${layer}</g>`;
+};
+
+/** SVG文字列に重ねる（後ろは体のグループの前、前は </svg> の直前）。stage で位置と大きさを合わせる */
+export function withWear(svg, equipped, stage = 3) {
   const { back, front } = wearLayers(equipped);
   if (!back && !front) return svg;
   let out = svg;
   if (back) {
     const i = out.indexOf('<g class="squish"');
     const at = i >= 0 ? i : out.indexOf('>') + 1;
-    out = `${out.slice(0, at)}<g class="tama-wear-back">${back}</g>${out.slice(at)}`;
+    out = `${out.slice(0, at)}<g class="tama-wear-back">${fit(back, stage)}</g>${out.slice(at)}`;
   }
   if (front) {
     const end = out.lastIndexOf('</svg>');
-    if (end >= 0) out = `${out.slice(0, end)}<g class="tama-wear-front">${front}</g>${out.slice(end)}`;
+    if (end >= 0) out = `${out.slice(0, end)}<g class="tama-wear-front">${fit(front, stage)}</g>${out.slice(end)}`;
   }
   return out;
 }

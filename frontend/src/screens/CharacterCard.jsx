@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Character } from "../characters/Character";
 import { ChatSheet, GreetingBubble } from "./CharacterChat";
 import { getFaculty, getUniversity } from "../game/universities";
-import { timeToGo } from "../game/rules";
+import { BOND_UNLOCKS, bondOf, timeToGo } from "../game/rules";
 import {
   GRADE_FROM_APP, addDays, comma, daysBetween, hoursLabel, nextGoal, parseYmd,
   roughDate, streakInfo, todayHours, todayStart,
@@ -90,6 +90,7 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
             <p className="tama-note"><strong className="tama-togo">大のなかよし！</strong><span>{`（${comma(exp)} EXP）`}</span></p>
           </>
         )}
+        <BondGauge exp={exp} bond={bond} plan={plan} stage={stage} />
         <p className="tama-season">
           <span>
             {`${grade}シーズン${seasonLeft != null ? ` 残り${seasonLeft}日` : ""}｜今の目安 1日${hoursLabel(daily)}時間`}
@@ -126,6 +127,43 @@ export default function CharacterCard({ profile, logs, logsReady = true, menu })
       )}
       <WeekBars logs={logs} faculty={faculty} profile={profile} />
     </section>
+  );
+}
+
+/** 親密度のゲージ（ピンク）。最終進化のあと、育成EXPが「(親密度10の必要EXP−最終進化の必要EXP)÷10」たまるごとに1つ上がる（rules.js の bondOf と同じ） */
+function BondGauge({ exp, bond, plan, stage }) {
+  const final = plan?.exp?.final;
+  const bond10 = plan?.exp?.bond10;
+  if (!final || !bond10) return null;
+  const step = (bond10 - final) / 10;
+  // 表示は育成EXPから計算した値にそろえる（上の「親密度◯まで あと…」と同じ式）
+  const level = stage === 3 ? bondOf(exp, plan) : Math.max(0, Math.min(10, bond || 0));
+  const into = stage === 3 ? exp - final - level * step : 0;
+  const pct = level >= 10 ? 100 : Math.max(0, Math.min(100, (into / step) * 100));
+  const nextKey = Object.keys(BOND_UNLOCKS).map(Number).find((k) => k > level);
+  return (
+    <div className="tama-bond">
+      <div className="tama-bond-head">
+        <span className="tama-bond-label">{`💗 親密度 ${level}／10`}</span>
+        <span className="tama-bond-hearts" aria-hidden="true">
+          {Array.from({ length: 10 }, (_, i) => (
+            <span key={i} className={i < level ? "on" : ""}>♥</span>
+          ))}
+        </span>
+      </div>
+      <div className="tama-bar tama-bar-bond" role="progressbar" aria-label="次の親密度まで" aria-valuenow={Math.round(pct)} aria-valuemin={0} aria-valuemax={100}>
+        <div style={{ width: `${pct}%` }} />
+      </div>
+      <p className="tama-tiny">
+        <span>
+          {stage < 3
+            ? "最終進化すると、親密度が上がりはじめます"
+            : level >= 10
+              ? "大のなかよし！ シーズンの終わりに図鑑へ"
+              : `次の親密度まで あと${Math.max(0, Math.ceil(step - into)).toLocaleString("ja-JP")}EXP${nextKey ? `｜親密度${nextKey}で「${BOND_UNLOCKS[nextKey]}」` : ""}`}
+        </span>
+      </p>
+    </div>
   );
 }
 

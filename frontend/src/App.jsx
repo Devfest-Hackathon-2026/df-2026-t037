@@ -609,8 +609,6 @@ function ResultCard({ result, universityId, faculty }) {
   const rawRank = toText(result?.verbal_score);
   const rank = RANK_META[rawRank] ? rawRank : "C";
   const meta = pending ? { title: "判定はあとで", className: "rank-c" } : RANK_META[rank];
-  const base = toNumber(result?.base_exp);
-  const bonus = toNumber(result?.bonus_exp);
   const reason = toText(result?.score_reason);
   const advice = toText(result?.advice);
   const growth = toNumber(result?.growth_exp);
@@ -663,10 +661,11 @@ function ResultCard({ result, universityId, faculty }) {
           </div>
         </div>
         <div className="exp-gain">
-          <span className="exp-gain-num">{`+${base + bonus}`}</span>
+          {/* 画面に出すEXPは、キャラが育つ「育成EXP」だけにそろえる（ゲージ・ログ・集計も同じ） */}
+          <span className="exp-gain-num">{`+${growth}`}</span>
           <span>EXP</span>
           <div className="exp-breakdown">
-            <span>{`時間 +${base} ・ 言語化 +${bonus}`}</span>
+            <span>キャラの育成EXP</span>
           </div>
         </div>
       </div>
@@ -678,7 +677,7 @@ function ResultCard({ result, universityId, faculty }) {
           <p className="penalty-title"><span>⚠ 勉強時間に対して、書かれた量が多すぎるようです</span></p>
           <p><span>{`「${toText(penalty.quote)}」— ${toText(penalty.reason)}`}</span></p>
           <p className="penalty-sub">
-            <span>{`${toNumber(result?.minutes) ? `${toNumber(result.minutes)}分では` : "この時間では"}こなせない量と判定したので、ランクはC・育成EXPは半分・言語化ボーナスはなしにしました。実際にやった範囲を正直に書けば、ふつうに採点されます。`}</span>
+            <span>{`${toNumber(result?.minutes) ? `${toNumber(result.minutes)}分では` : "この時間では"}こなせない量と判定したので、ランクはC・EXPは半分にしました。実際にやった範囲を正直に書けば、ふつうに採点されます。`}</span>
           </p>
         </div>
       )}
@@ -691,9 +690,9 @@ function ResultCard({ result, universityId, faculty }) {
         </p>
       )}
 
-      {(growth > 0 || evolved) && (
+      {evolved && (
         <p className="growth-gain">
-          <span>{evolved ? `🎉 進化した！ キャラに +${growth} 育成EXP` : `🌱 キャラに +${growth} 育成EXP`}</span>
+          <span>{`🎉 進化した！ キャラに +${growth} EXP`}</span>
         </p>
       )}
       {bondUp && (
@@ -762,7 +761,7 @@ function ReportView({ logs, profile }) {
 
     const totalMinutes = subjects.reduce((sum, s) => sum + s.minutes, 0);
     const totalExp = seasonLogs.reduce(
-      (sum, l) => sum + toNumber(l.base_exp) + toNumber(l.bonus_exp),
+      (sum, l) => sum + toNumber(l.growth_exp),
       0
     );
     const highRank = seasonLogs.filter((l) => ["S", "A"].includes(l.verbal_score)).length;
@@ -894,7 +893,7 @@ function ReportView({ logs, profile }) {
                       {`${formatDate(l.dateObj)} ・ ${formatMinutes(l.minutes)}`}
                     </span>
                     <span className="log-exp">
-                      {`+${toNumber(l.base_exp) + toNumber(l.bonus_exp)} EXP`}
+                      {`+${toNumber(l.growth_exp)} EXP`}
                     </span>
                     {l.rankPending && <span className="rank-badge rank-c">判定待ち</span>}
                     {l.penalty && <span className="rank-badge rank-c" title="勉強時間に対して書かれた量が多すぎたため、ランクCになった記録">量の確認</span>}

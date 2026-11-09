@@ -137,7 +137,7 @@ export const LEGEND = [
 export const MYTHIC = [
     { id: 'phoenix', name: '不死鳥の炎', condition: '同じ模試シリーズで志望校の判定をE→Aまで上げる' },
     { id: 'aurora', name: '銀河のオーロラ', condition: '高1・高2・高3の3シーズンすべてで親密度10（がっつりペース）' },
-    { id: 'sakura', name: '満開の桜吹雪', condition: '志望校に合格する（合格通知をGeminiで確認）' },
+    { id: 'sakura', name: '満開の桜吹雪', condition: '志望校に合格する（確かめる方法は準備中）' },
 ];
 /** 着替え：場所ごとに1つ＋エフェクト1つ。勉強タイマー中は変更できない */
 export const SLOTS = ['head', 'neck', 'chest', 'hand', 'back', 'effect'];

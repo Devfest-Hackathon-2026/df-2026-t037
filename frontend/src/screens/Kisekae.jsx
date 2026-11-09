@@ -148,7 +148,7 @@ export default function Kisekae({ uid, profile, onBack }) {
       {effects.length > 0 && (
         <>
           <p className="tama-label"><span>エフェクト（1つ）</span></p>
-          <div className="tama-kise-grid five">
+          <div className="tama-kise-grid three">
             {effects.map((it) => <ItemTile key={it.id} item={it} on={equipped.effect === it.id} locked={locked} onClick={() => toggle(it)} />)}
           </div>
         </>
@@ -157,7 +157,7 @@ export default function Kisekae({ uid, profile, onBack }) {
       {legends.length > 0 && (
         <>
           <p className="tama-label legend"><span>レジェンド（とても難しい・模試の成績など）</span></p>
-          <div className="tama-kise-grid five">
+          <div className="tama-kise-grid three">
             {legends.map((it) => <ItemTile key={it.id} item={it} on={equipped[it.slot] === it.id} locked={locked} onClick={() => toggle(it)} />)}
           </div>
         </>
@@ -165,8 +165,8 @@ export default function Kisekae({ uid, profile, onBack }) {
 
       {mythics.length > 0 && (
         <>
-          <p className="tama-label legend"><span>ミシック（最上級のエフェクト）</span></p>
-          <div className="tama-kise-grid five">
+          <p className="tama-label mythic"><span>ミシック（最上級のエフェクト）</span></p>
+          <div className="tama-kise-grid three">
             {mythics.map((it) => <ItemTile key={it.id} item={it} on={equipped.effect === it.id} locked={locked} onClick={() => toggle(it)} />)}
           </div>
         </>
@@ -180,7 +180,7 @@ export default function Kisekae({ uid, profile, onBack }) {
 function ItemTile({ item, on, locked, onClick }) {
   const cls = [
     "tama-item",
-    item.kind === "legend" || item.kind === "mythic" ? "legend" : "",
+    item.kind === "legend" ? "legend" : item.kind === "mythic" ? "mythic" : "",
     item.owned ? "" : "lockedItem",
     on ? "on" : "",
   ].join(" ");

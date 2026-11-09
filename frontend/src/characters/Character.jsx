@@ -50,7 +50,7 @@ export function Character({ uni, stage, variant = 'normal', size = 160, still = 
   const name = variant === 'equip' && stage === 3 ? `${uni}-equip` : `${uni}-${stage}`;
   const base = svgOf(name);
   if (!base) return null;
-  const worn = wear ? withWear(base, wear) : base;
+  const worn = wear ? withWear(base, wear, stage) : base;
   const svg = stage === 3 ? withFacultyMarks(worn, uni, faculty?.ribbon) : worn;
   return (
     <div

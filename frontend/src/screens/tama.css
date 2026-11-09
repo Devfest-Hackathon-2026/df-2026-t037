@@ -417,7 +417,13 @@
 .tama-kise-grid { display: grid; gap: 7px; }
 .tama-kise-grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .tama-kise-grid.five { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; }
+/* レジェンド・ミシック・エフェクトは説明が長いので3列（文字が重ならないように） */
+.tama-kise-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; }
+.tama-kise-grid.three .tama-item { padding: 20px 6px 8px; justify-content: flex-start; }
+.tama-kise-grid.three .tama-item-name { font-size: 11px; }
+.tama-kise-grid.three .tama-item-note { font-size: 9.5px; line-height: 1.35; }
 .tama-label.legend { color: #C8962A; font-size: 12px; }
+.tama-label.mythic { color: #7A4FD0; font-size: 12px; }
 .tama-item {
   position: relative;
   min-height: 64px;
@@ -436,6 +442,11 @@
 .tama-item.on { border: 2.5px solid var(--t-main); background: var(--t-main-soft); }
 .tama-item.lockedItem { border: 1.5px dashed #E2D6CA; background: #F4EFE9; cursor: default; }
 .tama-item.legend { border: 1.5px dashed #E0B040; background: #FFF8E4; }
+/* ミシックはレジェンドの金色と分けて紫 */
+.tama-item.mythic { border: 1.5px dashed #9B7BE0; background: #F4EEFF; }
+.tama-item.mythic .tama-item-slot { color: #7A4FD0; }
+.tama-item.mythic .tama-item-name { color: #5A33A8; }
+.tama-item.mythic.on { border: 2.5px solid #7A4FD0; background: #E9DFFF; }
 .tama-item-check {
   position: absolute; top: -6px; right: -6px; width: 20px; height: 20px; border-radius: 10px;
   background: var(--t-main); color: #FFFFFF; font-size: 12px; font-weight: 900;
@@ -444,6 +455,7 @@
 .tama-item-lock { position: absolute; top: 4px; right: 4px; font-size: 9px; font-weight: 900; color: var(--t-sub); }
 .tama-item-slot { position: absolute; top: 4px; left: 5px; font-size: 9px; font-weight: 900; color: #B0A296; }
 .tama-item.legend .tama-item-slot { color: #C8962A; }
+.tama-item.legend.on { border: 2.5px solid #C8962A; background: #FFEFC2; }
 .tama-item-name { font-size: 10px; font-weight: 900; color: var(--t-text); line-height: 1.2; }
 .tama-item-note { font-size: 8.5px; color: var(--t-sub); line-height: 1.2; }
 .tama-head-right { display: flex; align-items: center; gap: 6px; }
@@ -912,3 +924,12 @@
 .tama-mock-arrow { color: #B0A296; font-weight: 900; }
 .tama-mock-chip { display: inline-flex; align-items: center; gap: 6px; border: 1.5px solid #EEE4DA; background: #FDF8F4; border-radius: 999px; padding: 3px 10px 3px 3px; font-family: inherit; font-size: 11px; color: var(--t-text); }
 .tama-mock-badge { width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #FFFFFF; font-weight: 900; font-size: 12px; }
+
+/* 親密度のゲージ（ピンク） */
+.tama-bond { margin-top: 10px; display: flex; flex-direction: column; gap: 4px; }
+.tama-bond-head { display: flex; justify-content: space-between; align-items: center; }
+.tama-bond-label { font-size: 13px; font-weight: 900; color: #D0507A; }
+.tama-bond-hearts { display: flex; gap: 1px; font-size: 11px; color: #F3D3DD; }
+.tama-bond-hearts .on { color: #F06A93; }
+.tama-bar.tama-bar-bond { background: #FBE6EC; }
+.tama-bar.tama-bar-bond > div { background: linear-gradient(90deg, #FF9EBB, #F06A93); }
