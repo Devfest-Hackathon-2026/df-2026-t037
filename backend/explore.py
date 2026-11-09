@@ -55,28 +55,35 @@ def _norm(v: list[float]) -> float:
 
 _DOC_NORMS = {fid: _norm(v) for fid, v in VECTORS.items()}
 
-# 「近くなりやすさ」の補正（ハブネス対策）。
-# 紹介文が広く書かれた学部（例：国際教養学部）は、どんな文にも「少し近い」ので上位に出やすい。
-# 各学部が「ほかの学部の平均にどれだけ近いか」を求め、その分だけ近さから引く。
-# 学部だけで決まる値なので、質問の長さや書き方（複数の振り返りを足したベクトルなど）には左右されない
-# 30問の評価（tools/eval_explore.py）で、学部どうしの近さによる補正は逆効果だった（強さ1で P@5 0.69→0.60、4で0.25）。
-# いまは 0（補正なし）。補正をかけるなら、質問の実データから作る方式（faculty_calibration.json）を使う
-HUB_STRENGTH = 0.0
+# 学部の紹介文を長さ1のベクトルにそろえておく（コサイン類似度＝内積）
 _UNIT = {fid: [x / _DOC_NORMS[fid] for x in v] for fid, v in VECTORS.items()}
-_DIM = len(next(iter(_UNIT.values()))) if _UNIT else 0
-_MEAN_UNIT = [sum(u[i] for u in _UNIT.values()) / len(_UNIT) for i in range(_DIM)] if _UNIT else []
-_HUB = {fid: sum(a * b for a, b in zip(u, _MEAN_UNIT)) for fid, u in _UNIT.items()}
-_HUB_AVG = sum(_HUB.values()) / len(_HUB) if _HUB else 0.0
-HUB_PENALTY = {fid: HUB_STRENGTH * (h - _HUB_AVG) for fid, h in _HUB.items()}
+
+# 「記録から見つける」だけに使う補正（CSLS）。
+# 紹介文が広く書かれた学部（国際教養・京都総合人間（理系）など）は、どんな文にも少し近く出やすい。
+# 各学部が「ふつうの質問のうち、いちばん近い10件にどれだけ近いか」の平均 r を求め、近さ = 2×cos − r にする。
+# r は tools/eval_explore.py が、30種類の問題の振り返りから作る（faculty_calibration.json）。
+# 評価（30問・1問ぬき）：記録 P@5 0.667 → 0.707、国際教養などの混入も減った。ただし差は小さく、統計的には確かでない。
+# ファイルが無い・モデルが違うときは、自動で補正なし（raw）にもどる。
+# 「言葉で探す」は補正しても変わらなかった（0.720 → 0.713〜0.720）ので、補正なし。
+# 学部どうしの近さで引く方式は逆効果だった（強さ1で P@5 0.69 → 0.60）ので使わない。
+CALIBRATION_PATH = ROOT / "faculty_calibration.json"
+_CAL = _load(CALIBRATION_PATH, {})
+_CSLS_R: dict = (
+    {fid: float(v["top10"]) for fid, v in (_CAL.get("agg") or {}).items() if "top10" in v}
+    if _CAL.get("model") == EMBED_MODEL else {}
+)
+
+
+def csls_ready() -> bool:
+    return bool(_CSLS_R)
 
 
 def similarity(query_vec: list[float], fid: str) -> float:
-    """質問のベクトルと学部 fid の近さ（コサイン類似度 − 近くなりやすさの補正）。rank と同じ尺度"""
+    """質問のベクトルと学部 fid のコサイン類似度"""
     u = _UNIT.get(fid)
     if not u or len(query_vec) != len(u):
         return 0.0
-    qn = _norm(query_vec)
-    return sum(a * b for a, b in zip(query_vec, u)) / qn - HUB_PENALTY[fid]
+    return sum(a * b for a, b in zip(query_vec, u)) / _norm(query_vec)
 
 
 def embed_query(text: str, project_id: str, token: str) -> list[float]:
@@ -92,9 +99,15 @@ def embed_query(text: str, project_id: str, token: str) -> list[float]:
     return r.json()["predictions"][0]["embeddings"]["values"]
 
 
-def rank(query_vec: list[float]) -> list[tuple[str, float]]:
-    """(学部ID, 近さ0〜1) を近い順に。同じ大学は最大 PER_UNIVERSITY_MAX 件"""
-    scored = [(fid, similarity(query_vec, fid)) for fid in VECTORS]
+def rank(query_vec: list[float], mode: str = "raw") -> list[tuple[str, float]]:
+    """(学部ID, 近さ) を近い順に。同じ大学は最大 PER_UNIVERSITY_MAX 件。
+    mode="csls" は「記録から見つける」用の補正（補正値が無ければ raw と同じ）"""
+    use_csls = mode == "csls" and csls_ready()
+    r_avg = sum(_CSLS_R.values()) / len(_CSLS_R) if use_csls else 0.0
+    scored = []
+    for fid in VECTORS:
+        cos = similarity(query_vec, fid)
+        scored.append((fid, 2 * cos - _CSLS_R.get(fid, r_avg) if use_csls else cos))
     scored.sort(key=lambda x: x[1], reverse=True)
     picked, per_uni = [], {}
     for fid, sim in scored:

@@ -610,7 +610,7 @@ def discover_from_reflections(uid: str = Depends(verify_user)):
         ref.set({"discovers": firestore.Increment(-1)}, merge=True)
         return {"results": [], "themes": [], "usedLogs": len(logs), "needLogs": memory.DISCOVER_MIN_LOGS}
     try:
-        picked = explore.rank(memory.interest_vector(logs))
+        picked = explore.rank(memory.interest_vector(logs), mode="csls")
         evidence = {fid: memory.evidence_for(fid, logs) for fid, _ in picked}
         result = call_gemini(memory.build_discover_prompt([f for f, _ in picked], evidence), memory.DISCOVER_SCHEMA)
     except Exception:
