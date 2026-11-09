@@ -84,7 +84,7 @@ def find_similar(db, uid: str, vec: list[float]) -> list[dict]:
         docs = (
             vectors_ref(db, uid)
             .find_nearest(vector_field="embedding", query_vector=Vector(vec),
-                          distance_measure=DistanceMeasure.COSINE, limit=SIMILAR_LIMIT,
+                          distance_measure=DistanceMeasure.COSINE, limit=SIMILAR_LIMIT * 3,
                           distance_result_field="vector_distance")
             .get()
         )
@@ -94,6 +94,8 @@ def find_similar(db, uid: str, vec: list[float]) -> list[dict]:
     found = []
     logs_ref = db.collection("users").document(uid).collection("study_logs")
     for d in docs:
+        if len(found) >= SIMILAR_LIMIT:
+            break
         v = d.to_dict() or {}
         dv = v.get("vector_distance")
         dist = float(dv) if dv is not None else 1.0  # 同じ文章（距離0.0）も「似ている」に入れる
@@ -103,12 +105,16 @@ def find_similar(db, uid: str, vec: list[float]) -> list[dict]:
         if not log_snap.exists:
             continue
         log = log_snap.to_dict() or {}
+        snippet = (log.get("reflection") or "")[:80].replace("\n", " ")
+        # 同じ文の振り返りは1つだけ（同じ問題集を何日も続けたときに、同じ行が並ばないように）
+        if any(f["snippet"] == snippet for f in found):
+            continue
         found.append({
             "logId": d.id,
             "date": _ymd_jst(log.get("createdAt")),
             "subject": log.get("subject"),
             "rank": log.get("verbal_score"),
-            "snippet": (log.get("reflection") or "")[:80].replace("\n", " "),
+            "snippet": snippet,
             "similarity": round(1 - dist, 3),
         })
     return found
