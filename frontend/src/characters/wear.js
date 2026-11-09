@@ -41,10 +41,10 @@ export const WEAR = {
   },
   'comeback-wings': {
     back:
-      `<g class="wear-wingL"><path d="M42 92 Q8 86 -6 46 Q12 58 20 48 Q16 66 30 66 Q18 76 34 80 Q24 86 44 84 Z" fill="#FFFFFF" stroke="#9FB4D6" stroke-width="1.8" stroke-linejoin="round"></path>` +
-      `<path d="M38 86 Q16 80 4 58 M36 78 Q22 72 16 60" fill="none" stroke="#B8C8E0" stroke-width="1.4"></path></g>` +
-      `<g class="wear-wingR"><path d="M118 92 Q152 86 166 46 Q148 58 140 48 Q144 66 130 66 Q142 76 126 80 Q136 86 116 84 Z" fill="#FFFFFF" stroke="#9FB4D6" stroke-width="1.8" stroke-linejoin="round"></path>` +
-      `<path d="M122 86 Q144 80 156 58 M124 78 Q138 72 144 60" fill="none" stroke="#B8C8E0" stroke-width="1.4"></path></g>`,
+      `<g class="wear-wingL"><path d="M42 92 Q8 86 -6 46 Q12 58 20 48 Q16 66 30 66 Q18 76 34 80 Q24 86 44 84 Z" fill="#FFFFFF" stroke="#6F86B8" stroke-width="2.4" stroke-linejoin="round"></path>` +
+      `<path d="M38 86 Q16 80 4 58 M36 78 Q22 72 16 60" fill="none" stroke="#9FB4D6" stroke-width="1.5" stroke-linecap="round"></path></g>` +
+      `<g class="wear-wingR"><path d="M118 92 Q152 86 166 46 Q148 58 140 48 Q144 66 130 66 Q142 76 126 80 Q136 86 116 84 Z" fill="#FFFFFF" stroke="#6F86B8" stroke-width="2.4" stroke-linejoin="round"></path>` +
+      `<path d="M122 86 Q144 80 156 58 M124 78 Q138 72 144 60" fill="none" stroke="#9FB4D6" stroke-width="1.5" stroke-linecap="round"></path></g>`,
   },
   star70: {
     front:
@@ -145,8 +145,10 @@ const fit = (layer, stage) => {
 
 // ===== 学年の小物（高1はそのまま・高2は学年章のバッジ・高3は必勝の鉢巻） =====
 // 図鑑で「同じキャラでも学年で見た目がちがう」ことが分かるように、着替えとは別に重ねる
-const GRADE_BADGE =
-  `<g class="grade-badge" transform="translate(52 116)">` +
+// 東大の装備つきの絵は左胸に銀杏バッジ（60,126）があるので、学年章はその左に小さくずらす
+const BADGE_AT = { 'todai-equip': 'translate(41 117) scale(.82)' };
+const gradeBadge = (at = 'translate(52 116)') =>
+  `<g class="grade-badge" transform="${at}">` +
   `<path d="M0 -9 L8 -5 L8 3 Q8 8 0 11 Q-8 8 -8 3 L-8 -5 Z" fill="#3D5A99" stroke="#F5C33B" stroke-width="1.8" stroke-linejoin="round"></path>` +
   `<text x="0" y="4.6" font-size="10" font-weight="900" text-anchor="middle" fill="#FFFFFF" font-family="'M PLUS Rounded 1c', sans-serif">Ⅱ</text>` +
   `<path class="twinkle" d="M7 -11 l1 2.2 2.2 1 -2.2 1 -1 2.2 -1 -2.2 -2.2 -1 2.2 -1z" fill="#FFE07A"></path>` +
@@ -163,19 +165,21 @@ const HACHIMAKI =
   `<text x="96" y="64.4" font-size="7.4" font-weight="900" text-anchor="middle" fill="#C8102E" font-family="'M PLUS Rounded 1c', sans-serif">勝</text>` +
   `<ellipse cx="121" cy="64.5" rx="3.6" ry="4.2" fill="#FFFFFF" stroke="#D9DAE6" stroke-width="1"></ellipse>` +
   `</g>`;
-export const GRADE_LOOK = { 高校2年生: GRADE_BADGE, 高校3年生: HACHIMAKI };
-
-/** 学年の小物の絵（高1・学年なしは空） */
-export const gradeLayer = (grade) => GRADE_LOOK[grade] || '';
+/** 学年の小物の絵（高1・学年なしは空）。look：{ uni, variant }（装備つきの絵とかぶらない位置にする） */
+export function gradeLayer(grade, look = {}) {
+  if (grade === '高校2年生') return gradeBadge(BADGE_AT[`${look.uni}-${look.variant}`]);
+  if (grade === '高校3年生') return HACHIMAKI;
+  return '';
+}
 
 /**
  * SVG文字列に重ねる（後ろは体のグループの前、前は </svg> の直前）。stage で位置と大きさを合わせる。
  * grade：学年の小物（高2のバッジ・高3の鉢巻）。着替えより先（下）に重ねる
  */
-export function withWear(svg, equipped, stage = 3, grade = null) {
+export function withWear(svg, equipped, stage = 3, grade = null, look = {}) {
   const layers = wearLayers(equipped);
   const back = layers.back;
-  const front = gradeLayer(grade) + layers.front;
+  const front = gradeLayer(grade, look) + layers.front;
   if (!back && !front) return svg;
   let out = svg;
   if (back) {

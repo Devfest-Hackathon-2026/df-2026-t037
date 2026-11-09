@@ -3,8 +3,8 @@
 <ellipse class="shadow" cx="80" cy="146" rx="36" ry="5.5" fill="#4A4470" opacity=".14"></ellipse>
 <g class="squish">
 <ellipse cx="66" cy="138" rx="9" ry="5" fill="#A8A2CE"></ellipse><ellipse cx="94" cy="138" rx="9" ry="5" fill="#A8A2CE"></ellipse>
-<path class="flap" d="M44 94 Q24 82 20 94 Q26 98 24 104 Q32 104 44 102 Z" fill="#FFFFFF"></path>
-<path class="flapR" d="M116 94 Q136 82 140 94 Q134 98 136 104 Q128 104 116 102 Z" fill="#FFFFFF"></path>
+<g class="flap"><path d="M44 94 Q24 82 20 94 Q26 98 24 104 Q32 104 44 102 Z" fill="#FFFFFF" stroke="#7A72AE" stroke-width="2.0" stroke-linejoin="round"></path><path d="M42 96 Q32 90 23 92 M42 100 Q34 99 27 101" fill="none" stroke="#A9A2D2" stroke-width="1.2" stroke-linecap="round"></path></g>
+<g class="flapR"><path d="M116 94 Q136 82 140 94 Q134 98 136 104 Q128 104 116 102 Z" fill="#FFFFFF" stroke="#7A72AE" stroke-width="2.0" stroke-linejoin="round"></path><path d="M118 96 Q128 90 137 92 M118 100 Q126 99 133 101" fill="none" stroke="#A9A2D2" stroke-width="1.2" stroke-linecap="round"></path></g>
 <circle cx="80" cy="100" r="40" fill="url(#k5b)"></circle>
 <ellipse cx="65" cy="78" rx="12" ry="7" fill="#FFFFFF" opacity=".6"></ellipse>
 <g class="blink"><ellipse cx="68" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse><ellipse cx="92" cy="102" rx="4.2" ry="6" fill="#2B2632"></ellipse></g>
